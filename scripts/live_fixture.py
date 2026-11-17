@@ -18,11 +18,14 @@ def main():
     folder.mkdir(parents=True)
     print(f"Run {folder}", flush=True)
 
-    def ask(role, model, prompt):
+    def ask(role, model, prompt, properties):
         out = folder / (role + ".txt")
+        schema = folder / (role + ".schema.json")
+        schema.write_text(json.dumps({"type": "object", "properties": properties,
+            "required": list(properties), "additionalProperties": False}))
         start = time.monotonic()
         cmd = [sys.executable, "scripts/codex_project.py", "exec", "-s", "read-only", "--ephemeral",
-               "--json", "-m", model, "-o", str(out), "-"]
+               "--json", "-m", model, "--output-schema", str(schema), "-o", str(out), "-"]
         result = subprocess.run(cmd, input=prompt, capture_output=True, text=True,
                                 encoding="utf-8", errors="replace", timeout=300)
         events = []
@@ -44,9 +47,13 @@ def main():
     architect = "gpt-6.2-astra"
     engineer = "gpt-6.2-sol"
     expected = h.Ticket.model_validate_json(Path("tickets/FEAT-042.json").read_bytes())
+    text = {"type": "string"}
+    fields = h.Ticket.model_json_schema()["properties"]
+    fields["requirements"] = {"type": "object", "additionalProperties": False,
+        "required": list(expected.requirements), "properties": dict.fromkeys(expected.requirements, text)}
     answer = ask("intent", architect, "Use only supplied context. Return one JSON ticket, without markdown. "
         "Preserve the given IDs, requirements and scope exactly. Write the objective concisely. "
-        + expected.model_dump_json() + "\nCatalog: " + h.catalog().model_dump_json())
+        + expected.model_dump_json() + "\nCatalog: " + h.catalog().model_dump_json(), fields)
     ticket = h.Ticket.model_validate_json(answer)
     if ticket.model_copy(update={"intent": expected.intent}) != expected:
         raise ValueError("Architect changed approved fixture obligations")
@@ -56,7 +63,8 @@ def main():
     proposal = json.loads(ask("proposal", engineer,
         "Return only JSON with two fields: material (boolean) and rationale (string). "
         "Determine whether this fixture needs a public interface, dependency or scope change. "
-        "Use only supplied evidence. " + json.dumps(compiled["task"])))
+        "Use only supplied evidence. " + json.dumps(compiled["task"]),
+        {"material": {"type": "boolean"}, "rationale": text}))
     if proposal.get("material") is not False:
         raise ValueError("Material proposal requires a revised contract and architect approval")
     tree = folder / "attempt"
@@ -71,7 +79,7 @@ def main():
     answer = ask("implementation", engineer,
         "Return only JSON with a single string field named source containing the complete updated "
         "fixture/combat.py. Keep the public API and imports. Use only supplied input and no tools. "
-        + json.dumps(compiled["task"]) + "\nCurrent file:\n" + source)
+        + json.dumps(compiled["task"]) + "\nCurrent file:\n" + source, {"source": text})
     candidate = json.loads(answer)["source"]
     (tree / "fixture/combat.py").write_text(candidate, encoding="utf-8")
     commit(tree, "Implement the approved poison fixture intent")
@@ -82,7 +90,7 @@ def main():
     diff = h.git("diff", base, result["revision"], "--", cwd=tree)
     answer = ask("decision", architect, "Review the supplied intent, passing evidence, proposal and diff. "
         "Use only supplied input, no tools. Return only JSON with verdict (approve or revise) and reason. "
-        + json.dumps([result, proposal, diff]))
+        + json.dumps([result, proposal, diff]), {"verdict": {"type":"string","enum":["approve","revise"]}, "reason":text})
     if json.loads(answer).get("verdict") != "approve":
         raise ValueError("Reviewer requested revision")
     print(f"Approved {result['revision']}", flush=True)
