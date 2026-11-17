@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "FEAT-042",
+  "intent": "Independent poison applications stack and expire after five simulation turns.",
+  "components": [
+    "fixture.combat",
+    "fixture.turn_lifecycle"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-042-A": "Each application deals one additional damage per turn.",
+    "REQ-042-B": "Each stack deals damage for exactly five turns, including when applications are staggered."
+  },
+  "unknowns": []
+}

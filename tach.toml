@@ -1,0 +1,14 @@
+source_roots = ["."]
+exclude = ["tests", ".venv", "node_modules", ".harness", ".trail"]
+
+[[modules]]
+path = "fixture.entities"
+depends_on = []
+
+[[modules]]
+path = "fixture.combat"
+depends_on = ["fixture.entities"]
+
+[[modules]]
+path = "fixture.turn_lifecycle"
+depends_on = ["fixture.entities"]

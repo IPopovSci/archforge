@@ -1,0 +1,18 @@
+from fixture.combat import apply_poison
+from fixture.entities import Entity
+from fixture.turn_lifecycle import advance
+
+
+def test_additive():
+    entity = apply_poison(apply_poison(Entity(20)))
+    assert advance(entity).health == 18
+
+
+def test_staggered_expiry():
+    entity = apply_poison(Entity(20))
+    entity = apply_poison(advance(entity))
+    health = []
+    for _ in range(6):
+        entity = advance(entity)
+        health.append(entity.health)
+    assert health == [17, 15, 13, 11, 10, 10]

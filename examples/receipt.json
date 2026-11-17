@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "requirement_test_links": {
+    "REQ-042-A": [
+      "tests/test_feat_042.py::test_additive"
+    ],
+    "REQ-042-B": [
+      "tests/test_feat_042.py::test_staggered_expiry"
+    ]
+  }
+}
