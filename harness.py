@@ -1,5 +1,6 @@
 """Host-neutral compiler and verification commands. Run from the target repository root."""
 import argparse
+import ast
 import hashlib
 import json
 import os
@@ -38,6 +39,16 @@ class Catalog(Record):
     modules: dict[str, str]
 
 
+class ReviewedDelta(Record):
+    """Reviewer-supplied input in the trusted checkout (CLI only)."""
+    revision: str
+    ticket_digest: str
+    rationale: str = Field(min_length=1)
+    extra_paths: list[str]
+    public_api: dict[str, str]
+    file_digests: dict[str, str] = Field(default_factory=dict)
+
+
 class Task(Record):
     ticket: Ticket
     revision: str
@@ -45,6 +56,7 @@ class Task(Record):
     acceptance_file: str
     checks: list[str]
     evidence: list[dict]
+    review: ReviewedDelta | None = None
 
 
 class Receipt(Record):
@@ -71,14 +83,20 @@ def clean_revision(cwd=None):
 
 def trail(*args):
     binary = BIN / ("node.exe" if os.name == "nt" else "node")
-    return run(binary, INSTALL / "node_modules/@trailhq/trail-code/dist/bin/trail.js", *args).stdout
+    entry = Path("node_modules/@trailhq/trail-code/dist/bin/trail.js")
+    location = INSTALL / entry
+    if not location.exists():
+        common = git("rev-parse", "--path-format=absolute", "--git-common-dir", cwd=INSTALL)
+        location = Path(common).parent / entry
+    return run(binary, location, *args).stdout
 
 
 def catalog():
     revision = clean_revision()
     policy = tomllib.loads(Path("tach.toml").read_text())
     modules = {row["path"]: row["path"].replace(".", "/") + ".py" for row in policy["modules"]}
-    roots = sorted({p.split("/")[0] for p in modules.values()} | {"tests"})
+    tracked = git("ls-files", "-z", "--", "*.py").rstrip("\0").split("\0")
+    roots = sorted({p.split("/")[0] for p in [*modules.values(), *tracked] if p} | {"tests"})
     flags = [arg for root in roots for arg in ("--only-dir", root)]
     trail("build", "--strict", "--no-gitignore", "--no-ignore", *flags)
     nodes = json.loads(Path("graft/.graph/wiring.json").read_text(encoding="utf-8"))["nodes"]
@@ -91,26 +109,62 @@ def catalog():
     return Catalog(version=1, revision=revision, modules=modules)
 
 
-def get_context(query):
+def _context(query, cat):
     if not query.strip() or len(query) > 1000 or query.startswith("-"):
         raise ValueError("Provide a short search phrase.")
-    cat = catalog()
     hits = json.loads(trail("ask", query, ".", "--json", "--source", "-n", "6"))["hits"]
     return [dict(pointer=h["pointer"], title=h["title"][:120], code=h.get("code", "")[:650],
                  revision=cat.revision, reason="Trail query match") for h in hits if h.get("pointer")]
 
 
-def compile_ticket(ticket):
+def get_context(query):
+    return _context(query, catalog())
+
+
+def ticket_digest(ticket):
+    return hashlib.sha256(json.dumps(ticket.model_dump(), sort_keys=True).encode()).hexdigest()
+
+
+def _validate_review(review, ticket, revision, scope):
+    if review.revision != revision or review.ticket_digest != ticket_digest(ticket):
+        raise ValueError("Review belongs to a different revision or ticket")
+    for path in review.extra_paths:
+        if not re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_./-]*", path) or any(
+            part in ("", ".", "..", "node_modules", "__pycache__") or part.startswith(".")
+            for part in path.split("/")
+        ):
+            raise ValueError(f"Invalid repository path: {path}")
+    if not (set(review.public_api) | set(review.file_digests)) <= (scope | set(review.extra_paths)):
+        raise ValueError("Reviewed interface outside approved files")
+    protected = {p for p in review.extra_paths if not p.endswith(".py") or p.startswith("tests/")}
+    if not protected <= review.file_digests.keys():
+        raise ValueError("Policy, configuration and test changes require reviewed file digests")
+    if any(not re.fullmatch("[a-f0-9]{64}", digest) for digest in
+           [*review.public_api.values(), *review.file_digests.values()]):
+        raise ValueError("Expected SHA-256 of approved interface")
+
+
+def compile_ticket(ticket, review=None):
     cat = catalog()
-    if ticket.unknowns or set(ticket.components) - cat.modules.keys():
+    modules = dict(cat.modules)
+    if review:
+        for component in set(ticket.components) - modules.keys():
+            path = component.replace(".", "/") + ".py"
+            if path in review.extra_paths and "tach.toml" in review.extra_paths and not Path(path).exists():
+                modules[component] = path
+    if ticket.unknowns or set(ticket.components) - modules.keys():
         raise ValueError("Resolve unknowns and component references before compilation.")
     acceptance = "tests/test_" + ticket.id.lower().replace("-", "_") + ".py"
     if Path(acceptance).exists():
         raise ValueError("Ticket needs a fresh acceptance test file.")
+    scope = {modules[c] for c in ticket.components} | {acceptance}
+    if review:
+        _validate_review(review, ticket, cat.revision, scope)
+        scope.update(review.extra_paths)
     task = Task(version=1, ticket=ticket, revision=cat.revision,
-                scope=sorted({cat.modules[c] for c in ticket.components} | {acceptance}),
+                scope=sorted(scope), review=review,
                 acceptance_file=acceptance, checks=["tach", "pytest", "requirement links", "scope"],
-                evidence=get_context(ticket.intent))
+                evidence=_context(ticket.intent, cat))
     if clean_revision() != cat.revision:
         raise ValueError("Source revision changed during compilation.")
     data = task.model_dump_json(indent=2).encode()
@@ -131,8 +185,10 @@ def profile(paths):
         return "FULL"
     if all(p == "README.md" or re.fullmatch(r"docs/usage/[\w-]+\.md", p) for p in paths):
         return "FAST"
-    components = {p for p in paths if p.startswith("fixture/")}
-    if len(components) <= 1 and all(p.endswith(".py") and p.startswith(("fixture/", "tests/")) for p in paths):
+    components = {p for p in paths if not p.startswith("tests/")}
+    policy = tomllib.loads(Path("tach.toml").read_text())
+    owned = {m["path"].replace(".", "/") + ".py" for m in policy["modules"]}
+    if len(components) <= 1 and components <= owned and all(p.endswith(".py") for p in paths):
         return "STANDARD"
     return "FULL"
 
@@ -156,6 +212,66 @@ def diff_paths(base, cwd=None):
     return sorted(set(filter(None, (data + extra).split("\0"))))
 
 
+def public_api_digest(source):
+    """Fingerprint public Python definitions, class fields and callable signatures."""
+    def surface(body):
+        entries = []
+        for node in body:
+            name = getattr(node, "name", "")
+            if name.startswith("_") and name != "__init__":
+                continue
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                node.body = [ast.Pass()]
+                entries.append(ast.dump(node))
+            elif isinstance(node, ast.ClassDef):
+                members = surface(node.body)
+                node.body = [ast.Pass()]
+                entries.append((ast.dump(node), members))
+            elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+                if not node.target.id.startswith("_"):
+                    entries.append(ast.dump(node))
+        return entries
+    return hashlib.sha256(json.dumps(surface(ast.parse(source).body)).encode()).hexdigest()
+
+
+def _api_changes(task, revision, paths, attempt):
+    problems = []
+    for path in paths:
+        if not path.endswith(".py") or path.startswith("tests/"):
+            continue
+        sources = []
+        for ref in (task.revision, revision):
+            blob = run("git", "show", f"{ref}:{path}", cwd=attempt, check=False)
+            sources.append(blob.stdout if blob.returncode == 0 else "")
+        try:
+            before, after = map(public_api_digest, sources)
+        except SyntaxError as exc:
+            problems.append(f"Invalid Python in {path}: {exc}")
+            continue
+        if before != after and (task.review is None or task.review.public_api.get(path) != after):
+            problems.append(f"Unapproved public interface change in {path}: {after}")
+    return problems
+
+
+def recheck(base):
+    paths = diff_paths(base)
+    result = RuleProvider().decide(paths, ["FAST", "STANDARD", "FULL"])
+    if result["choice"] == "STANDARD":
+        for path in paths:
+            if path.startswith("tests/"):
+                continue
+            before = run("git", "show", f"{base}:{path}", check=False)
+            try:
+                after = Path(path).read_text(encoding="utf-8") if Path(path).exists() else ""
+                changed = public_api_digest(before.stdout) != public_api_digest(after)
+            except (SyntaxError, UnicodeError):
+                changed = True
+            if changed:
+                result.update(choice="FULL", scores={"FULL": 1}, reason=f"Public interface changed: {path}")
+                break
+    return result
+
+
 def verify(contract, attempt, receipt):
     if not re.fullmatch("[0-9a-f]{64}", contract):
         raise ValueError("Expected compiler digest.")
@@ -169,6 +285,23 @@ def verify(contract, attempt, receipt):
     problems = []
     if set(paths) - set(task.scope) or task.acceptance_file not in paths:
         problems.append("Scope violation or missing new acceptance file")
+    if not problems:
+        problems.extend(_api_changes(task, revision, paths, attempt))
+        for path, digest in (task.review.file_digests.items() if task.review else ()):
+            candidate = Path(attempt) / path
+            if not candidate.is_file() or hashlib.sha256(candidate.read_bytes()).hexdigest() != digest:
+                problems.append(f"File differs from reviewed content: {path}")
+        if task.review and "tach.toml" in task.review.extra_paths:
+            try:
+                policy = tomllib.loads((Path(attempt) / "tach.toml").read_text(encoding="utf-8"))
+                declared = {m["path"] for m in policy["modules"]}
+                present = {name for name in declared if
+                           (Path(attempt) / (name.replace(".", "/") + ".py")).is_file()}
+                missing = set(task.ticket.components) - present
+                if missing:
+                    problems.append(f"Candidate policy omits required components: {sorted(missing)}")
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                problems.append(f"Invalid candidate policy: {exc}")
     links = receipt.requirement_test_links
     if set(links) != set(task.ticket.requirements):
         problems.append("Requirement IDs differ from the compiled contract")
@@ -202,22 +335,33 @@ def cli():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="op", required=True)
     for name, args in {"route":["paths"], "recheck":["base"], "schema":[], "catalog":[],
-                       "context":["query"], "compile":["ticket"], "verify":["contract","attempt","receipt"]}.items():
+                       "context":["query"], "compile":["ticket"], "ticket-digest":["ticket"],
+                       "api-digest":["source"], "verify":["contract","attempt","receipt"]}.items():
         p = sub.add_parser(name)
+        if name == "compile":
+            p.add_argument("--review", help="Reviewer-owned, revision-bound architecture delta JSON")
         for arg in args:
             p.add_argument(arg, nargs="+" if arg == "paths" else None)
     args = parser.parse_args()
-    if args.op in ("route", "recheck"):
-        paths = args.paths if args.op == "route" else diff_paths(args.base)
-        result = RuleProvider().decide(paths, ["FAST","STANDARD","FULL"])
+    if args.op == "route":
+        result = RuleProvider().decide(args.paths, ["FAST","STANDARD","FULL"])
+    elif args.op == "recheck":
+        result = recheck(args.base)
     elif args.op == "catalog":
         result = catalog().model_dump()
     elif args.op == "schema":
-        result = {m.__name__: m.model_json_schema() for m in (Ticket, Catalog, Task, Receipt)}
+        result = {m.__name__: m.model_json_schema() for m in (Ticket, Catalog, ReviewedDelta, Task, Receipt)}
     elif args.op == "context":
         result = get_context(args.query)
-    elif args.op == "compile":
-        result = compile_ticket(Ticket.model_validate_json(Path(args.ticket).read_bytes()))
+    elif args.op in ("compile", "ticket-digest"):
+        ticket = Ticket.model_validate_json(Path(args.ticket).read_bytes())
+        if args.op == "ticket-digest":
+            result = ticket_digest(ticket)
+        else:
+            review = ReviewedDelta.model_validate_json(Path(args.review).read_bytes()) if args.review else None
+            result = compile_ticket(ticket, review)
+    elif args.op == "api-digest":
+        result = public_api_digest(Path(args.source).read_text(encoding="utf-8"))
     else:
         result = verify(args.contract, args.attempt, Receipt.model_validate_json(Path(args.receipt).read_bytes()))
     print(json.dumps(result, indent=2))

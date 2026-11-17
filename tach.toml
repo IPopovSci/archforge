@@ -2,6 +2,30 @@ source_roots = ["."]
 exclude = ["tests", ".venv", "node_modules", ".harness", ".trail"]
 
 [[modules]]
+path = "harness"
+depends_on = []
+
+[[modules]]
+path = "server"
+depends_on = ["harness"]
+
+[[modules]]
+path = "scripts.demo"
+depends_on = ["harness"]
+
+[[modules]]
+path = "scripts.live_fixture"
+depends_on = ["harness", "scripts.demo"]
+
+[[modules]]
+path = "scripts.codex_project"
+depends_on = []
+
+[[modules]]
+path = "scripts.shadow_decisions"
+depends_on = ["harness"]
+
+[[modules]]
 path = "fixture.entities"
 depends_on = []
 
