@@ -1,10 +1,11 @@
 from mcp.server.mcpserver import MCPServer
+from mcp.types import ToolAnnotations
 import harness
 
 server = MCPServer("architecture-harness")
 
 
-@server.tool()
+@server.tool(annotations=ToolAnnotations(readOnlyHint=True, openWorldHint=False))
 def route_task(paths: list[str]) -> dict:
     """Choose the minimum workflow from intended paths."""
     return harness.RuleProvider().decide(paths, ["FAST", "STANDARD", "FULL"])
