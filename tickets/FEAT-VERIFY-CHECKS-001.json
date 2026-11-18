@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "FEAT-VERIFY-CHECKS-001",
+  "intent": "Generalize the compiled verification check list into a named registry with repository defaults and ticket-declared extras, so gate checks run in every verification without agent discipline.",
+  "components": [
+    "harness"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-VC-A": "A named check registry maps every non-structural contract check to a subprocess command run in the candidate worktree, including the Godot boundary gate under the root godot.toml convention for game-project tickets, and compilation rejects tickets that declare unknown or structural check names.",
+    "REQ-VC-B": "Every compiled contract for this repository includes the documentation gate check by default, so verification fails on a stale generated catalog or an unresolved documentation pointer in the candidate.",
+    "REQ-VC-C": "The charter records that L2 gates are wired into compiled verification checks and documents the frozen handoff brief's exemption from the pointer gate."
+  },
+  "unknowns": []
+}
