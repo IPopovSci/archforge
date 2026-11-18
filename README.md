@@ -55,3 +55,13 @@ Run `python harness.py context compile_ticket` to locate the compiler, or use `r
 For a reviewed boundary change, the reviewer supplies `python harness.py compile <ticket> --review <delta.json>` from the trusted checkout. Use `python harness.py schema` for the ReviewedDelta fields, `python harness.py ticket-digest <ticket>` for its ticket binding, and `git rev-parse HEAD` for the baseline. Use `api-digest <proposed-source>` for the approved public signature and SHA-256 of the exact proposed policy bytes for `file_digests`. A new module requires its proposed file and tach.toml in `extra_paths`. The acceptance test `test_self_hosted_contract` exercises the whole workflow, including approval of a new module and rejection of an extra policy edit.
 
 The interface check covers statically declared functions, methods, classes and annotated public fields. Review behavior, runtime exports, decorators' actual effects and semantic changes in the diff. Reviewer-owned inputs and the verifier must run from a trusted checkout.
+
+## Codex roles
+
+Use the role launcher when assigning a new engineering task. Architect and reviewer use GPT-6.2 Astra. Engineer uses GPT-6.2 Sol. Every invocation starts a separate ephemeral Codex thread. Supply the request, compiler evidence or verified review bundle explicitly. Task IDs group receipts across calls without loading previous conversations.
+
+```powershell
+.\.venv\Scripts\python scripts/codex_role.py engineer TASK-123 --prompt "Inspect the off-by-one in fixture/turn_lifecycle.py"
+```
+
+Architect and reviewer calls are read-only. For engineering edits, use `--write --worktree <linked-checkout>` and the normal scope and verification gates. The default runs read-only. Each receipt in .harness/roles records the requested model, task, working directory, Codex thread ID, usage events and outcome. Use the interactive session for coordination. The role launcher owns model selection for delegated tasks.

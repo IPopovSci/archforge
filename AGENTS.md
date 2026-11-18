@@ -3,3 +3,5 @@ Start every task by identifying the intended paths and running route_task or the
 FAST uses a direct edit and a reviewed Git diff. STANDARD uses focused Trail evidence, Tach and pytest. FULL needs reviewed intent, a compiled contract, an isolated attempt, explicit approval for material architecture changes, passing requirement-linked evidence, and final intent review. Stop for a revised contract when scope expands. Allow at most two repair attempts per contract.
 
 Run the harness from the project root. Both clients can use its CLI when MCP is unavailable. The Lines design bible is a reference for harness cases. Keep gameplay development separate.
+
+Use scripts/codex_role.py for delegated Codex tasks. Assign architect and reviewer to Astra and engineering to Sol via the launcher's named roles. Start a fresh engineer invocation per task, passing only its request and relevant evidence. A process already launched in its assigned role should do that task directly. Keep routine FAST edits on the direct path.

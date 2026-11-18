@@ -15,7 +15,7 @@ depends_on = ["harness"]
 
 [[modules]]
 path = "scripts.live_fixture"
-depends_on = ["harness", "scripts.demo"]
+depends_on = ["harness", "scripts.demo", "scripts.codex_role"]
 
 [[modules]]
 path = "scripts.codex_project"
@@ -36,3 +36,7 @@ depends_on = ["fixture.entities"]
 [[modules]]
 path = "fixture.turn_lifecycle"
 depends_on = ["fixture.entities"]
+
+[[modules]]
+path = "scripts.codex_role"
+depends_on = ["harness"]
