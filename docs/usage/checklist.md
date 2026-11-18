@@ -18,4 +18,7 @@ The live artifacts are in `.harness/live/6fd4c3c3dc134e1da2b7018022b5bc9b/`. Com
 - [ ] Verify normal interactive use on a second checkout, including starting with unrelated uncommitted user work. Compilation currently requires a clean tree.
 - [ ] Benchmark baseline Codex, compiler-assisted Codex and decision-assisted Codex on the same 10–30 tasks by profile. Compare completion, time, turns, tokens and repair counts.
 - [x] Run GLiNER locally against a labeled shadow suite and compare with rules. See research-results.md for the measured results and reproduction command.
+- [x] Compare path rules, diff evidence, GLiNER and selective inference on a second suite. Confirm a deterministic request works with the model absent.
+- [x] Pin delegated architect and reviewer invocations to Astra and engineering to Sol. Observe unique live thread IDs for both engineering phases and a separate self-development task.
+- [x] Exercise the Windows unattended edit failure. The bounded edit command applied a real Sol change and ran independent checks. The shared verifier rejected unapproved API changes and a regression now covers removing ordinary public bindings.
 - [ ] Benchmark alternative providers on real requests and compare agent-spec and SIGIL with the existing compiler.

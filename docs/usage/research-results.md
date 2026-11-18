@@ -8,7 +8,7 @@
 
 **Verification boundary.** The verifier checks Git scope, revision, Tach, pytest status and requirement-linked passing tests. The reviewer evaluates what the tests actually prove. The live fixture controls the acceptance tests outside the implementing model. For general use, enforce protected baselines and approval for public API changes even inside allowed files. Tach's import checks alone cannot detect a changed signature.
 
-**Decision layer and frameworks.** The runnable provider uses deterministic rules. Local inference latency, abstention quality, agent-spec interoperability and SIGIL execution have yet to be measured. The first slice supplies a reproducible baseline for those experiments.
+**Decision layer and frameworks.** Deterministic rules enforce routing. The local inference measurements below use this baseline. Agent-spec interoperability and SIGIL execution remain open experiments.
 
 ## Self-hosting experiment
 
@@ -24,6 +24,26 @@ The experimental environment is separate from the harness. From the project root
 $checkpoint = ".harness/models/gliner-9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90"
 .\.harness\decision-env\Scripts\python scripts/shadow_decisions.py $checkpoint
 .\.harness\decision-env\Scripts\python scripts/shadow_decisions.py $checkpoint --request "Change the compiler ticket schema" --paths harness.py
+```
+
+## Selective use of multiple signals
+
+A fresh Sol engineer implemented the advisory assessment as a harness task. Its independent verifier ran Tach and 23 tests. The assessment takes intended paths and optionally the Git diff from `--base`. Mandatory FULL changes, documentation-only changes and isolated tests bypass inference. Ambiguous STANDARD work can query GLiNER for a suggested promotion. Missing weights, classifier errors and unknown labels produce explicit abstentions. The deterministic floor, recommendation and disagreement are visible separately.
+
+On a second set of 14 synthetic requests, seven required FULL review. Three examples supplied small before/after source pairs for computing observed interface impact. Each treatment used the same cases:
+
+| Treatment | Correct | Missed FULL | Unnecessary FULL | Classifier calls per 14 |
+|---|---:|---:|---:|---:|
+| Path rules | 10 | 4 | 0 | 0 |
+| Paths and observed impact | 12 | 2 | 0 | 0 |
+| GLiNER alone | 6 | 5 | 0 | 14 |
+| Deterministic evidence with selective GLiNER | 13 | 1 | 0 | 5 |
+
+The paired evaluation ran GLiNER once per case and reused each prediction to calculate what the selective policy would do. GLiNER helped flag a proposed versioned report format. Both the deterministic and selective methods missed a new plugin lifecycle proposed within one file. This is evidence for a trial on actual tasks. The sample is too small to estimate generalization, cloud savings or subscription impact.
+
+```powershell
+.\.harness\decision-env\Scripts\python scripts/shadow_decisions.py $checkpoint --benchmark-selective
+.\.harness\decision-env\Scripts\python scripts/shadow_decisions.py $checkpoint --base HEAD --request "Design a versioned report format" --paths server.py
 ```
 
 For another machine, create a virtualenv under .harness/decision-env, install `gliner2[local]==2.1.0`, `torch==2.15.0` and `transformers==5.23.0`, and use Hugging Face's `hf download fastino/GLiNER2.5-Decide --revision 9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90 --local-dir <checkpoint-directory>`. The local installation also retains the complete environment freeze in .harness/decision-env.lock and the measured rows in .harness/shadow-results.json.
