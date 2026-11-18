@@ -38,6 +38,30 @@ classes; the tags query captures `class_name`, `func`, inner `class` and
 would retire the local patch; file it when the Godot comparison campaign
 starts.
 
+## Validation against mature projects
+
+One-shot model code is homogeneous and low-cruft, so the patch was also
+validated against two experienced-hand repositories (shallow clones under
+`E:\Temp\opencode\gdscript-validation`):
+
+- **Orama-Interactive/Pixelorama** (~6k stars, production pixel-art app,
+  Godot 4): 249 `.gd` files, ~2.2 MB. Strict build parsed 253/253 files
+  (the repo also contains bash/python), yielding 3812 nodes with 3449
+  GDScript definitions (3229 function, 168 class, 52 method) — **zero files
+  without symbols**. Retrieval works on real code: `trail ask "undo history
+  snapshot"` returns the undo dialog, `clear_history` and `general_undo`.
+- **godotengine/godot-demo-projects** (official, mixed Godot 3/4 idioms):
+  461 `.gd` files. Strict build parsed 497/497 files, 2099 GDScript
+  definitions; the only 3 files without symbols are symbol-less by nature
+  (const/export-only or a bare `extends Node`) — not parse failures. Typed
+  dictionaries, `@export` property setters, `&"StringName"` literals and
+  `extends "res://..."` script paths all parse cleanly.
+
+Mature code exercises both coupling styles the boundary checker extracts:
+Pixelorama declares 98 global `class_name` classes with 17
+preload/extends-script import edges across 12 files; the demo projects carry
+56 `class_name` declarations with 26 import edges across 22 files.
+
 ## Boundary enforcement for GDScript
 
 `scripts/godot_boundaries.py` enforces module dependencies like Tach, with a
