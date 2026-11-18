@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "id": "FEAT-PHASES-001",
+  "intent": "Record the development-order policy and the fundamentals-first principle in agent instructions so every session proposes work in the right order without user reminders.",
+  "components": [
+    "harness"
+  ],
+  "actions": [
+    "fix_behavior"
+  ],
+  "requirements": {
+    "REQ-PH-A": "Agent instructions state that the designed feature set is completed and stabilized before any field trial or benchmark, and that a trial is expected to generate its own failure list as evidence for the next cycle.",
+    "REQ-PH-B": "Agent instructions state that the harness core stays language-neutral and that language tooling enters as pluggable adapters rather than core structure."
+  },
+  "unknowns": []
+}
