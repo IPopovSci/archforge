@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "id": "FEAT-DOC-LAYER-001",
+  "intent": "Establish the four-layer documentation system on the harness itself: a generated component catalog, pointer and staleness gates, and the binding charter.",
+  "components": [
+    "scripts.doc_catalog"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-DOC-A": "A generated, revision-stamped component catalog renders modules, public names, dependency edges, tickets and acceptance coverage from the repository state without model calls.",
+    "REQ-DOC-B": "The check fails when the committed generated catalog no longer matches a fresh render of the current tree.",
+    "REQ-DOC-C": "The check fails when a hand-written documentation file references a repository path that does not exist in the working tree.",
+    "REQ-DOC-D": "Advisory statistics report sentence overlap between hand-written documentation and the generated catalog, plus comment density and non-referential comment counts per module."
+  },
+  "unknowns": []
+}
