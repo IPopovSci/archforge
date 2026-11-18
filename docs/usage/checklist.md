@@ -13,8 +13,9 @@ The live artifacts are in `.harness/live/6fd4c3c3dc134e1da2b7018022b5bc9b/`. Com
 
 ## Open before general-purpose use
 
-- [ ] Exercise FULL on a fresh requirement with a new component, including a reviewed architecture change. Today's compiler authorizes existing policy modules and a fresh ticket-specific acceptance file. The live runner is specific to FEAT-042.
-- [ ] Exercise scope expansion and material public-interface approval, including rejection when a proposal understates its impact. Current review procedures still require a reviewer to inspect the actual diff.
+- [x] Use one harness for the compiler, server, engineering scripts and fixture. Trail retrieves the compiler definition. Tach rejects a reverse dependency from the compiler to the server.
+- [x] Compile and verify a synthetic new tool component against a reviewed policy. Exercise a public-signature change with and without approval, including rejection of policy drift.
 - [ ] Verify normal interactive use on a second checkout, including starting with unrelated uncommitted user work. Compilation currently requires a clean tree.
 - [ ] Benchmark baseline Codex, compiler-assisted Codex and decision-assisted Codex on the same 10–30 tasks by profile. Compare completion, time, turns, tokens and repair counts.
-- [ ] Evaluate local decision models in shadow mode and evaluate agent-spec and SIGIL against the direct Python workflow. Adoption decisions remain open.
+- [x] Run GLiNER locally against a labeled shadow suite and compare with rules. See research-results.md for the measured results and reproduction command.
+- [ ] Benchmark alternative providers on real requests and compare agent-spec and SIGIL with the existing compiler.

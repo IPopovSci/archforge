@@ -47,3 +47,11 @@ python harness.py verify <contract-digest> <attempt-directory> examples/receipt.
 Review requirements against the tests and implementation diff at the reported candidate revision. Passing tests establish that linked examples ran. Human or model judgment still determines whether they cover the intent. Keep the compiler checkout, approved digest and test environment under reviewer control. Use the demo to replay a baseline failure, passing implementation, forbidden import and scope failure. Every replay retains a separate local worktree and evidence under .harness/runs. Only the revision in review.json is the passing candidate.
 
 Run `python scripts/live_fixture.py` from a clean checkout to exercise Codex as architect, engineer and reviewer using your ChatGPT subscription. See the [setup checklist](docs/usage/checklist.md) and [first-run findings](docs/usage/research-results.md).
+
+## Developing the harness itself
+
+Run `python harness.py context compile_ticket` to locate the compiler, or use `retrieve_context` from Codex. The catalog includes the compiler, MCP adapter, engineering scripts and synthetic simulation. FAST and STANDARD work can use the normal checkout. For FULL work, a linked Git worktree lets the reviewer run the trusted compiler against a committed candidate, including when the candidate changes the verifier. The installation and Git object database are shared.
+
+For a reviewed boundary change, the reviewer supplies `python harness.py compile <ticket> --review <delta.json>` from the trusted checkout. Use `python harness.py schema` for the ReviewedDelta fields, `python harness.py ticket-digest <ticket>` for its ticket binding, and `git rev-parse HEAD` for the baseline. Use `api-digest <proposed-source>` for the approved public signature and SHA-256 of the exact proposed policy bytes for `file_digests`. A new module requires its proposed file and tach.toml in `extra_paths`. The acceptance test `test_self_hosted_contract` exercises the whole workflow, including approval of a new module and rejection of an extra policy edit.
+
+The interface check covers statically declared functions, methods, classes and annotated public fields. Review behavior, runtime exports, decorators' actual effects and semantic changes in the diff. Reviewer-owned inputs and the verifier must run from a trusted checkout.
