@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "id": "FEAT-AGENT-RULES-001",
+  "intent": "Require explicit advance approval for any public posting on external services, and make manual filing the default.",
+  "components": [
+    "harness"
+  ],
+  "actions": [
+    "fix_behavior"
+  ],
+  "requirements": {
+    "REQ-AR-A": "Agent instructions forbid posting on public services on the user's behalf without explicit advance approval for that specific action, and require a repository to specifically welcome agent-filed contributions before a filing is proposed.",
+    "REQ-AR-B": "The upstream filing instructions require checking the target repository's contribution policy first, with manual filing by the user as the default path."
+  },
+  "unknowns": []
+}
