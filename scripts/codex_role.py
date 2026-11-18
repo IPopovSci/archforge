@@ -1,7 +1,9 @@
-"""Launch one task in a fresh, fixed-role Codex session and retain its receipt."""
+"""Launch one task in a fresh, fixed-role native client session and retain its receipt."""
 import argparse
+from importlib import metadata as _packages
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -12,6 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import harness as h
+from scripts import opencode_project as _opencode
 
 _MODELS = {"architect": "gpt-6.2-astra", "engineer": "gpt-6.2-sol", "reviewer": "gpt-6.2-astra"}
 
@@ -27,6 +30,16 @@ def _command(role, write, folder, schema):
     return [*command, "-"]
 
 
+def _adapter(client):
+    if client == "opencode":
+        return _opencode._model, _opencode._run
+    matches = list(_packages.entry_points(group="architecture_harness.clients", name=client))
+    if len(matches) != 1:
+        raise ValueError(f"Expected one installed native adapter for {client!r}")
+    adapter = matches[0].load()
+    return adapter.model, adapter.run
+
+
 def _write_result(base, cwd):
     paths = h.diff_paths(base, cwd)
     if not paths:
@@ -37,6 +50,13 @@ def _write_result(base, cwd):
 def invoke(role, task, prompt, *, worktree=None, write=False, schema=None):
     if role not in _MODELS or not task.strip() or not prompt.strip():
         raise ValueError("Expected a named role, task ID and nonempty prompt")
+    client = os.environ.get("HARNESS_CLIENT", "codex")
+    if not re.fullmatch(r"[a-z][a-z0-9_-]{0,63}", client):
+        raise ValueError("Invalid native client name")
+    if client != "codex" and write:
+        raise ValueError(f"{client} engineering writes require --edit-file")
+    adapter = None if client == "codex" else _adapter(client)
+    model = adapter[0](role) if adapter else _MODELS[role]
     root = Path(h.git("rev-parse", "--show-toplevel")).resolve()
     common = Path(h.git("rev-parse", "--path-format=absolute", "--git-common-dir")).resolve()
     cwd = Path(worktree or root).resolve()
@@ -51,35 +71,46 @@ def invoke(role, task, prompt, *, worktree=None, write=False, schema=None):
     folder = runs / uuid.uuid4().hex
     folder.mkdir(parents=True)
     started = time.monotonic()
-    metadata = dict(task=task, role=role, requested_model=_MODELS[role], cwd=str(cwd),
+    metadata = dict(task=task, role=role, client=client, requested_model=model, cwd=str(cwd),
                     base=h.git("rev-parse","HEAD",cwd=cwd), write=write, thread_id=None,
                     usage=[], outcome="failed", receipt=str(folder / "receipt.json"))
     try:
         schema = Path(schema).resolve() if schema else None
         instruction = f"You are the assigned {role} for task {task}. Complete this task directly.\n"
-        result = subprocess.run(_command(role, write, folder, schema), cwd=cwd, input=instruction+prompt,
-                                capture_output=True, encoding="utf-8", errors="replace", timeout=1800)
-        ids = []
-        for line in result.stdout.splitlines():
-            try:
-                event = json.loads(line)
-            except ValueError:
-                continue
-            if event.get("type") == "thread.started":
-                ids.append(str(uuid.UUID(event["thread_id"])))
-            if event.get("usage"):
-                metadata["usage"].append(event["usage"])
-        if result.returncode or len(ids) != 1:
-            raise ValueError(f"Codex exit {result.returncode}, observed {len(ids)} thread starts. "
-                             + (result.stderr + result.stdout)[-1200:])
-        metadata["thread_id"] = ids[0]
+        if adapter:
+            thread, answer, metadata["usage"] = adapter[1](role, model, instruction+prompt, cwd, schema)
+            if not isinstance(thread, str) or not re.fullmatch(r"[a-zA-Z0-9_-]{1,160}", thread):
+                raise ValueError("Invalid native session ID")
+            (folder / "answer.txt").write_text(answer, encoding="utf-8")
+        else:
+            result = subprocess.run(_command(role, write, folder, schema), cwd=cwd, input=instruction+prompt,
+                                    capture_output=True, encoding="utf-8", errors="replace", timeout=1800)
+            ids = []
+            for line in result.stdout.splitlines():
+                try:
+                    event = json.loads(line)
+                except ValueError:
+                    continue
+                if event.get("type") == "thread.started":
+                    ids.append(str(uuid.UUID(event["thread_id"])))
+                if event.get("usage"):
+                    metadata["usage"].append(event["usage"])
+            if result.returncode or len(ids) != 1:
+                raise ValueError(f"Codex exit {result.returncode}, observed {len(ids)} thread starts. "
+                                 + (result.stderr + result.stdout)[-1200:])
+            thread = ids[0]
+        metadata["thread_id"] = thread
         threads = runs / "threads"
         threads.mkdir(exist_ok=True)
-        with (threads / ids[0]).open("x", encoding="utf-8") as marker:
+        marker_name = f"{client}.{thread}" if adapter else thread
+        with (threads / marker_name).open("x", encoding="utf-8") as marker:
             marker.write(folder.name)
         answer = (folder / "answer.txt").read_text(encoding="utf-8").strip()
         if not answer:
-            raise ValueError("Codex returned an empty response")
+            raise ValueError(f"{client} returned an empty response")
+        if schema:
+            from jsonschema import validate
+            validate(json.loads(answer), json.loads(schema.read_bytes()))
         if write:
             metadata["changed"] = _write_result(metadata["base"], cwd)
         metadata["outcome"] = "completed"
@@ -94,7 +125,7 @@ def invoke(role, task, prompt, *, worktree=None, write=False, schema=None):
 
 def _validate_edit(before, after):
     if before == after:
-        raise ValueError("Sol returned unchanged source")
+        raise ValueError("Engineer returned unchanged source")
     if h.public_api_digest(before) != h.public_api_digest(after):
         raise ValueError("Proposed public interface change requires FULL review")
 
@@ -150,6 +181,7 @@ def _main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("role", choices=list(_MODELS))
     parser.add_argument("task")
+    parser.add_argument("--client", help="Native client name, defaults to HARNESS_CLIENT or codex")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--prompt")
     group.add_argument("--prompt-file", type=Path)
@@ -157,6 +189,8 @@ def _main():
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--edit-file", help="Apply one explicitly scoped, verified STANDARD edit")
     args = parser.parse_args()
+    if args.client:
+        os.environ["HARNESS_CLIENT"] = args.client
     prompt = args.prompt if args.prompt_file is None else args.prompt_file.read_text(encoding="utf-8")
     if args.edit_file:
         if args.role != "engineer" or not args.worktree or args.write:

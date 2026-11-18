@@ -1,12 +1,24 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "policies": [
+    {"action":"provider.use","resource":"*","effect":"deny"},
+    {"action":"provider.use","resource":"opencode-go","effect":"allow"}
+  ],
+  "model": "opencode-go/glm-5.3",
+  "agents": {
+    "harness-architect": {"mode": "primary", "description": "Plan from supplied contract evidence", "model": "opencode-go/glm-5.3", "permissions":[{"action":"*","resource":"*","effect":"deny"}]},
+    "harness-engineer": {"mode": "primary", "description": "Implement one task from supplied source", "model": "opencode-go/glm-5.3-flash", "permissions":[{"action":"*","resource":"*","effect":"deny"}]},
+    "harness-reviewer": {"mode": "primary", "description": "Review supplied intent and verification evidence", "model": "opencode-go/glm-5.3", "permissions":[{"action":"*","resource":"*","effect":"deny"}]}
+  },
   "mcp": {
-    "architecture_harness": {
+    "servers": {"architecture_harness": {
       "type": "local",
       "command": [
-        ".venv/Scripts/python.exe",
-        "server.py"
+        "py",
+        "-3",
+        "scripts/opencode_project.py",
+        "--serve-mcp"
       ]
-    }
+    }}
   }
 }

@@ -15,13 +15,21 @@ python -m pytest -q
 tach check
 ```
 
-Codex is the active client. From the repository root, start a session with the project MCP server:
+From the repository root, start Codex with the project MCP server:
 
 ```powershell
 .\.venv\Scripts\python scripts/codex_project.py
 ```
 
-Ask Codex to call `route_task` on `README.md`. A working connection returns `FAST` from `rules-v1`. The launcher passes this project's server configuration for that session. The Python CLI also works in an existing Codex session. OpenCode is an optional adapter for a future switch.
+To start the installed OpenCode 2.x client, run `python scripts/opencode_project.py` in the activated environment. Both launchers select the native client for child tasks. Ask either client to call `route_task` on `README.md`. A working connection returns `FAST` from `rules-v1`. Both clients also have access to the Python CLI.
+
+## Using another client
+
+Any client with shell access can run the daily workflow below. For a client with stdio MCP support, configure the absolute project Python executable as its command, the absolute path to `server.py` as its argument, and the checkout root as its working directory. Give it the repository's `AGENTS.md` instructions. This also works for clients that use a different project instruction filename. Verification runs through the Python CLI in the trusted checkout.
+
+To hand work between clients, share the baseline revision, compiled digest, candidate checkout and requirement receipt. Each client should run verification from the checkout holding the compiled artifact. On another machine, transfer the approved contract to `.harness/compiled/<digest>.json` along with the Git revisions and receipt.
+
+Automated model delegation is optional. A new native client can publish a Python entry point in the `architecture_harness.clients` group under its client name. The entry point loads an adapter object with `model(role) -> str` and `run(role, model, prompt, cwd, schema) -> (session_id, answer, usage_events)`. The adapter owns authentication, pinned model selection, starting a fresh read-only session, and checking native completion. The shared launcher validates structured answers, rejects reused session IDs and applies scoped edits. Install the adapter in the project environment and select it with `--client <name>`. Use one explicitly selected client per task.
 
 ## Daily workflow
 
@@ -46,7 +54,7 @@ python harness.py verify <contract-digest> <attempt-directory> examples/receipt.
 
 Review requirements against the tests and implementation diff at the reported candidate revision. Passing tests establish that linked examples ran. Human or model judgment still determines whether they cover the intent. Keep the compiler checkout, approved digest and test environment under reviewer control. Use the demo to replay a baseline failure, passing implementation, forbidden import and scope failure. Every replay retains a separate local worktree and evidence under .harness/runs. Only the revision in review.json is the passing candidate.
 
-Run `python scripts/live_fixture.py` from a clean checkout to exercise Codex as architect, engineer and reviewer using your ChatGPT subscription. See the [setup checklist](docs/usage/checklist.md) and [first-run findings](docs/usage/research-results.md).
+Run `python scripts/live_fixture.py` from a clean checkout to exercise the selected client as architect, engineer and reviewer. See the [setup checklist](docs/usage/checklist.md) and [first-run findings](docs/usage/research-results.md).
 
 ## Developing the harness itself
 
@@ -69,18 +77,22 @@ For a reviewed boundary change, the reviewer supplies `python harness.py compile
 
 The interface check covers statically declared functions, methods, classes and annotated public fields. Review behavior, runtime exports, decorators' actual effects and semantic changes in the diff. Reviewer-owned inputs and the verifier must run from a trusted checkout.
 
-## Codex roles
+## Native client roles
 
-Use the role launcher when assigning a new engineering task. Architect and reviewer use GPT-6.2 Astra. Engineer uses GPT-6.2 Sol. Every invocation starts a separate ephemeral Codex thread. Supply the request, compiler evidence or verified review bundle explicitly. Task IDs group receipts across calls without loading previous conversations.
+OpenCode Go users can connect their subscription with `python scripts/opencode_project.py auth login`. The architect and reviewer default to GLM-5.3 and the engineer to GLM-5.3-Flash. Configure the native agents and foreground model in `opencode.json`. The shared launcher reads the selected role from that file. A failed role ends the task on the selected client.
+
+Run `python scripts/roles.py engineer HOST-EXAMPLE --client opencode --prompt "Summarize the supplied requirement ..."` for a fresh OpenCode session. Use `--client codex` for a fresh Codex thread. From a project-launched session, omit the flag to inherit the client. For the live fixture launched from a standalone PowerShell, set `$env:HARNESS_CLIENT = 'opencode'` or `'codex'` before running `python scripts/live_fixture.py`. Both paths use the same contract, evidence and verification code. Unattended OpenCode roles receive their source and evidence in the request. Use the bounded `--edit-file` path below for engineering writes. Interactive sessions retain native client permissions. If your native executable is outside PATH, set HARNESS_OPENCODE to its absolute executable path.
+
+For Codex, use the same role launcher. Architect and reviewer use GPT-6.2 Astra. Engineer uses GPT-6.2 Sol. Every invocation starts a separate ephemeral Codex thread. Supply the request, compiler evidence or verified review bundle explicitly. Task IDs group receipts across calls without loading previous conversations.
 
 ```powershell
-.\.venv\Scripts\python scripts/codex_role.py engineer TASK-123 --prompt "Inspect the off-by-one in fixture/turn_lifecycle.py"
+.\.venv\Scripts\python scripts/roles.py engineer TASK-123 --prompt "Inspect the off-by-one in fixture/turn_lifecycle.py"
 ```
 
-Architect and reviewer calls are read-only. For engineering edits, use `--write --worktree <linked-checkout>` and the normal scope and verification gates. The default runs read-only. Each receipt in .harness/roles records the requested model, task, working directory, Codex thread ID, usage events and outcome. Use the interactive session for coordination. The role launcher owns model selection for delegated tasks.
+Architect and reviewer calls are read-only. For direct Codex engineering edits, use `--write --worktree <linked-checkout>` and the normal scope and verification gates. The default runs read-only. Each receipt in .harness/roles records the requested model, task, working directory, native client and session ID, usage events and outcome. Use the interactive session for coordination. The role launcher owns model selection for delegated tasks.
 
-On machines where unattended Codex shell tools cannot start, use the bounded STANDARD edit path. Supply an existing declared Python module, a clean linked worktree, and the task. Python gives a fresh read-only Sol process that file, validates the returned interface, applies the edit, and runs Tach and pytest. The edit receipt records the actual changed file and checks. A failing candidate stays in its worktree for inspection.
+On machines where unattended Codex shell tools cannot start, use the bounded STANDARD edit path. Supply an existing declared Python module, a clean linked worktree, and the task. Python gives a fresh read-only engineer process that file, validates the returned interface, applies the edit, and runs Tach and pytest. The edit receipt records the actual changed file and checks. A failing candidate stays in its worktree for inspection.
 
 ```powershell
-.\.venv\Scripts\python scripts/codex_role.py engineer TASK-124 --worktree <linked-checkout> --edit-file fixture/combat.py --prompt "Preserve existing stacks when applying poison"
+.\.venv\Scripts\python scripts/roles.py engineer TASK-124 --worktree <linked-checkout> --edit-file fixture/combat.py --prompt "Preserve existing stacks when applying poison"
 ```

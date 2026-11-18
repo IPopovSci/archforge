@@ -17,6 +17,7 @@ def test_role_commands(tmp_path):
 
 
 def test_audit_and_reuse(tmp_path, monkeypatch):
+    monkeypatch.setenv("HARNESS_CLIENT", "codex")
     monkeypatch.chdir(tmp_path)
     h.git("init", "-q")
     h.git("-c","user.name=Test","-c","user.email=test@localhost","commit","--allow-empty","-qm","base")

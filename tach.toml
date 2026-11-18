@@ -39,4 +39,12 @@ depends_on = ["fixture.entities"]
 
 [[modules]]
 path = "scripts.codex_role"
-depends_on = ["harness"]
+depends_on = ["harness", "scripts.opencode_project"]
+
+[[modules]]
+path = "scripts.opencode_project"
+depends_on = []
+
+[[modules]]
+path = "scripts.roles"
+depends_on = ["scripts.codex_role"]
