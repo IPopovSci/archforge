@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "id": "FEAT-GODOT-HYGIENE-001",
+  "intent": "Enforce autoload registration allowlists and absolute-path hygiene for GDScript projects, and record the adopted community style tooling.",
+  "components": [
+    "scripts.godot_boundaries"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-GH-A": "The boundary checker rejects a project.godot autoload registration that is missing from the policy allowlist with exit code 1.",
+    "REQ-GH-B": "The boundary checker rejects absolute filesystem paths in GDScript outside tests while res:// and user:// paths pass."
+  },
+  "unknowns": []
+}
