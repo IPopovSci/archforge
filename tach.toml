@@ -26,6 +26,10 @@ path = "scripts.shadow_decisions"
 depends_on = ["harness"]
 
 [[modules]]
+path = "scripts.benchmark"
+depends_on = ["harness", "scripts.codex_role"]
+
+[[modules]]
 path = "fixture.entities"
 depends_on = []
 
