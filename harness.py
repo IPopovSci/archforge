@@ -167,6 +167,10 @@ def check_commands(report):
 
 
 def compile_ticket(ticket, review=None):
+    """Compile a revision-bound contract. The check list is frozen at compile
+    time: a ticket that changes the compiler itself is therefore verified
+    against the pre-change list, and the next compiled contract exercises
+    the change. Acceptance tests carry the proof across that boundary."""
     structural = set(ticket.checks) & set(STRUCTURAL_CHECKS)
     if structural:
         raise ValueError(f"Structural checks are not ticket-declarable: {sorted(structural)}")
