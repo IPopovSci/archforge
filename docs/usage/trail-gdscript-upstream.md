@@ -62,9 +62,14 @@ an already-bundled grammar, the same pattern as the glsl row merged for #293.
 
 ## Filing checklist
 
-1. Fork trailhq/Trail-Code; add the row + query in a branch.
-2. Open a PR or comment on issue #299 referencing the validation above.
-3. On merge and release: drop `patches/trail/gdscript.scm`, the
+1. Check the repository's contributing and issue policy for whether
+   agent-filed contributions are welcome at all; if it does not say so,
+   stop here.
+2. Ask the user for explicit advance approval for the specific filing. The
+   default is manual filing by the user using this page.
+3. On approval: fork trailhq/Trail-Code; add the row + query in a branch.
+4. Open a PR or comment on issue #299 referencing the validation above.
+5. On merge and release: drop `patches/trail/gdscript.scm`, the
    `scripts/patch_trail.mjs` applier, the package.json postinstall hook, the
    patch assertions in `tests/test_feat_gdscript_001.py`, and this page; bump
    the pinned version in package.json.
