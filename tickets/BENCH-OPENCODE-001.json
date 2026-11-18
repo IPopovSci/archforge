@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "id": "BENCH-OPENCODE-001",
+  "intent": "Run the ten-task paired benchmark through the OpenCode adapter and record the cross-client comparison.",
+  "components": [
+    "scripts.benchmark"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-BENCH-A": "The paired runner completes all ten seeded tasks on the OpenCode client with per-task receipts.",
+    "REQ-BENCH-B": "Recorded results allow baseline and Trail-context comparison by profile, tokens, seconds and pass count."
+  },
+  "unknowns": [
+    "OpenCode Go quota impact of the full run"
+  ]
+}

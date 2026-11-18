@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "FEAT-DAG-001",
+  "intent": "Compile ordered multi-ticket plans so a campaign of tickets can declare and validate dependencies.",
+  "components": [
+    "harness"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-DAG-A": "A plan file lists ticket identifiers with explicit depends_on references and the compiler rejects unknown or cyclic references.",
+    "REQ-DAG-B": "Compilation of a dependent ticket records which planned tickets already completed."
+  },
+  "unknowns": [
+    "Plan file format and storage location",
+    "Whether execution ordering is enforced by the compiler or the launchers"
+  ]
+}

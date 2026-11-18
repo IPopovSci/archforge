@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "FEAT-GDSCRIPT-001",
+  "intent": "Index GDScript for Trail and enforce Godot module boundaries and headless checks, validated against the 2026-11-18 one-shot experiment.",
+  "components": [
+    "scripts.godot_boundaries",
+    "scripts.godot_check"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-GD-A": "A GDScript file builds into a Trail graph with a file node plus class and function definition nodes from the patched breadth-tier registry row and tags query.",
+    "REQ-GD-B": "The postinstall applier restores the registry row and tags query in the shared Trail installation and is idempotent.",
+    "REQ-GD-C": "The boundary checker approves declared cross-file GDScript dependencies and rejects undeclared ones with exit code 1.",
+    "REQ-GD-D": "The headless check adapter runs a configured command and reports exit code, output and timeout failures."
+  },
+  "unknowns": []
+}

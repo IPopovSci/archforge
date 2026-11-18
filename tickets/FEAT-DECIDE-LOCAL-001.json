@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "FEAT-DECIDE-LOCAL-001",
+  "intent": "Evaluate local GPU decision models for routing and promotion on the recorded shadow suites.",
+  "components": [
+    "scripts.shadow_decisions"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-DECIDE-A": "A local decision model below 5B parameters answers the routing choice on the recorded shadow suites using the machine GPU.",
+    "REQ-DECIDE-B": "Measured rows compare the local model with the path rules and GLiNER baselines on accuracy, latency and hardware cost."
+  },
+  "unknowns": [
+    "Model candidate and inference runtime",
+    "Whether a System One-compatible local server covers the same question types"
+  ]
+}
