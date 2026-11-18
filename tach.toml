@@ -52,3 +52,11 @@ depends_on = []
 [[modules]]
 path = "scripts.roles"
 depends_on = ["scripts.codex_role"]
+
+[[modules]]
+path = "scripts.godot_boundaries"
+depends_on = []
+
+[[modules]]
+path = "scripts.godot_check"
+depends_on = []
