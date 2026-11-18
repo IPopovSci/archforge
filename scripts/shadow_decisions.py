@@ -2,6 +2,9 @@
 import argparse
 import ast as _ast
 import contextlib as _contextlib
+import hashlib as _hash
+import importlib.metadata as _metadata
+import tempfile as _tempfile
 import json
 import os
 import re as _re
@@ -651,25 +654,97 @@ def _lookup_hits(documents, scores, revision):
     return hits
 
 
-def _semantic_lookup(query, directory, threads):
+def _digest(value):
+    return _hash.sha256(json.dumps(value, sort_keys=True, allow_nan=False).encode()).hexdigest()
+
+
+def _cache(path, build):
+    if path.is_file():
+        record = json.loads(path.read_text(encoding="utf-8"))
+        if record["digest"] == _digest(record["data"]):
+            return record["data"], True
+        raise ValueError(f"Invalid cache checksum: {path}")
+    data = build()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with _tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as tmp:
+        staged = Path(tmp.name)
+    try:
+        staged.write_text(json.dumps({"digest": _digest(data), "data": data}, allow_nan=False), encoding="utf-8")
+        os.replace(staged, path)
+    finally:
+        staged.unlink(missing_ok=True)
+    return data, False
+
+
+def _snapshot(root, revision):
     from harness import catalog
-    if not query.strip() or len(query) > 1000 or not directory.is_dir():
-        raise ValueError("Provide a short question and an installed MiniLM checkpoint directory")
-    import torch
-    from transformers import AutoModel, AutoTokenizer
+    def build():
+        cat = catalog()
+        tracked = set(_embedding_git(root, "ls-files", "-z").split("\0"))
+        docs, _, _ = _embedding_corpus(root, cat.model_dump(), tracked, study=False)
+        if not docs or cat.revision != revision or _embedding_revision(root) != revision:
+            raise ValueError("Empty or stale Trail graph")
+        return docs
+    return _cache(root / ".harness/lookup/v1" / f"{revision}.json", build)
+
+
+def _model_key(directory):
+    if directory is None or not directory.is_dir():
+        raise ValueError("Supply a local MiniLM checkpoint directory for behavioral lookup")
+    files = {}
+    for path in sorted(directory.iterdir()):
+        if path.is_file() and path.suffix in {".json", ".txt", ".safetensors", ".model"}:
+            with path.open("rb") as stream:
+                files[path.name] = _hash.file_digest(stream, "sha256").hexdigest()
+    if "model.safetensors" not in files:
+        raise ValueError("Expected a local safetensors checkpoint")
+    return _digest([files, {p: _metadata.version(p) for p in ("torch","transformers","tokenizers")},
+                    "masked-mean-normalized-256-v1"])
+
+
+def _lookup(query, directory, threads, stage):
     root = Path.cwd().resolve()
-    cat = catalog()
-    tracked = set(_embedding_git(root, "ls-files", "-z").split("\0"))
-    documents, _, _ = _embedding_corpus(root, cat.model_dump(), tracked, study=False)
-    if not documents:
-        raise ValueError("No indexed functions in the current catalog")
-    torch.set_num_threads(threads)
-    encode = _embedding_encoder(directory, torch, AutoTokenizer, AutoModel, "masked_mean")
-    indexed = encode([documents[symbol]["text"] for symbol in sorted(documents)])
-    scores = (encode([query]) @ indexed.T)[0]
-    if _embedding_revision(root) != cat.revision:
+    revision = _embedding_revision(root)
+    documents, reused = _snapshot(root, revision)
+    info = dict(revision=revision, symbols=len(documents), snapshot_reused=reused)
+    if stage == "snapshot":
+        return info
+    symbols = sorted(documents)
+    if query is not None:
+        query = query.strip()
+        if not query or len(query) > 1000:
+            raise ValueError("Provide a question of 1 to 1000 characters")
+        exact = [s for s in symbols if query in (s, documents[s]["name"])]
+        if exact:
+            hits = []
+            for s in exact[:3]:
+                doc = documents[s]
+                hits.append(dict(symbol=s, revision=revision, excerpt=doc["text"][:650],
+                                 pointer=f"{doc['path']}:L{doc['first']}-L{doc['last']}"))
+            return dict(info, method="trail-symbol", hits=hits)
+    model_key = _model_key(directory)
+    # A docs-only revision can reuse the vectors when ordered symbol IDs and input text agree.
+    texts = [documents[s]["text"] for s in symbols]
+    key = _digest([model_key, symbols, texts])
+    encoder = None
+    def encode(batch):
+        nonlocal encoder
+        if encoder is None:
+            import torch
+            from transformers import AutoModel, AutoTokenizer
+            torch.set_num_threads(threads)
+            encoder = _embedding_encoder(directory, torch, AutoTokenizer, AutoModel, "masked_mean")
+        return encoder(batch)
+    vectors, reused = _cache(root / ".harness/lookup/v1" / f"vectors-{key}.json",
+                             lambda: encode(texts).tolist())
+    info.update(vector_key=key, vectors_reused=reused, method="trail-minilm")
+    if stage == "query":
+        import numpy as np
+        scores = np.asarray(vectors, dtype="float32") @ encode([query])[0]
+        info["hits"] = _lookup_hits(documents, scores, revision)
+    if _embedding_revision(root) != revision:
         raise ValueError("Revision changed during lookup")
-    return _lookup_hits(documents, scores, cat.revision)
+    return info
 
 
 def main():
@@ -680,15 +755,22 @@ def main():
     parser.add_argument("--paths", nargs="+", help="Intended repository-relative paths")
     parser.add_argument("--base", help="Recheck the diff against this Git revision")
     parser.add_argument("--benchmark-selective", action="store_true", help="Run the selective benchmark")
-    parser.add_argument("--semantic-query", help="Return three revision-bound MiniLM source matches")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--semantic-query", help="Return up to three source matches")
+    modes.add_argument("--lookup", help="Return source matches and cache provenance")
+    modes.add_argument("--snapshot", action="store_true", help="Save Trail source records without loading ML")
+    modes.add_argument("--prepare-lookup", action="store_true", help="Encode a previously saved Trail snapshot")
     parser.add_argument("--embedding-study", nargs=2, type=Path, metavar=("MINILM_DIR", "BGE_DIR"),
                         help="Run the experimental offline retrieval and routing study")
     args = parser.parse_args()
-    if args.semantic_query is not None:
-        if (args.model_directory is None or args.threads < 1 or args.embedding_study or args.request is not None
+    if args.semantic_query is not None or args.lookup is not None or args.snapshot or args.prepare_lookup:
+        if (args.threads < 1 or args.embedding_study or args.request is not None
                 or args.paths or args.base or args.benchmark_selective):
             parser.error("--semantic-query requires a local MiniLM directory and optional positive --threads")
-        print(json.dumps(_semantic_lookup(args.semantic_query, args.model_directory, args.threads), indent=2))
+        stage = "snapshot" if args.snapshot else "prepare" if args.prepare_lookup else "query"
+        result = _lookup(args.lookup if args.lookup is not None else args.semantic_query,
+                         args.model_directory, args.threads, stage)
+        print(json.dumps(result["hits"] if args.semantic_query is not None else result, indent=2))
         return
     if args.threads < 1:
         parser.error("Expected a positive CPU thread count")
