@@ -14,8 +14,7 @@
     "servers": {"architecture_harness": {
       "type": "local",
       "command": [
-        "py",
-        "-3",
+        "python",
         "scripts/opencode_project.py",
         "--serve-mcp"
       ]

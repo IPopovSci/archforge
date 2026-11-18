@@ -2,7 +2,6 @@ import asyncio
 import json
 import subprocess
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 from jsonschema import ValidationError
@@ -39,7 +38,7 @@ def test_session(monkeypatch, tmp_path):
     assert native._run("engineer", native._model("engineer"), "answer", tmp_path, schema) == (
         "ses_123", "42", [{"output":1}])
     for invalid in [text, text+"\n"+done.replace("ses_123","ses_456"),
-                    json.dumps({"type":"error"}), text+"\n"+done.replace("stop","length")]:
+                    json.dumps({"type":"error"}), stream.replace("stop","length"), stream+"\n"+text]:
         with pytest.raises(ValueError):
             native._reply(invalid)
 
@@ -64,12 +63,15 @@ def test_portable(tmp_path, monkeypatch):
     subprocess.run(["git","init","-q"], check=True)
     subprocess.run(["git","-c","user.name=Test","-c","user.email=test@localhost","commit",
                     "--allow-empty","-qm","base"], check=True)
-    answers = iter([("session1","42",[]), ("session1","42",[]), ("session2","false",[])])
-    adapter = SimpleNamespace(model=lambda role: "test/fast", run=lambda *args: next(answers))
-    def installed(group, name):
-        assert (group, name) == ("architecture_harness.clients", "example")
-        return [SimpleNamespace(load=lambda:adapter)]
-    monkeypatch.setattr(roles._packages,"entry_points",installed)
+    distribution = tmp_path / "host_example-1.dist-info"
+    distribution.mkdir()
+    (distribution / "METADATA").write_text("Metadata-Version: 2.1\nName: host-example\nVersion: 1\n")
+    (distribution / "entry_points.txt").write_text("[architecture_harness.clients]\nexample = example_host\n")
+    (tmp_path / "example_host.py").write_text(
+        "answers = iter([('session1','42',[]), ('session1','42',[]), ('session2','false',[])])\n"
+        "def model(role): return 'test/fast'\n"
+        "def run(role, model, prompt, cwd, schema): return next(answers)\n")
+    monkeypatch.syspath_prepend(str(tmp_path))
     monkeypatch.setenv("HARNESS_CLIENT","example")
     schema = tmp_path / "schema.json"
     schema.write_text('{"type":"integer"}')

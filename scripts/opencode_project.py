@@ -41,6 +41,7 @@ def _model(role):
 def _reply(output):
     sessions, parts, usage = set(), [], []
     finished = False
+    opened = False
     for line in output.splitlines():
         event = json.loads(line)
         if event["type"] == "error":
@@ -51,11 +52,16 @@ def _reply(output):
         sessions.add(session)
         part = event["part"]
         if event["type"] == "step_start":
+            if opened or finished:
+                raise ValueError("Unexpected OpenCode step start")
+            opened = True
             parts.clear()
-            finished = False
+        elif not opened:
+            raise ValueError("OpenCode event outside active step")
         elif event["type"] == "text":
             parts.append(part["text"])
         elif event["type"] == "step_finish":
+            opened = False
             finished = part["reason"] == "stop"
             usage.append(part["tokens"])
     answer = "".join(parts).strip()
@@ -64,13 +70,18 @@ def _reply(output):
     return sessions.pop(), answer, usage
 
 
+def _environment():
+    return {**os.environ, "HARNESS_CLIENT":"opencode",
+            "PATH":str(Path(sys.executable).parent) + os.pathsep + os.environ.get("PATH", "")}
+
+
 def _run(role, model, prompt, cwd, schema):
     if schema:
         specification = json.loads(schema.read_bytes())
         prompt += "\nReturn only JSON matching this schema:\n" + json.dumps(specification)
     command = [_client(), "run", "--standalone", "--archived", "--agent", "harness-" + role,
                "--model", model, "--format", "json"]
-    result = subprocess.run(command, input=prompt, cwd=cwd, capture_output=True,
+    result = subprocess.run(command, input=prompt, cwd=cwd, env=_environment(), capture_output=True,
                             encoding="utf-8", errors="replace", timeout=1800)
     if result.returncode:
         raise ValueError(f"OpenCode exit {result.returncode}: {result.stderr[-1000:]}")
@@ -89,4 +100,4 @@ if __name__ == "__main__":
     if sys.argv[1:] == ["--serve-mcp"]:
         sys.exit(subprocess.call(_server_command()))
     sys.exit(subprocess.call([_client(), "--standalone", *sys.argv[1:]],
-                             env={**os.environ,"HARNESS_CLIENT":"opencode"}))
+                             env=_environment()))
