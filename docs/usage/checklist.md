@@ -25,3 +25,9 @@ The live artifacts are in `.harness/live/6fd4c3c3dc134e1da2b7018022b5bc9b/`. Com
 - [x] Compare two offline embedding encoders with Trail, TF-IDF and rank fusion. Test a separate Trail extraction, vector-preparation process and warm semantic lookup.
 - [x] Validate a live noninteractive Codex request on a second checkout with unrelated dirty work and compile in its clean companion.
 - [x] Build and exercise agent-spec 1.4.0 planning and fixture tests. Windows conformance and SIGIL runtime validation remain open; see the research results.
+- [x] Upgrade Docker Desktop to 29.9.3, rebuild its internal WSL distributions, run `hello-world`, and leave the Linux engine healthy.
+- [x] Build and run SIGIL 0.7.16 locally from its pinned source. The persistent container is running, its deterministic official example gate passed, and project-local path forwarding works.
+- [x] Add a ten-task paired benchmark suite covering FAST, STANDARD, and FULL work. Dry-run validation confirmed every seeded defect fails its focused test without spending model calls.
+- [x] Exercise the paired benchmark runner end to end on one FAST task. Baseline and Trail-context treatments both passed, and the runner recorded per-task seconds, client, model, session ID, input tokens, output tokens, cached tokens, changed files, and focused test result.
+- [x] Extend the paired sample to one STANDARD and one FULL seeded repair. Baseline and Trail context each passed all three sampled tasks.
+- [ ] Run the complete ten-task suite and compare Codex with OpenCode on the same seeds before drawing a cost or quality conclusion.

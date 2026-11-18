@@ -1,0 +1,140 @@
+{
+  "tasks": [
+    {
+      "id": "docs-codex",
+      "profile": "FAST",
+      "request": "Restore the README sentence that tells users how to start Codex with the project MCP server.",
+      "file": "README.md",
+      "context_query": "start Codex with the project MCP server",
+      "mutation": {
+        "find": "From the repository root, start Codex with the project MCP server:",
+        "replace": "From the repository root, start the client with the project MCP server:"
+      },
+      "test_file": "tests/benchmark/test_docs_codex.py",
+      "test_source": "from pathlib import Path\n\ndef test_readme_mentions_codex():\n    text = Path(\"README.md\").read_text(encoding=\"utf-8\")\n    assert \"start Codex with the project MCP server\" in text\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_docs_codex.py"]
+    },
+    {
+      "id": "combat-stack",
+      "profile": "STANDARD",
+      "request": "Make applying poison preserve every existing stack and append a new five-turn stack.",
+      "file": "fixture/combat.py",
+      "context_query": "apply poison preserve existing stacks",
+      "test_file": "tests/benchmark/test_combat_stack.py",
+      "test_source": "from fixture.combat import apply_poison\nfrom fixture.entities import Entity\n\ndef test_preserves_existing_stacks():\n    entity = Entity(20, (3,))\n    assert apply_poison(entity).poison == (3, 5)\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_combat_stack.py"]
+    },
+    {
+      "id": "profile-docs",
+      "profile": "FULL",
+      "request": "Restore the routing rule that keeps documentation-only work on the FAST path.",
+      "file": "harness.py",
+      "context_query": "documentation only routing FAST",
+      "mutation": {
+        "find": "    if all(p == \"README.md\" or re.fullmatch(r\"docs/usage/[\\w-]+\\.md\", p) for p in paths):\n        return \"FAST\"",
+        "replace": "    if False:\n        return \"FAST\""
+      },
+      "test_file": "tests/benchmark/test_profile_docs.py",
+      "test_source": "from harness import profile\n\ndef test_docs_only_is_fast():\n    assert profile([\"README.md\"]) == \"FAST\"\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_profile_docs.py"]
+    },
+    {
+      "id": "review-binding",
+      "profile": "FULL",
+      "request": "Restore the check that binds a reviewed architecture delta to its exact revision and ticket.",
+      "file": "harness.py",
+      "context_query": "reviewed delta revision ticket binding",
+      "mutation": {
+        "find": "    if review.revision != revision or review.ticket_digest != ticket_digest(ticket):",
+        "replace": "    if False:"
+      },
+      "test_file": "tests/benchmark/test_review_binding.py",
+      "test_source": "import pytest\nfrom scripts.benchmark import load_tasks\nfrom harness import ReviewedDelta, Ticket\n\ndef test_review_binding():\n    ticket = Ticket(version=1, id=\"BENCH-001\", intent=\"test\", components=[\"harness\"], actions=[\"extend_behavior\"], requirements={\"REQ-1\":\"test\"}, unknowns=[])\n    review = ReviewedDelta(version=1, revision=\"base\", ticket_digest=\"bad\", rationale=\"test\", extra_paths=[], public_api={})\n    with pytest.raises(ValueError):\n        review.model_copy(update={\"revision\": \"other\"})\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_review_binding.py"]
+    },
+    {
+      "id": "edit-guard",
+      "profile": "STANDARD",
+      "request": "Restore the guard that rejects an engineer response that leaves a source file unchanged.",
+      "file": "scripts/codex_role.py",
+      "context_query": "reject unchanged engineer response",
+      "mutation": {
+        "find": "    if before == after:\n        raise ValueError(\"Engineer returned unchanged source\")",
+        "replace": "    if False:\n        raise ValueError(\"Engineer returned unchanged source\")"
+      },
+      "test_file": "tests/benchmark/test_edit_guard.py",
+      "test_source": "import pytest\nfrom scripts.codex_role import _validate_edit\n\ndef test_unchanged_source_rejected():\n    with pytest.raises(ValueError, match=\"unchanged\"):\n        _validate_edit(\"x = 1\", \"x = 1\")\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_edit_guard.py"]
+    },
+    {
+      "id": "rank-fusion",
+      "profile": "STANDARD",
+      "request": "Restore reciprocal-rank fusion so results from both rankings contribute to the final order.",
+      "file": "scripts/shadow_decisions.py",
+      "context_query": "reciprocal rank fusion",
+      "mutation": {
+        "find": "    return sorted(scores, key=lambda symbol: (-scores[symbol], symbol))",
+        "replace": "    return list(list1)"
+      },
+      "test_file": "tests/benchmark/test_rank_fusion.py",
+      "test_source": "from scripts.shadow_decisions import _fuse\n\ndef test_fuse_combines_rankings():\n    assert _fuse([\"a\", \"b\"], [\"b\", \"c\"])[0] == \"b\"\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_rank_fusion.py"]
+    },
+    {
+      "id": "native-session",
+      "profile": "FULL",
+      "request": "Restore the native-client reply guard that rejects multiple sessions in one response.",
+      "file": "scripts/opencode_project.py",
+      "context_query": "native client reply guard multiple sessions",
+      "mutation": {
+        "find": "    if len(sessions) != 1 or not finished or not answer:",
+        "replace": "    if not answer:"
+      },
+      "test_file": "tests/benchmark/test_native_session.py",
+      "test_source": "import json\nimport pytest\nfrom scripts import opencode_project as native\n\ndef test_multiple_sessions_rejected():\n    events = [\n        {\"type\":\"step_start\"},\n        {\"type\":\"text\", \"text\":\"x\"},\n        {\"type\":\"step_finish\", \"reason\":\"stop\"},\n    ]\n    stream = \"\\n\".join(json.dumps({**e, \"sessionID\":sid}) for sid in (\"ses_1\", \"ses_2\") for e in events)\n    with pytest.raises(ValueError):\n        native._reply(stream)\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_native_session.py"]
+    },
+    {
+      "id": "mcp-route",
+      "profile": "FULL",
+      "request": "Restore route_task so documentation-only work returns FAST rather than a hardcoded FULL result.",
+      "file": "server.py",
+      "context_query": "route task documentation FAST",
+      "mutation": {
+        "find": "    return harness.RuleProvider().decide(paths, [\"FAST\", \"STANDARD\", \"FULL\"])",
+        "replace": "    return {\"choice\": \"FULL\", \"provider\": \"broken\", \"scores\": {\"FULL\": 1}, \"evidence\": paths}"
+      },
+      "test_file": "tests/benchmark/test_mcp_route.py",
+      "test_source": "from server import route_task\n\ndef test_docs_route_fast():\n    assert route_task([\"README.md\"])[\"choice\"] == \"FAST\"\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_mcp_route.py"]
+    },
+    {
+      "id": "public-bindings",
+      "profile": "FULL",
+      "request": "Restore public-binding detection so removing a module-level export changes the interface digest.",
+      "file": "harness.py",
+      "context_query": "public binding detection interface digest",
+      "mutation": {
+        "find": "                names = sorted({part.id for target in node.targets for part in ast.walk(target)\n                                if isinstance(part, ast.Name) and isinstance(part.ctx, ast.Store)\n                                and not part.id.startswith(\"_\")})",
+        "replace": "                names = []"
+      },
+      "test_file": "tests/benchmark/test_public_bindings.py",
+      "test_source": "from harness import public_api_digest\n\ndef test_removed_binding_changes_digest():\n    before = \"BIN = 1\\n\"\n    after = \"\"\n    assert public_api_digest(before) != public_api_digest(after)\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_public_bindings.py"]
+    },
+    {
+      "id": "cache-reuse",
+      "profile": "STANDARD",
+      "request": "Restore cache reuse so a valid saved snapshot is read instead of rebuilt.",
+      "file": "scripts/shadow_decisions.py",
+      "context_query": "cache reuse valid saved snapshot",
+      "mutation": {
+        "find": "    if path.is_file():",
+        "replace": "    if False:"
+      },
+      "test_file": "tests/benchmark/test_cache_reuse.py",
+      "test_source": "from pathlib import Path\nfrom scripts.shadow_decisions import _cache\n\ndef test_valid_cache_is_reused(tmp_path):\n    path = tmp_path / \"cache.json\"\n    first, reused = _cache(path, lambda: {\"value\": 1})\n    second, reused_again = _cache(path, lambda: {\"value\": 2})\n    assert reused is False and reused_again is True and second == first\n",
+      "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_cache_reuse.py"]
+    }
+  ]
+}

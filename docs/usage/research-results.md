@@ -89,4 +89,24 @@ A live Codex MCP call successfully routed a request in a second worktree contain
 
 Agent-spec 1.4.0 built with a project-local Rust toolchain. The upstream note-app gated plan produced two requirement entries and its two Rust contract tests passed. A fresh import passed its drift check. The checked-in fixture failed that check; the diff included an accepted requirement that fresh import emits as proposed. Provider manifest validation passed. The runtime conformance probe using Git Bash exceeded two minutes, requiring cleanup of its runner and helper. A Trail-to-agent-spec runtime adapter remains unverified. [Agent-spec provider kit](https://github.com/ZhangHanDong/agent-spec/blob/v1.4.0/docs/code-graph-provider-kit.md)
 
-SIGIL 0.7.16's npm package rejected native Windows. Its official installer uses Docker or a Linux WSL distribution. Neither installed Docker endpoint connected after attempting to start Desktop; WSL listed Docker's internal distributions only. There is no verified SIGIL runtime here. The existing Python compiler remains the active workflow. [SIGIL Windows installation](https://github.com/sigilagent/sigil/blob/v0.7.16/docs/reference/windows.md)
+SIGIL 0.7.16's npm package rejected native Windows. Its official installer uses Docker or a Linux WSL distribution. After enabling SVM, upgrading Docker Desktop to 29.9.3, and removing the stale internal distributions, the rebuilt Linux engine passed `hello-world`. The pinned GHCR image rejected anonymous access, so SIGIL was built locally from the tagged source with its pinned Jac 0.37.25 runtime. The persistent container is running with state, graph, and skills volumes, and only this project is mounted at `/host`. Its official `writing-plans` AG-IR gate passed with `gate: ok (1919 lines lowered)`. Project-local path forwarding works from PowerShell through `scripts/sigil.cmd`. Model connection and an end-to-end new `SKILL.md` compile remain open.
+
+### Paired benchmark setup
+
+`benchmarks/tasks.json` defines ten seeded engineering tasks: one FAST documentation repair, four STANDARD contained fixes, and five FULL policy or architecture repairs. Each task has a fixed request, target file, Trail query, seeded defect, focused acceptance test, and command. `scripts/benchmark.py --dry-run` created a disposable worktree for every task, applied the seed, and confirmed all ten focused tests failed before any model call. That validates the benchmark’s starting state.
+
+The first paired model run used Codex with Sol for the FAST documentation task. Baseline and Trail-context treatments both repaired the seeded defect and passed the focused test:
+
+| Treatment | Passed | Seconds | Input tokens | Cached input | Output |
+|---|---:|---:|---:|---:|---:|
+| Baseline | 1/1 | 68.87 | 79,703 | 59,008 | 2,688 |
+| Trail context | 1/1 | 80.82 | 119,927 | 98,176 | 2,952 |
+
+The sample was then extended to one STANDARD repair and one FULL architecture repair. Across the three completed paired tasks, baseline and Trail context both passed 3/3:
+
+| Treatment | Passed | Total seconds | Input tokens | Cached input | Output |
+|---|---:|---:|---:|---:|---:|
+| Baseline | 3/3 | 268.41 | 393,113 | 338,432 | 10,048 |
+| Trail context | 3/3 | 289.24 | 481,471 | 405,760 | 10,249 |
+
+Trail context was slower and used more input tokens on these three seeded repairs while producing the same pass count. That is a useful negative result for a tiny, deliberately broken set, not proof that context is unhelpful on real work. The complete ten-task suite and an OpenCode comparison remain open.

@@ -96,3 +96,19 @@ On machines where unattended Codex shell tools cannot start, use the bounded STA
 ```powershell
 .\.venv\Scripts\python scripts/roles.py engineer TASK-124 --worktree <linked-checkout> --edit-file fixture/combat.py --prompt "Preserve existing stacks when applying poison"
 ```
+
+## Paired benchmark
+
+`benchmarks/tasks.json` defines ten seeded engineering tasks across FAST, STANDARD, and FULL work. Each task has a fixed request, target file, Trail query, seeded defect, focused acceptance test, and command. `scripts/benchmark.py --dry-run` validates every seed in a disposable Git worktree without model calls:
+
+```powershell
+.\.venv\Scripts\python scripts/benchmark.py --dry-run
+```
+
+To compare a plain model prompt with a Trail-context prompt on the same task:
+
+```powershell
+.\.venv\Scripts\python scripts/benchmark.py --client codex --tasks docs-codex
+```
+
+Use `--client opencode` to run the same paired suite through the OpenCode adapter. Each run writes per-task client, model, session ID, timing, token totals, changed files, focused test result, and receipt to `.harness/benchmark/results/`.
