@@ -49,3 +49,44 @@ The paired evaluation ran GLiNER once per case and reused each prediction to cal
 For another machine, create a virtualenv under .harness/decision-env, install `gliner2[local]==2.1.0`, `torch==2.15.0` and `transformers==5.23.0`, and use Hugging Face's `hf download fastino/GLiNER2.5-Decide --revision 9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90 --local-dir <checkpoint-directory>`. The local installation also retains the complete environment freeze in .harness/decision-env.lock and the measured rows in .harness/shadow-results.json.
 
 Jev's 4B and 0.8B releases are adapters requiring their corresponding base checkpoints. Their model cards specify CC BY-NC 4.0. They were evaluated for fit from their published interfaces and remain uninstalled and unbenchmarked. [4B model card](https://huggingface.co/JevAgentHarness/AgentDecision-4B) · [0.8B model card](https://huggingface.co/JevAgentHarness/AgentDecision-0.8B)
+
+## Trail and embedding retrieval
+
+The study froze 35 observed function candidates at Git revision `228066d5fa95ef33ae677338365a53c1adc62579`, four exact-name targets and eight behavioral questions before running inference. Dense and TF-IDF methods saw the same symbol text. The operational Trail CLI baseline retains rank positions occupied by files or test symbols. Each question has one designated target, so another useful function can still count as a miss.
+
+| Method | Exact target first, of 4 | Behavioral target in top three, of 8 |
+|---|---:|---:|
+| Trail ask | 4 | 1 |
+| Word and bigram TF-IDF | 2 | 2 |
+| MiniLM | 2 | 5 |
+| BGE-small | 3 | 4 |
+| Trail + MiniLM reciprocal rank fusion | 3 | 4 |
+| Trail + BGE reciprocal rank fusion | 4 | 3 |
+
+MiniLM found the turn-ticking implementation first for a question about remaining lifetime and damage. It ranked the fresh-engineer session launcher thirteenth on a question that TF-IDF answered first. The experimental lookup answers exact symbol names and IDs from a Trail snapshot. Other questions search the whole eligible function corpus with MiniLM. This avoids dropping candidates that never appeared in Trail's initial lexical results. The live corpus includes the experimental module and methods, whereas the benchmark excluded both. Treat the small frozen study as an indication of where to try each tool.
+
+The routing comparison used 13 labeled nearest-neighbor exemplars and 14 separate test prompts. With the intended-path minimum, TF-IDF scored 11/14, MiniLM 10/14 and BGE 11/14. Each missed one FULL task. They produced two, three and two unnecessary FULL recommendations respectively. The earlier selective GLiNER experiment also had diff evidence for some cases. Keep embeddings optional for retrieval while collecting real engineering queries.
+
+### Reproduce the offline study
+
+Use the separate decision environment with the previously listed Torch and Transformers versions, plus `scikit-learn==1.9.1` and `nodejs-wheel==24.19.0`. The tested dependency freeze is in `.harness/embedding-env.lock`. Use the official model IDs and revisions below. HF's CLI can download only the root tokenizer files, config and safetensors weights.
+
+```powershell
+$miniRev = '1110a243fdf4706b3f48f1d95db1a4f5529b4d41'
+$bgeRev = '5c38ec7c405ec4b44b94cc5a9bb96e735b38267a'
+$mini = ".harness/models/minilm-$miniRev"
+$bge = ".harness/models/bge-$bgeRev"
+.\.harness\decision-env\Scripts\hf download sentence-transformers/all-MiniLM-L6-v2 --revision $miniRev --local-dir $mini --include 'config.json' 'tokenizer*.json' 'special_tokens_map.json' 'vocab.txt' 'model.safetensors'
+.\.harness\decision-env\Scripts\hf download BAAI/bge-small-en-v1.5 --revision $bgeRev --local-dir $bge --include 'config.json' 'tokenizer*.json' 'special_tokens_map.json' 'vocab.txt' 'model.safetensors'
+.\.harness\decision-env\Scripts\python scripts/shadow_decisions.py --embedding-study $mini $bge
+```
+
+Run the experiment script by absolute path from a clean checkout of the frozen corpus to reproduce the original comparison. Use absolute model paths in that case. The recorded per-query ranks, timings and revision are in `.harness/embedding-results.json`. Both checkpoints passed SHA-256 verification and ran on CPU with local files only. [MiniLM model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and [BGE model card](https://huggingface.co/BAAI/bge-small-en-v1.5)
+
+### Checkout and framework probes
+
+A live Codex MCP call successfully routed a request in a second worktree containing an unrelated README edit. Its dirty compilation correctly failed. The clean companion compiled the same ticket while the unrelated edit retained its original hash. This covered a noninteractive Codex process.
+
+Agent-spec 1.4.0 built with a project-local Rust toolchain. The upstream note-app gated plan produced two requirement entries and its two Rust contract tests passed. A fresh import passed its drift check. The checked-in fixture failed that check; the diff included an accepted requirement that fresh import emits as proposed. Provider manifest validation passed. The runtime conformance probe using Git Bash exceeded two minutes, requiring cleanup of its runner and helper. A Trail-to-agent-spec runtime adapter remains unverified. [Agent-spec provider kit](https://github.com/ZhangHanDong/agent-spec/blob/v1.4.0/docs/code-graph-provider-kit.md)
+
+SIGIL 0.7.16's npm package rejected native Windows. Its official installer uses Docker or a Linux WSL distribution. Neither installed Docker endpoint connected after attempting to start Desktop; WSL listed Docker's internal distributions only. There is no verified SIGIL runtime here. The existing Python compiler remains the active workflow. [SIGIL Windows installation](https://github.com/sigilagent/sigil/blob/v0.7.16/docs/reference/windows.md)

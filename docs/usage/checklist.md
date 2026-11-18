@@ -22,3 +22,6 @@ The live artifacts are in `.harness/live/6fd4c3c3dc134e1da2b7018022b5bc9b/`. Com
 - [x] Pin delegated architect and reviewer invocations to Astra and engineering to Sol. Observe unique live thread IDs for both engineering phases and a separate self-development task.
 - [x] Exercise the Windows unattended edit failure. The bounded edit command applied a real Sol change and ran independent checks. The shared verifier rejected unapproved API changes and a regression now covers removing ordinary public bindings.
 - [ ] Benchmark alternative providers on real requests and compare agent-spec and SIGIL with the existing compiler.
+- [x] Compare two offline embedding encoders with Trail, TF-IDF and rank fusion. Test a separate Trail extraction, vector-preparation process and warm semantic lookup.
+- [x] Validate a live noninteractive Codex request on a second checkout with unrelated dirty work and compile in its clean companion.
+- [x] Build and exercise agent-spec 1.4.0 planning and fixture tests. Windows conformance and SIGIL runtime validation remain open; see the research results.

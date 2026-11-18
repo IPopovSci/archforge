@@ -50,6 +50,19 @@ Run `python scripts/live_fixture.py` from a clean checkout to exercise Codex as 
 
 ## Developing the harness itself
 
+For an exact function name, use the Trail catalog. For a question phrased in terms of behavior, the optional local lookup can consume a saved Trail snapshot and rank its functions with MiniLM. From a clean project root:
+
+```powershell
+$lookup = 'scripts/shadow_decisions.py'
+$mini = (Get-Item .harness/models/minilm-1110a243fdf4706b3f48f1d95db1a4f5529b4d41).FullName
+.\.venv\Scripts\python $lookup --snapshot
+.\.venv\Scripts\python $lookup --lookup diff_paths
+.\.harness\decision-env\Scripts\python $lookup $mini --prepare-lookup
+.\.harness\decision-env\Scripts\python $lookup $mini --lookup "Find edits someone made that Git is not tracking yet"
+```
+
+The four commands can run at different times. An exact match returns observed symbol references using the core environment. Behavioral lookup prepares any missing inputs on demand. A warm query reports `snapshot_reused` and `vectors_reused`, loads MiniLM in that process and encodes the question. Each result includes the Git revision, symbol, source span and a bounded excerpt. [Model setup and measurements](docs/usage/research-results.md#trail-and-embedding-retrieval)
+
 Run `python harness.py context compile_ticket` to locate the compiler, or use `retrieve_context` from Codex. The catalog includes the compiler, MCP adapter, engineering scripts and synthetic simulation. FAST and STANDARD work can use the normal checkout. For FULL work, a linked Git worktree lets the reviewer run the trusted compiler against a committed candidate, including when the candidate changes the verifier. The installation and Git object database are shared.
 
 For a reviewed boundary change, the reviewer supplies `python harness.py compile <ticket> --review <delta.json>` from the trusted checkout. Use `python harness.py schema` for the ReviewedDelta fields, `python harness.py ticket-digest <ticket>` for its ticket binding, and `git rev-parse HEAD` for the baseline. Use `api-digest <proposed-source>` for the approved public signature and SHA-256 of the exact proposed policy bytes for `file_digests`. A new module requires its proposed file and tach.toml in `extra_paths`. The acceptance test `test_self_hosted_contract` exercises the whole workflow, including approval of a new module and rejection of an extra policy edit.
