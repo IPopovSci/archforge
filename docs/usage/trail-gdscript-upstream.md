@@ -10,14 +10,14 @@ postinstall hook and this page.
 
 ## The exact change
 
-One breadth-tier registry row in `src/graph/generic.ts` (`GENERIC_LANGS`),
+One breadth-tier registry row in their src/graph/generic.ts (GENERIC_LANGS),
 inserted after the glsl row:
 
 ```js
 { name: "gdscript", exts: [".gd"], wasm: "gdscript" }, // #293; gdscript is #299
 ```
 
-One tags query at `src/graph/queries/gdscript.scm`, using only node names from
+One tags query at their src/graph/queries/gdscript.scm, using only node names from
 the PrestonKnopp/tree-sitter-gdscript grammar (no query predicates, matching
 the breadth tier's sanitizer):
 

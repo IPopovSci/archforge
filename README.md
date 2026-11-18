@@ -2,6 +2,10 @@
 
 The Python CLI and stdio MCP server share the same compiler, Trail query adapter and routing rules. OpenCode and Codex can work on the same Git history and exchange the same compiled contract digest. The headless poison fixture is a repeatable acceptance case. The Lines design bible supplies an example of a binding document that deserves FULL review.
 
+## Documentation
+
+Documentation is layered, and each layer has one writer: binding intent lives in `AGENTS.md` and `docs/documentation-charter.md`; contracts live in `tickets/` and `tach.toml`; the observed layer is generated into `docs/usage/catalog.md` (`python scripts/doc_catalog.py render`) and never hand-written; code is the point of truth. `python scripts/doc_catalog.py check` fails on a stale generated catalog or on a documentation pointer that no longer resolves.
+
 ## Windows setup
 
 From the repository root with Python 3.14 x64 and Git installed:

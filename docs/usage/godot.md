@@ -104,7 +104,7 @@ Two gate-style rules ride along in the same check:
   `class_name` registry, which the dependency edges above already police.
 - **Absolute paths** — a `C:/...`-style filesystem path in a `.gd` string
   literal outside `tests/` is rejected; `res://` and `user://` pass. This
-  catches a real one-shot offense: `src/main.gd` hardcodes
+  catches a real one-shot offense: the experiment's `main.gd` hardcodes
   `"E:/Temp/opencode/shot_*.png"` while `save.gd` correctly uses
   `user://saves`.
 

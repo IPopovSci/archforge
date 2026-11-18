@@ -60,3 +60,7 @@ depends_on = []
 [[modules]]
 path = "scripts.godot_check"
 depends_on = []
+
+[[modules]]
+path = "scripts.doc_catalog"
+depends_on = []
