@@ -4,6 +4,7 @@ extends CanvasLayer
 ## fixture's forbidden import.
 
 var _data := preload("res://data.gd")
+const SHOT_PATH := "E:/Temp/shot.png"
 
 func report(ch: Dictionary) -> String:
 	return "hp %s" % str(GStats.max_hp(ch))

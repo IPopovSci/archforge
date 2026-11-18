@@ -6,6 +6,7 @@ const CLASSES := {
 	"vanguard": {"hp_bonus": 15.0, "mp_bonus": 0.0},
 	"arcanist": {"hp_bonus": 0.0, "mp_bonus": 20.0},
 }
+const SAVE_DIR := "user://saves"
 
 static func xp_next(level: int) -> int:
 	return int(floor(100.0 * pow(float(level), 1.55)))

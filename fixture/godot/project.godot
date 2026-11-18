@@ -1,0 +1,10 @@
+; Minimal project file for the GDScript boundary fixture: registers GData as
+; an autoload that the godot.toml policy deliberately does not allow.
+
+[application]
+
+config/name="Harness GDScript fixture"
+
+[autoload]
+
+GData="*res://data.gd"

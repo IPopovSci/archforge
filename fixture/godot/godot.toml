@@ -1,6 +1,7 @@
-# Boundary policy for the GDScript fixture. The ui_bad.gd module deliberately
-# omits its dependency on stats.gd; scripts/godot_boundaries.py check fixture/godot
-# fails until that row is added, mirroring the Python poison fixture.
+# Boundary policy for the GDScript fixture. ui_bad.gd deliberately omits its
+# dependency on stats.gd and hardcodes an absolute path, and project.godot
+# registers the GData autoload without a policy row — scripts/godot_boundaries.py
+# check fixture/godot fails until those are fixed, mirroring the poison fixture.
 [[modules]]
 path = "data.gd"
 depends_on = []
@@ -12,3 +13,6 @@ depends_on = ["data.gd"]
 [[modules]]
 path = "ui_bad.gd"
 depends_on = []
+
+[autoloads]
+allowed = ["GUtil"]

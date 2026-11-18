@@ -24,6 +24,10 @@ IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 SCRIPT_URL = re.compile(r"""(?:preload|load)\s*\(\s*"([^"]+\.gd)"|^\s*extends\s+"([^"]+\.gd)\"""",
                         re.MULTILINE)
 COMMENT_LINE = re.compile(r"^\s*#", re.MULTILINE)
+AUTOLOAD_SECTION = re.compile(r"^\[autoload\]\s*$([\s\S]*?)(?=^\[|\Z)", re.MULTILINE)
+AUTOLOAD_ROW = re.compile(r"""^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*"(\*?)(res://[^"]+)\"""",
+                         re.MULTILINE)
+ABSOLUTE_PATH = re.compile(r"""["']([A-Za-z]:[\\/][^"']*)["']""")
 
 
 def scan(root):
@@ -51,6 +55,36 @@ def module_of(path, modules):
             if len(base) > best_len:
                 best, best_len = index, len(base)
     return best
+
+
+def registered_autoloads(root):
+    """Names registered in project.godot's [autoload] section."""
+    project = Path(root) / "project.godot"
+    if not project.is_file():
+        return []
+    source = project.read_text(encoding="utf-8", errors="replace")
+    section = AUTOLOAD_SECTION.search(source)
+    if not section:
+        return []
+    return [name for name, _, _ in AUTOLOAD_ROW.findall(section.group(1))]
+
+
+def _hygiene_problems(root, files, policy):
+    """Autoload allowlist and absolute-path problems; both are gate-style rules."""
+    allowed = policy.get("autoloads", {}).get("allowed", [])
+    problems = [f"project.godot: autoload {name} registered without a policy row "
+                f"([autoloads] allowed={sorted(allowed)})"
+                for name in registered_autoloads(root) if name not in allowed]
+    for rel in files:
+        if rel.startswith("tests/"):
+            continue
+        source = COMMENT_LINE.sub("", Path(root, rel).read_text(encoding="utf-8",
+                                                                errors="replace"))
+        match = ABSOLUTE_PATH.search(source)
+        if match:
+            problems.append(f"{rel}: absolute filesystem path '{match.group(1)}' "
+                            f"(use res:// or user://)")
+    return problems
 
 
 def check(root, policy):
@@ -89,6 +123,7 @@ def check(root, policy):
                 problems.append(
                     f"{rel}: cannot use '{label}' from module '{modules[other]['path']}'; "
                     f"module '{modules[index]['path']}' does not depend on it")
+    problems.extend(_hygiene_problems(root, files, policy))
     return problems
 
 

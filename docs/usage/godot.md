@@ -88,8 +88,46 @@ referenced by nearly every file, and the checker lists all 24 undeclared
 edges with exit code 1.
 
 `fixture/godot/` mirrors the Python poison fixture: `ui_bad.gd` uses `GStats`
-and preloads `stats.gd` without a declared dependency, so
+and preloads `stats.gd` without a declared dependency, and
 `godot_boundaries.py fixture/godot` fails until the policy row is added.
+
+## Autoload and path hygiene
+
+Two gate-style rules ride along in the same check:
+
+- **Autoload allowlist** — every `[autoload]` registration in `project.godot`
+  must appear in the policy (`[autoloads] allowed = [...]` in `godot.toml`).
+  The rule is fail-closed: with no policy table, any registration is a
+  violation, so adding a global requires a reviewed policy edit — the same
+  posture Tach takes toward new module dependencies. The one-shot experiment
+  registered no autoloads at all; its globals flowed through the
+  `class_name` registry, which the dependency edges above already police.
+- **Absolute paths** — a `C:/...`-style filesystem path in a `.gd` string
+  literal outside `tests/` is rejected; `res://` and `user://` pass. This
+  catches a real one-shot offense: `src/main.gd` hardcodes
+  `"E:/Temp/opencode/shot_*.png"` while `save.gd` correctly uses
+  `user://saves`.
+
+## Community style tooling
+
+Convention and style rules are adopted, not built. The measured candidates
+(2026-11-18, against the three validation corpora):
+
+| Corpus | `gdlint` findings |
+|---|---:|
+| One-shot experiment | **516** (474 line-length, 21 unused-argument, 13 class-definitions-order, …) |
+| Pixelorama (mature production app) | **0** |
+| godot-demo-projects (legacy demos) | 551 |
+
+`gdlint`/`gdformat` come from [gdtoolkit 4.5.0](https://github.com/Scony/godot-gdscript-toolkit)
+(pip, MIT, actively maintained). The newer
+[gdstyle](https://github.com/atelico/gdstyle) ships one binary with 52 rules
+and scene-aware renames across `.tscn`/`.tres`. A game project picks one and
+runs it as a plain check command; the harness treats it like any other
+deterministic gate. Style tooling is validated in the experimental
+`.harness/decision-env` and is deliberately absent from the locked harness
+environment.
+
 
 ## Headless Godot checks
 
