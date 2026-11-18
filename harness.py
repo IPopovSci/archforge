@@ -230,6 +230,14 @@ def public_api_digest(source):
             elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
                 if not node.target.id.startswith("_"):
                     entries.append(ast.dump(node))
+            elif isinstance(node, ast.Assign):
+                names = sorted({part.id for target in node.targets for part in ast.walk(target)
+                                if isinstance(part, ast.Name) and isinstance(part.ctx, ast.Store)
+                                and not part.id.startswith("_")})
+                if names:
+                    entries.append(("bindings", names))
+                if any(isinstance(t, ast.Name) and t.id == "__all__" for t in node.targets):
+                    entries.append(ast.dump(node))
         return entries
     return hashlib.sha256(json.dumps(surface(ast.parse(source).body)).encode()).hexdigest()
 

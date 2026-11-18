@@ -19,3 +19,12 @@ def test_no_write_is_detected(tmp_path):
         _write_result("HEAD", tmp_path)
     (tmp_path/"owned.py").write_text("x = 1")
     assert _write_result("HEAD", tmp_path) == ["owned.py"]
+
+
+def test_public_bindings():
+    before = "BIN = configured_path()\nLEFT, RIGHT = pair()\n"
+    with pytest.raises(ValueError, match="FULL review"):
+        _validate_edit(before, "LEFT, RIGHT = pair()\n")
+    with pytest.raises(ValueError, match="FULL review"):
+        _validate_edit(before, "BIN = configured_path()\nLEFT, renamed = pair()\n")
+    _validate_edit(before, before.replace("configured_path()", "resolve_path()"))
