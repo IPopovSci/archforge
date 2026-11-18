@@ -65,3 +65,9 @@ Use the role launcher when assigning a new engineering task. Architect and revie
 ```
 
 Architect and reviewer calls are read-only. For engineering edits, use `--write --worktree <linked-checkout>` and the normal scope and verification gates. The default runs read-only. Each receipt in .harness/roles records the requested model, task, working directory, Codex thread ID, usage events and outcome. Use the interactive session for coordination. The role launcher owns model selection for delegated tasks.
+
+On machines where unattended Codex shell tools cannot start, use the bounded STANDARD edit path. Supply an existing declared Python module, a clean linked worktree, and the task. Python gives a fresh read-only Sol process that file, validates the returned interface, applies the edit, and runs Tach and pytest. The edit receipt records the actual changed file and checks. A failing candidate stays in its worktree for inspection.
+
+```powershell
+.\.venv\Scripts\python scripts/codex_role.py engineer TASK-124 --worktree <linked-checkout> --edit-file fixture/combat.py --prompt "Preserve existing stacks when applying poison"
+```

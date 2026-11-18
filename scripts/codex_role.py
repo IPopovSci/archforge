@@ -1,9 +1,12 @@
 """Launch one task in a fresh, fixed-role Codex session and retain its receipt."""
 import argparse
 import json
+import os
 import subprocess
 import sys
+import tempfile
 import time
+import tomllib
 import uuid
 from pathlib import Path
 
@@ -22,6 +25,13 @@ def _command(role, write, folder, schema):
     if schema:
         command.extend(["--output-schema", str(schema)])
     return [*command, "-"]
+
+
+def _write_result(base, cwd):
+    paths = h.diff_paths(base, cwd)
+    if not paths:
+        raise ValueError("Codex returned without changing the worktree; inspect answer.txt")
+    return paths
 
 
 def invoke(role, task, prompt, *, worktree=None, write=False, schema=None):
@@ -70,6 +80,8 @@ def invoke(role, task, prompt, *, worktree=None, write=False, schema=None):
         answer = (folder / "answer.txt").read_text(encoding="utf-8").strip()
         if not answer:
             raise ValueError("Codex returned an empty response")
+        if write:
+            metadata["changed"] = _write_result(metadata["base"], cwd)
         metadata["outcome"] = "completed"
         return answer, metadata
     except Exception as exc:
@@ -78,6 +90,60 @@ def invoke(role, task, prompt, *, worktree=None, write=False, schema=None):
     finally:
         metadata["seconds"] = round(time.monotonic()-started, 2)
         Path(metadata["receipt"]).write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+
+
+def _validate_edit(before, after):
+    if before == after:
+        raise ValueError("Sol returned unchanged source")
+    if h.public_api_digest(before) != h.public_api_digest(after):
+        raise ValueError("Proposed public interface change requires FULL review")
+
+
+def _edit_file(task, prompt, worktree, relative):
+    cwd = worktree.resolve()
+    common = Path(h.git("rev-parse", "--path-format=absolute", "--git-common-dir")).resolve()
+    if cwd == common.parent or not (cwd / ".git").is_file() or Path(h.git(
+            "rev-parse", "--path-format=absolute", "--git-common-dir", cwd=cwd)).resolve() != common:
+        raise ValueError("Expected a separate linked checkout of this repository")
+    base = h.clean_revision(cwd)
+    policy = tomllib.loads((cwd / "tach.toml").read_text(encoding="utf-8"))
+    owned = {m["path"].replace(".", "/") + ".py" for m in policy["modules"]}
+    target = cwd / relative
+    if relative not in owned or target.resolve() != target or not target.is_file():
+        raise ValueError("Expected one existing policy-owned source file")
+    h.git("ls-files", "--error-unmatch", "--", relative, cwd=cwd)
+    before = target.read_text(encoding="utf-8")
+    request = json.dumps({"request":prompt, "file":relative, "current_source":before})
+    with tempfile.TemporaryDirectory() as tmp:
+        schema = Path(tmp) / "edit.json"
+        schema.write_text(json.dumps({"type":"object","properties":{"source":{"type":"string"}},
+                                      "required":["source"],"additionalProperties":False}))
+        answer, metadata = invoke("engineer",task,
+            "Use only the supplied source. Return the complete edited source. Keep its public API. " + request,
+            worktree=cwd,schema=schema)
+    record = dict(task=task, base=base, file=relative, thread_id=metadata["thread_id"], passed=False, checks={})
+    try:
+        after = json.loads(answer)["source"]
+        _validate_edit(before, after)
+        if h.clean_revision(cwd) != base or target.read_text(encoding="utf-8") != before:
+            raise ValueError("Candidate changed during inference")
+        with tempfile.NamedTemporaryFile(dir=target.parent,delete=False) as staging:
+            staged = Path(staging.name)
+        try:
+            staged.write_text(after, encoding="utf-8")
+            os.replace(staged, target)
+        finally:
+            staged.unlink(missing_ok=True)
+        for name, command in [("tach",[h.BIN/"tach","check"]),("pytest",[sys.executable,"-m","pytest","-q"])]:
+            outcome = h.run(*command,cwd=cwd,check=False)
+            record["checks"][name] = {"exit":outcome.returncode,"output":(outcome.stdout+outcome.stderr)[-2000:]}
+        record["changed"] = h.diff_paths(base,cwd)
+        if record["changed"] != [relative] or any(c["exit"] for c in record["checks"].values()):
+            raise ValueError("Verification failed; see edit.json")
+        record["passed"] = True
+        return record
+    finally:
+        Path(metadata["receipt"]).with_name("edit.json").write_text(json.dumps(record,indent=2),encoding="utf-8")
 
 
 def _main():
@@ -89,8 +155,14 @@ def _main():
     group.add_argument("--prompt-file", type=Path)
     parser.add_argument("--worktree", type=Path)
     parser.add_argument("--write", action="store_true")
+    parser.add_argument("--edit-file", help="Apply one explicitly scoped, verified STANDARD edit")
     args = parser.parse_args()
     prompt = args.prompt if args.prompt_file is None else args.prompt_file.read_text(encoding="utf-8")
+    if args.edit_file:
+        if args.role != "engineer" or not args.worktree or args.write:
+            parser.error("--edit-file requires engineer and --worktree; use it without --write")
+        print(json.dumps(_edit_file(args.task,prompt,args.worktree,args.edit_file),indent=2))
+        return
     answer, record = invoke(args.role,args.task,prompt,worktree=args.worktree,write=args.write)
     print(answer)
     print("Receipt:", record["receipt"], file=sys.stderr)
