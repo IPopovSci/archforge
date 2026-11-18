@@ -196,8 +196,9 @@ def main(argv=None):
 def _revision(root):
     try:
         import subprocess
-        return subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, capture_output=True,
-                              encoding="utf-8", timeout=30).stdout.strip()
+        rev = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, capture_output=True,
+                             encoding="utf-8", timeout=30).stdout.strip()
+        return rev if re.fullmatch("[0-9a-f]{40}", rev) else "0" * 40
     except Exception:
         return "0" * 40
 

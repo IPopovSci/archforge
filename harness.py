@@ -32,6 +32,7 @@ class Ticket(Record):
     actions: list[Literal["extend_behavior", "fix_behavior"]] = Field(min_length=1)
     requirements: dict[Identifier, Annotated[str, Field(min_length=1)]] = Field(min_length=1)
     unknowns: list[str]
+    checks: list[str] = Field(default_factory=list)
 
 
 class Catalog(Record):
@@ -144,7 +145,35 @@ def _validate_review(review, ticket, revision, scope):
         raise ValueError("Expected SHA-256 of approved interface")
 
 
+STRUCTURAL_CHECKS = ("requirement links", "scope")
+DEFAULT_CHECKS = ("tach", "pytest", "requirement links", "scope", "doc_gates")
+
+
+def check_commands(report):
+    """Named subprocess checks a compiled contract can request, run in the
+    candidate worktree. A check is any command that exits nonzero on
+    violation, so adapters stay pluggable rows rather than core structure:
+    the Python gates and the documentation gate are this repository's
+    defaults, and language-specific gates are registered rows that a
+    project's tickets declare, such as the Godot boundary adapter under
+    the root godot.toml convention."""
+    tach = BIN / ("tach.exe" if os.name == "nt" else "tach")
+    return {
+        "tach": [str(tach), "check"],
+        "pytest": [sys.executable, "-m", "pytest", "-q", "--junitxml", str(report)],
+        "doc_gates": [sys.executable, "scripts/doc_catalog.py", "check", "."],
+        "godot_boundaries": [sys.executable, "scripts/godot_boundaries.py", ".", "--policy", "godot.toml"],
+    }
+
+
 def compile_ticket(ticket, review=None):
+    structural = set(ticket.checks) & set(STRUCTURAL_CHECKS)
+    if structural:
+        raise ValueError(f"Structural checks are not ticket-declarable: {sorted(structural)}")
+    commands = check_commands(Path("pytest.xml"))
+    unknown = set(ticket.checks) - commands.keys()
+    if unknown:
+        raise ValueError(f"Unknown check names: {sorted(unknown)}")
     cat = catalog()
     modules = dict(cat.modules)
     if review:
@@ -163,7 +192,8 @@ def compile_ticket(ticket, review=None):
         scope.update(review.extra_paths)
     task = Task(version=1, ticket=ticket, revision=cat.revision,
                 scope=sorted(scope), review=review,
-                acceptance_file=acceptance, checks=["tach", "pytest", "requirement links", "scope"],
+                acceptance_file=acceptance,
+                checks=list(dict.fromkeys((*DEFAULT_CHECKS, *ticket.checks))),
                 evidence=_context(ticket.intent, cat))
     if clean_revision() != cat.revision:
         raise ValueError("Source revision changed during compilation.")
@@ -316,12 +346,16 @@ def verify(contract, attempt, receipt):
     tests = {}
     checks = {}
     if not problems:
-        tach = BIN / ("tach.exe" if os.name == "nt" else "tach")
         with tempfile.TemporaryDirectory() as tmp:
             report = Path(tmp) / "pytest.xml"
-            for name, cmd in [("tach", [tach, "check"]),
-                              ("pytest", [sys.executable, "-m", "pytest", "-q", "--junitxml", report])]:
-                result = run(*cmd, cwd=attempt, check=False)
+            commands = check_commands(report)
+            for name in task.checks:
+                if name in STRUCTURAL_CHECKS:
+                    continue
+                if name not in commands:
+                    problems.append(f"Unknown contract check: {name}")
+                    continue
+                result = run(*commands[name], cwd=attempt, check=False)
                 checks[name] = {"exit": result.returncode, "output": (result.stdout + result.stderr)[-3000:]}
                 if result.returncode:
                     problems.append(f"{name} failed")

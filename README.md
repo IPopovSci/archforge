@@ -4,7 +4,7 @@ The Python CLI and stdio MCP server share the same compiler, Trail query adapter
 
 ## Documentation
 
-Documentation is layered, and each layer has one writer: binding intent lives in `AGENTS.md` and `docs/documentation-charter.md`; contracts live in `tickets/` and `tach.toml`; the observed layer is generated into `docs/usage/catalog.md` (`python scripts/doc_catalog.py render`) and never hand-written; code is the point of truth. `python scripts/doc_catalog.py check` fails on a stale generated catalog or on a documentation pointer that no longer resolves.
+Documentation is layered, and each layer has one writer: binding intent lives in `AGENTS.md` and `docs/documentation-charter.md`; contracts live in `tickets/` and `tach.toml`; the observed layer is generated into `docs/usage/catalog.md` (`python scripts/doc_catalog.py render`) and never hand-written; code is the point of truth. `python scripts/doc_catalog.py check` fails on a stale generated catalog or on a documentation pointer that no longer resolves. Compiled verification runs the documentation gate by default: every FULL contract check list includes it, so documentation rot cannot pass through a merge.
 
 ## Windows setup
 

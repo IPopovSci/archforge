@@ -34,5 +34,12 @@ Rules, enforced or measured programmatically:
    outside `docs/usage/` and routes FULL — the router itself is a
    documentation-governance rule.
 
-Wiring L2 gates into compiled verification checks is deliberately parked as
-a boundary-change ticket until the check-list generalization lands.
+L2 gates are wired into compiled verification: every contract for this
+repository runs the documentation gate check (`doc_gates` in `harness.py`)
+in the candidate worktree, and tickets may declare further named checks
+from the registry — a check being any command that exits nonzero on
+violation, so language adapters are pluggable rows (the Godot boundary
+gate under the root `godot.toml` convention is one such row) rather than
+core structure. The frozen handoff brief `OPENCODE_HARNESS_HANDOFF.md` is
+exempt from the pointer gate: it is a design brief whose proposed
+artifacts need not exist.

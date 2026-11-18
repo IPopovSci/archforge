@@ -1,4 +1,5 @@
 import hashlib
+import shutil
 import subprocess
 import sys
 import tomllib
@@ -6,6 +7,8 @@ from pathlib import Path
 
 import pytest
 import harness as h
+
+REPO = Path(__file__).resolve().parents[1]
 
 
 def test_tooling_modules():
@@ -66,9 +69,12 @@ def test_self_hosted_contract(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     h.git("init", "-q")
     Path("tests").mkdir()
-    Path(".gitignore").write_text(".harness/\ngraft/\n__pycache__/\n.pytest_cache/\n")
+    Path(".gitignore").write_text(".harness/\ngraft/\nscripts/\n__pycache__/\n.pytest_cache/\n")
     Path("tach.toml").write_text('source_roots=["."]\n[[modules]]\npath="compiler"\ndepends_on=[]\n')
     Path("compiler.py").write_text("def compile_ticket(value): return value\n")
+    Path("scripts").mkdir()
+    shutil.copy(REPO / "scripts" / "doc_catalog.py", "scripts/doc_catalog.py")
+    subprocess.run([sys.executable, "scripts/doc_catalog.py", "render", "."], check=True)
     def commit(message):
         h.git("add", "-A")
         h.git("-c","user.name=Test","-c","user.email=test@localhost","commit","-qm",message)
@@ -93,20 +99,24 @@ def test_self_hosted_contract(tmp_path, monkeypatch):
     verified = h.verify(approved["contract"], tmp_path, receipt)
     assert verified["passed"], verified
 
-    next_base = h.clean_revision()
     next_ticket = ticket.model_copy(update={"id":"SELF-101", "components":["review_summary"],
         "intent":"Expose review summary", "requirements":{"REQ-B":"Return an empty review count"}})
     with pytest.raises(ValueError, match="component references"):
         h.compile_ticket(next_ticket)
     policy = Path("tach.toml").read_bytes() + b'\n[[modules]]\npath="review_summary"\ndepends_on=[]\n'
     source = "def review_count(): return 0\n"
-    delta = h.ReviewedDelta(version=1, revision=next_base, ticket_digest=h.ticket_digest(next_ticket),
-        rationale="Create an independent review summary module", extra_paths=["review_summary.py","tach.toml"],
-        public_api={"review_summary.py":h.public_api_digest(source)},
-        file_digests={"tach.toml":hashlib.sha256(policy).hexdigest()})
-    new_contract = h.compile_ticket(next_ticket, delta)
     Path("review_summary.py").write_text(source)
     Path("tach.toml").write_bytes(policy)
+    subprocess.run([sys.executable, "scripts/doc_catalog.py", "render", "."], check=True)
+    commit("prepare reviewed module, policy and regenerated catalog")
+    review_base = h.clean_revision()
+    delta = h.ReviewedDelta(version=1, revision=review_base, ticket_digest=h.ticket_digest(next_ticket),
+        rationale="Create an independent review summary module",
+        extra_paths=["review_summary.py", "tach.toml", "docs/usage/catalog.md"],
+        public_api={"review_summary.py": h.public_api_digest(source)},
+        file_digests={"tach.toml": hashlib.sha256(policy).hexdigest(),
+                      "docs/usage/catalog.md": hashlib.sha256(Path("docs/usage/catalog.md").read_bytes()).hexdigest()})
+    new_contract = h.compile_ticket(next_ticket, delta)
     Path("tests/test_self_101.py").write_text("from review_summary import review_count\n"
         "def test_count(): assert review_count() == 0\n")
     commit("implement independently reviewed module")
