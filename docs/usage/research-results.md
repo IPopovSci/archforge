@@ -109,4 +109,11 @@ The sample was then extended to one STANDARD repair and one FULL architecture re
 | Baseline | 3/3 | 268.41 | 393,113 | 338,432 | 10,048 |
 | Trail context | 3/3 | 289.24 | 481,471 | 405,760 | 10,249 |
 
-Trail context was slower and used more input tokens on these three seeded repairs while producing the same pass count. That is a useful negative result for a tiny, deliberately broken set, not proof that context is unhelpful on real work. The complete ten-task suite and an OpenCode comparison remain open.
+Trail context was slower and used more input tokens on these three seeded repairs while producing the same pass count. After correcting a flawed review-binding acceptance test, the full ten-task Codex run completed:
+
+| Treatment | Passed | Total seconds | Input tokens | Cached input | Output |
+|---|---:|---:|---:|---:|---:|
+| Baseline | 10/10 | 1,373.49 | 1,634,896 | 1,413,888 | 54,434 |
+| Trail context | 10/10 | 1,409.45 | 1,895,062 | 1,624,704 | 54,752 |
+
+Trail context added 35.96 seconds and 260,166 input tokens while producing the same 10/10 pass count on this deliberately broken suite. This is evidence that the harness improves reproducibility and evidence capture, not that Trail context improves repair quality or cost on this seed set. The corrected review-binding rerun passed 1/1 for both treatments. The OpenCode comparison remains open.

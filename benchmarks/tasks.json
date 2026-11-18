@@ -49,7 +49,7 @@
         "replace": "    if False:"
       },
       "test_file": "tests/benchmark/test_review_binding.py",
-      "test_source": "import pytest\nfrom scripts.benchmark import load_tasks\nfrom harness import ReviewedDelta, Ticket\n\ndef test_review_binding():\n    ticket = Ticket(version=1, id=\"BENCH-001\", intent=\"test\", components=[\"harness\"], actions=[\"extend_behavior\"], requirements={\"REQ-1\":\"test\"}, unknowns=[])\n    review = ReviewedDelta(version=1, revision=\"base\", ticket_digest=\"bad\", rationale=\"test\", extra_paths=[], public_api={})\n    with pytest.raises(ValueError):\n        review.model_copy(update={\"revision\": \"other\"})\n",
+      "test_source": "import pytest\nimport harness as h\nfrom harness import ReviewedDelta, Ticket\n\ndef test_review_binding():\n    ticket = Ticket(version=1, id=\"BENCH-001\", intent=\"test\", components=[\"harness\"], actions=[\"extend_behavior\"], requirements={\"REQ-1\":\"test\"}, unknowns=[])\n    review = ReviewedDelta(version=1, revision=\"base\", ticket_digest=\"bad\", rationale=\"test\", extra_paths=[], public_api={})\n    with pytest.raises(ValueError, match=\"different revision or ticket\"):\n        h._validate_review(review, ticket, \"base\", set())\n",
       "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_review_binding.py"]
     },
     {
