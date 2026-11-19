@@ -67,6 +67,19 @@ still-productive reasoning (the exact false positive to avoid), and the
 interleave is partly the model's own failing self-rescue — not a reason to
 wait for it.
 
+## Scope decision
+
+Out of scope for Archforge: the failure lives in the agent harness's model
+stream, which Archforge is designed to never see (it is agent-neutral CLI
+and MCP tooling around work verification). The home for any fix follows the
+failure location: decoding pathologies → provider sampling settings first;
+stream detection and recovery → the agent harness (upstream or its plugin
+system, if the plugin API exposes reasoning-stream events); a standalone
+stream-watchdog proxy (new repo) only if the failure recurs often enough to
+justify permanent local infrastructure. One observed occurrence in a long
+session does not meet that bar. Until recurrence changes the calculus, the
+operational mitigation is: interrupt, compact, continue.
+
 ## Next steps (parked)
 
 - Client-side guard prototype: stream watcher with the three-signal
