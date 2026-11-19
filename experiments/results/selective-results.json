@@ -1,0 +1,352 @@
+﻿{
+  "checkpoint": "gliner-9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90",
+  "device": "cpu",
+  "threads": 4,
+  "load_seconds": 4.74,
+  "rows": [
+    {
+      "request": "Update the README heading for the offline routing example.",
+      "paths": [
+        "README.md"
+      ],
+      "expected": "FAST",
+      "observed": null,
+      "path_rules": "FAST",
+      "deterministic": "FAST",
+      "model_only": "FAST",
+      "selective": "FAST",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Clarify where to launch the CLI in the usage checklist.",
+      "paths": [
+        "docs/usage/checklist.md"
+      ],
+      "expected": "FAST",
+      "observed": null,
+      "path_rules": "FAST",
+      "deterministic": "FAST",
+      "model_only": "FAST",
+      "selective": "FAST",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Add a regression test for a rejected revision in the evidence report.",
+      "paths": [
+        "tests/test_regression.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rules": "STANDARD",
+      "deterministic": "STANDARD",
+      "model_only": "FAST",
+      "selective": "STANDARD",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Add assertions for the existing routing and compiler error messages.",
+      "paths": [
+        "tests/test_routing.py",
+        "tests/test_compiler.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rules": "STANDARD",
+      "deterministic": "STANDARD",
+      "model_only": "FAST",
+      "selective": "STANDARD",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Fix extra whitespace in the compiled contract output.",
+      "paths": [
+        "harness.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rules": "STANDARD",
+      "deterministic": "STANDARD",
+      "model_only": "FAST",
+      "selective": "STANDARD",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": true,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": true
+    },
+    {
+      "request": "Limit a combat score to its permitted range.",
+      "paths": [
+        "fixture/combat.py"
+      ],
+      "expected": "STANDARD",
+      "observed": "STANDARD",
+      "path_rules": "STANDARD",
+      "deterministic": "STANDARD",
+      "model_only": "STANDARD",
+      "selective": "STANDARD",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": true,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Fix the MCP adapter to preserve false values in evidence results.",
+      "paths": [
+        "server.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rules": "STANDARD",
+      "deterministic": "STANDARD",
+      "model_only": "STANDARD",
+      "selective": "STANDARD",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": true,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Define a new plugin lifecycle inside the harness runner.",
+      "paths": [
+        "harness.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rules": "STANDARD",
+      "deterministic": "STANDARD",
+      "model_only": "STANDARD",
+      "selective": "STANDARD",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": true,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Design a versioned report format for the MCP adapter's consumers.",
+      "paths": [
+        "server.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rules": "STANDARD",
+      "deterministic": "STANDARD",
+      "model_only": "FULL",
+      "selective": "FULL",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": true,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": true
+    },
+    {
+      "request": "Require a revision when compiling an intent into a contract.",
+      "paths": [
+        "harness.py"
+      ],
+      "expected": "FULL",
+      "observed": "FULL",
+      "path_rules": "STANDARD",
+      "deterministic": "FULL",
+      "model_only": "FAST",
+      "selective": "FULL",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Return a structured turn result through the public turn lifecycle API.",
+      "paths": [
+        "fixture/turn_lifecycle.py"
+      ],
+      "expected": "FULL",
+      "observed": "FULL",
+      "path_rules": "STANDARD",
+      "deterministic": "FULL",
+      "model_only": "STANDARD",
+      "selective": "FULL",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Move evidence ownership from the CLI harness to the MCP adapter.",
+      "paths": [
+        "harness.py",
+        "server.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rules": "FULL",
+      "deterministic": "FULL",
+      "model_only": "FULL",
+      "selective": "FULL",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Allow the compiler to import the transport layer by changing the dependency policy.",
+      "paths": [
+        "tach.toml"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rules": "FULL",
+      "deterministic": "FULL",
+      "model_only": "STANDARD",
+      "selective": "FULL",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    },
+    {
+      "request": "Change which task profiles require human approval in the agent policy.",
+      "paths": [
+        "AGENTS.md"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rules": "FULL",
+      "deterministic": "FULL",
+      "model_only": "FAST",
+      "selective": "FULL",
+      "model_only_called": true,
+      "model_only_abstention_reason": null,
+      "selective_called": false,
+      "selective_abstained": false,
+      "selective_abstention_reason": null,
+      "selective_disagreement": false
+    }
+  ],
+  "metrics": {
+    "path_rules": {
+      "correct": 10,
+      "total": 14,
+      "missed_full": 4,
+      "unnecessary_full": 0,
+      "per_profile": {
+        "FAST": {
+          "correct": 2,
+          "total": 2
+        },
+        "STANDARD": {
+          "correct": 5,
+          "total": 5
+        },
+        "FULL": {
+          "correct": 3,
+          "total": 7
+        }
+      },
+      "abstentions": 0,
+      "model_calls": 0
+    },
+    "deterministic": {
+      "correct": 12,
+      "total": 14,
+      "missed_full": 2,
+      "unnecessary_full": 0,
+      "per_profile": {
+        "FAST": {
+          "correct": 2,
+          "total": 2
+        },
+        "STANDARD": {
+          "correct": 5,
+          "total": 5
+        },
+        "FULL": {
+          "correct": 5,
+          "total": 7
+        }
+      },
+      "abstentions": 0,
+      "model_calls": 0
+    },
+    "model_only": {
+      "correct": 6,
+      "total": 14,
+      "missed_full": 5,
+      "unnecessary_full": 0,
+      "per_profile": {
+        "FAST": {
+          "correct": 2,
+          "total": 2
+        },
+        "STANDARD": {
+          "correct": 2,
+          "total": 5
+        },
+        "FULL": {
+          "correct": 2,
+          "total": 7
+        }
+      },
+      "abstentions": 0,
+      "model_calls": 14
+    },
+    "selective": {
+      "correct": 13,
+      "total": 14,
+      "missed_full": 1,
+      "unnecessary_full": 0,
+      "per_profile": {
+        "FAST": {
+          "correct": 2,
+          "total": 2
+        },
+        "STANDARD": {
+          "correct": 5,
+          "total": 5
+        },
+        "FULL": {
+          "correct": 6,
+          "total": 7
+        }
+      },
+      "abstentions": 0,
+      "model_calls": 5
+    }
+  }
+}

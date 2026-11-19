@@ -1,0 +1,1068 @@
+{
+ "suites": {
+  "routing13": {
+   "rows": [
+    {
+     "request": "Correct a spelling error in the readme.",
+     "expected": "FAST",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FAST",
+     "probabilities": {
+      "FAST": 0.969159737709119,
+      "STANDARD": 0.023434174110606963,
+      "FULL": 0.007406088180274075
+     },
+     "confidence": 0.9537396065636785,
+     "milliseconds": 2056.3,
+     "tokens": {
+      "input_tokens": 222,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Fix the punctuation in the setup guide.",
+     "expected": "FAST",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FAST",
+     "probabilities": {
+      "FAST": 0.9640120980776825,
+      "STANDARD": 0.02666818975091077,
+      "FULL": 0.009319712171406709
+     },
+     "confidence": 0.9460181471165239,
+     "milliseconds": 2069.0,
+     "tokens": {
+      "input_tokens": 226,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Clarify the example command in the usage instructions.",
+     "expected": "FAST",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FAST",
+     "probabilities": {
+      "FAST": 0.945965702088304,
+      "STANDARD": 0.040459586885847075,
+      "FULL": 0.013574711025848915
+     },
+     "confidence": 0.9189485531324559,
+     "milliseconds": 2084.0,
+     "tokens": {
+      "input_tokens": 228,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Fix a broken Markdown link in the readme.",
+     "expected": "FAST",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FAST",
+     "probabilities": {
+      "FAST": 0.943343693989078,
+      "STANDARD": 0.04550411538910289,
+      "FULL": 0.011152190621819082
+     },
+     "confidence": 0.9150155409836169,
+     "milliseconds": 2085.1,
+     "tokens": {
+      "input_tokens": 223,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Fix an off-by-one in the poison timer.",
+     "expected": "STANDARD",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "STANDARD",
+     "probabilities": {
+      "FAST": 0.05347573343012709,
+      "STANDARD": 0.9177985386126337,
+      "FULL": 0.02872572795723914
+     },
+     "confidence": 0.8766978079189505,
+     "milliseconds": 2100.6,
+     "tokens": {
+      "input_tokens": 228,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Repair the stack calculation inside the existing combat function.",
+     "expected": "STANDARD",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "STANDARD",
+     "probabilities": {
+      "FAST": 0.04843421242351437,
+      "STANDARD": 0.9192221363228283,
+      "FULL": 0.03234365125365731
+     },
+     "confidence": 0.8788332044842426,
+     "milliseconds": 2363.3,
+     "tokens": {
+      "input_tokens": 226,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Add a regression assertion for the unchanged public stacking behavior.",
+     "expected": "STANDARD",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "STANDARD",
+     "probabilities": {
+      "FAST": 0.34265904666762464,
+      "STANDARD": 0.6150807620757711,
+      "FULL": 0.04226019125660433
+     },
+     "confidence": 0.4226211431136566,
+     "milliseconds": 2298.0,
+     "tokens": {
+      "input_tokens": 227,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Correct arithmetic in one turn without changing its interface.",
+     "expected": "STANDARD",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "STANDARD",
+     "probabilities": {
+      "FAST": 0.059891958035911595,
+      "STANDARD": 0.9133916076358807,
+      "FULL": 0.02671643432820771
+     },
+     "confidence": 0.8700874114538211,
+     "milliseconds": 2233.6,
+     "tokens": {
+      "input_tokens": 228,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Add a new subsystem and define its dependency rules.",
+     "expected": "FULL",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FULL",
+     "probabilities": {
+      "FAST": 0.017726328647625928,
+      "STANDARD": 0.06520482378227982,
+      "FULL": 0.9170688475700942
+     },
+     "confidence": 0.8756032713551414,
+     "milliseconds": 2221.5,
+     "tokens": {
+      "input_tokens": 225,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Change the public schema used by the compiler and its MCP adapter.",
+     "expected": "FULL",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FULL",
+     "probabilities": {
+      "FAST": 0.053589944341627255,
+      "STANDARD": 0.16681410873855385,
+      "FULL": 0.7795959469198189
+     },
+     "confidence": 0.6693939203797283,
+     "milliseconds": 2240.4,
+     "tokens": {
+      "input_tokens": 230,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Change what agents are authorized to edit.",
+     "expected": "FULL",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FULL",
+     "probabilities": {
+      "FAST": 0.10860867378799341,
+      "STANDARD": 0.14870853232844,
+      "FULL": 0.7426827938835666
+     },
+     "confidence": 0.6140241908253499,
+     "milliseconds": 2099.0,
+     "tokens": {
+      "input_tokens": 223,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Revise the locked replay contract in the game design bible.",
+     "expected": "FULL",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FULL",
+     "probabilities": {
+      "FAST": 0.2534720755034732,
+      "STANDARD": 0.16135267358078942,
+      "FULL": 0.5851752509157374
+     },
+     "confidence": 0.37776287637360606,
+     "milliseconds": 2196.6,
+     "tokens": {
+      "input_tokens": 233,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    },
+    {
+     "request": "Change the required arguments of the public combat API.",
+     "expected": "FULL",
+     "provider": "deem-4b-q4km",
+     "protocol": "systemone",
+     "prediction": "FULL",
+     "probabilities": {
+      "FAST": 0.07766398552450077,
+      "STANDARD": 0.19073305384094102,
+      "FULL": 0.7316029606345581
+     },
+     "confidence": 0.5974044409518371,
+     "milliseconds": 2122.8,
+     "tokens": {
+      "input_tokens": 226,
+      "output_tokens": 1
+     },
+     "abstained_90": false
+    }
+   ],
+   "metrics": {
+    "correct": 13,
+    "total": 13,
+    "missed_full": 0,
+    "unnecessary_full": 0,
+    "model_calls": 13,
+    "median_ms": 2122.8
+   },
+   "abstain90_metrics": {
+    "correct": 13,
+    "total": 13,
+    "missed_full": 0,
+    "unnecessary_full": 0,
+    "model_calls": 13,
+    "median_ms": 2122.8
+   }
+  },
+  "selective14": {
+   "selective_deem": {
+    "rows": [
+     {
+      "request": "Update the README heading for the offline routing example.",
+      "paths": [
+       "README.md"
+      ],
+      "expected": "FAST",
+      "observed": null,
+      "path_rule": "FAST",
+      "floor": "FAST",
+      "recommendation": "FAST",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Clarify where to launch the CLI in the usage checklist.",
+      "paths": [
+       "docs/usage/checklist.md"
+      ],
+      "expected": "FAST",
+      "observed": null,
+      "path_rule": "FAST",
+      "floor": "FAST",
+      "recommendation": "FAST",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Add a regression test for a rejected revision in the evidence report.",
+      "paths": [
+       "tests/test_regression.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Add assertions for the existing routing and compiler error messages.",
+      "paths": [
+       "tests/test_routing.py",
+       "tests/test_compiler.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Fix extra whitespace in the compiled contract output.",
+      "paths": [
+       "harness.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": "STANDARD",
+      "disagreement": false,
+      "called": true,
+      "milliseconds": 2269.0,
+      "tokens": {
+       "input_tokens": 223,
+       "output_tokens": 1
+      },
+      "probabilities": {
+       "FAST": 0.29981389968809874,
+       "STANDARD": 0.6866507468646976,
+       "FULL": 0.013535353447203661
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Limit a combat score to its permitted range.",
+      "paths": [
+       "fixture/combat.py"
+      ],
+      "expected": "STANDARD",
+      "observed": "STANDARD",
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": "STANDARD",
+      "disagreement": false,
+      "called": true,
+      "milliseconds": 2177.3,
+      "tokens": {
+       "input_tokens": 225,
+       "output_tokens": 1
+      },
+      "probabilities": {
+       "FAST": 0.09547916383696864,
+       "STANDARD": 0.837223315676093,
+       "FULL": 0.06729752048693842
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Fix the MCP adapter to preserve false values in evidence results.",
+      "paths": [
+       "server.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": "STANDARD",
+      "disagreement": false,
+      "called": true,
+      "milliseconds": 2147.7,
+      "tokens": {
+       "input_tokens": 226,
+       "output_tokens": 1
+      },
+      "probabilities": {
+       "FAST": 0.05758191362459528,
+       "STANDARD": 0.8714056287608094,
+       "FULL": 0.07101245761459533
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Define a new plugin lifecycle inside the harness runner.",
+      "paths": [
+       "harness.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "FULL",
+      "vote": "FULL",
+      "disagreement": true,
+      "called": true,
+      "milliseconds": 2062.3,
+      "tokens": {
+       "input_tokens": 224,
+       "output_tokens": 1
+      },
+      "probabilities": {
+       "FAST": 0.04659783408591,
+       "STANDARD": 0.20777274393403636,
+       "FULL": 0.7456294219800536
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Design a versioned report format for the MCP adapter's consumers.",
+      "paths": [
+       "server.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "FULL",
+      "vote": "FULL",
+      "disagreement": true,
+      "called": true,
+      "milliseconds": 2209.9,
+      "tokens": {
+       "input_tokens": 227,
+       "output_tokens": 1
+      },
+      "probabilities": {
+       "FAST": 0.0766508475042351,
+       "STANDARD": 0.22391401357767665,
+       "FULL": 0.6994351389180883
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Require a revision when compiling an intent into a contract.",
+      "paths": [
+       "harness.py"
+      ],
+      "expected": "FULL",
+      "observed": "FULL",
+      "path_rule": "STANDARD",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Return a structured turn result through the public turn lifecycle API.",
+      "paths": [
+       "fixture/turn_lifecycle.py"
+      ],
+      "expected": "FULL",
+      "observed": "FULL",
+      "path_rule": "STANDARD",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Move evidence ownership from the CLI harness to the MCP adapter.",
+      "paths": [
+       "harness.py",
+       "server.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "FULL",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Allow the compiler to import the transport layer by changing the dependency policy.",
+      "paths": [
+       "tach.toml"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "FULL",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Change which task profiles require human approval in the agent policy.",
+      "paths": [
+       "AGENTS.md"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "FULL",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     }
+    ],
+    "metrics": {
+     "correct": 14,
+     "total": 14,
+     "missed_full": 0,
+     "unnecessary_full": 0,
+     "model_calls": 5,
+     "median_ms": 2177.3
+    }
+   },
+   "selective_deem_chat": {
+    "rows": [
+     {
+      "request": "Update the README heading for the offline routing example.",
+      "paths": [
+       "README.md"
+      ],
+      "expected": "FAST",
+      "observed": null,
+      "path_rule": "FAST",
+      "floor": "FAST",
+      "recommendation": "FAST",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Clarify where to launch the CLI in the usage checklist.",
+      "paths": [
+       "docs/usage/checklist.md"
+      ],
+      "expected": "FAST",
+      "observed": null,
+      "path_rule": "FAST",
+      "floor": "FAST",
+      "recommendation": "FAST",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Add a regression test for a rejected revision in the evidence report.",
+      "paths": [
+       "tests/test_regression.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Add assertions for the existing routing and compiler error messages.",
+      "paths": [
+       "tests/test_routing.py",
+       "tests/test_compiler.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Fix extra whitespace in the compiled contract output.",
+      "paths": [
+       "harness.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": "FAST",
+      "disagreement": true,
+      "called": true,
+      "milliseconds": 525.2,
+      "tokens": {
+       "input": 112,
+       "output": 48
+      },
+      "probabilities": null,
+      "abstained_90": false
+     },
+     {
+      "request": "Limit a combat score to its permitted range.",
+      "paths": [
+       "fixture/combat.py"
+      ],
+      "expected": "STANDARD",
+      "observed": "STANDARD",
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": "STANDARD",
+      "disagreement": false,
+      "called": true,
+      "milliseconds": 531.3,
+      "tokens": {
+       "input": 114,
+       "output": 54
+      },
+      "probabilities": null,
+      "abstained_90": false
+     },
+     {
+      "request": "Fix the MCP adapter to preserve false values in evidence results.",
+      "paths": [
+       "server.py"
+      ],
+      "expected": "STANDARD",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "STANDARD",
+      "vote": "STANDARD",
+      "disagreement": false,
+      "called": true,
+      "milliseconds": 592.1,
+      "tokens": {
+       "input": 115,
+       "output": 60
+      },
+      "probabilities": null,
+      "abstained_90": false
+     },
+     {
+      "request": "Define a new plugin lifecycle inside the harness runner.",
+      "paths": [
+       "harness.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "FULL",
+      "vote": "FULL",
+      "disagreement": true,
+      "called": true,
+      "milliseconds": 603.7,
+      "tokens": {
+       "input": 113,
+       "output": 64
+      },
+      "probabilities": null,
+      "abstained_90": false
+     },
+     {
+      "request": "Design a versioned report format for the MCP adapter's consumers.",
+      "paths": [
+       "server.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "STANDARD",
+      "floor": "STANDARD",
+      "recommendation": "FULL",
+      "vote": "FULL",
+      "disagreement": true,
+      "called": true,
+      "milliseconds": 853.4,
+      "tokens": {
+       "input": 116,
+       "output": 94
+      },
+      "probabilities": null,
+      "abstained_90": false
+     },
+     {
+      "request": "Require a revision when compiling an intent into a contract.",
+      "paths": [
+       "harness.py"
+      ],
+      "expected": "FULL",
+      "observed": "FULL",
+      "path_rule": "STANDARD",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Return a structured turn result through the public turn lifecycle API.",
+      "paths": [
+       "fixture/turn_lifecycle.py"
+      ],
+      "expected": "FULL",
+      "observed": "FULL",
+      "path_rule": "STANDARD",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Move evidence ownership from the CLI harness to the MCP adapter.",
+      "paths": [
+       "harness.py",
+       "server.py"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "FULL",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Allow the compiler to import the transport layer by changing the dependency policy.",
+      "paths": [
+       "tach.toml"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "FULL",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     },
+     {
+      "request": "Change which task profiles require human approval in the agent policy.",
+      "paths": [
+       "AGENTS.md"
+      ],
+      "expected": "FULL",
+      "observed": null,
+      "path_rule": "FULL",
+      "floor": "FULL",
+      "recommendation": "FULL",
+      "vote": null,
+      "disagreement": false,
+      "called": false
+     }
+    ],
+    "metrics": {
+     "correct": 14,
+     "total": 14,
+     "missed_full": 0,
+     "unnecessary_full": 0,
+     "model_calls": 5,
+     "median_ms": 592.1
+    }
+   },
+   "deem_alone": {
+    "rows": [
+     {
+      "request": "Update the README heading for the offline routing example.",
+      "expected": "FAST",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "FAST",
+      "probabilities": {
+       "FAST": 0.9554493373584225,
+       "STANDARD": 0.03390292146740331,
+       "FULL": 0.010647741174174167
+      },
+      "confidence": 0.9331740060376337,
+      "milliseconds": 2043.8,
+      "tokens": {
+       "input_tokens": 224,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Clarify where to launch the CLI in the usage checklist.",
+      "expected": "FAST",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "FAST",
+      "probabilities": {
+       "FAST": 0.9359834508326094,
+       "STANDARD": 0.0462806873281234,
+       "FULL": 0.017735861839267255
+      },
+      "confidence": 0.9039751762489141,
+      "milliseconds": 2200.9,
+      "tokens": {
+       "input_tokens": 230,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Add a regression test for a rejected revision in the evidence report.",
+      "expected": "STANDARD",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "STANDARD",
+      "probabilities": {
+       "FAST": 0.1859955683724087,
+       "STANDARD": 0.721915422036463,
+       "FULL": 0.09208900959112828
+      },
+      "confidence": 0.5828731330546946,
+      "milliseconds": 2176.5,
+      "tokens": {
+       "input_tokens": 229,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Add assertions for the existing routing and compiler error messages.",
+      "expected": "STANDARD",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "STANDARD",
+      "probabilities": {
+       "FAST": 0.3087726929028448,
+       "STANDARD": 0.6238581064772436,
+       "FULL": 0.06736920061991157
+      },
+      "confidence": 0.43578715971586535,
+      "milliseconds": 2194.9,
+      "tokens": {
+       "input_tokens": 232,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Fix extra whitespace in the compiled contract output.",
+      "expected": "STANDARD",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "STANDARD",
+      "probabilities": {
+       "FAST": 0.29981389968809874,
+       "STANDARD": 0.6866507468646976,
+       "FULL": 0.013535353447203661
+      },
+      "confidence": 0.5299761202970465,
+      "milliseconds": 2138.4,
+      "tokens": {
+       "input_tokens": 223,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Limit a combat score to its permitted range.",
+      "expected": "STANDARD",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "STANDARD",
+      "probabilities": {
+       "FAST": 0.09547916383696864,
+       "STANDARD": 0.837223315676093,
+       "FULL": 0.06729752048693842
+      },
+      "confidence": 0.7558349735141394,
+      "milliseconds": 2156.2,
+      "tokens": {
+       "input_tokens": 225,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Fix the MCP adapter to preserve false values in evidence results.",
+      "expected": "STANDARD",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "STANDARD",
+      "probabilities": {
+       "FAST": 0.05758191362459528,
+       "STANDARD": 0.8714056287608094,
+       "FULL": 0.07101245761459533
+      },
+      "confidence": 0.8071084431412141,
+      "milliseconds": 2181.0,
+      "tokens": {
+       "input_tokens": 226,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Define a new plugin lifecycle inside the harness runner.",
+      "expected": "FULL",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "FULL",
+      "probabilities": {
+       "FAST": 0.04659783408591,
+       "STANDARD": 0.20777274393403636,
+       "FULL": 0.7456294219800536
+      },
+      "confidence": 0.6184441329700803,
+      "milliseconds": 2105.4,
+      "tokens": {
+       "input_tokens": 224,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Design a versioned report format for the MCP adapter's consumers.",
+      "expected": "FULL",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "FULL",
+      "probabilities": {
+       "FAST": 0.0766508475042351,
+       "STANDARD": 0.22391401357767665,
+       "FULL": 0.6994351389180883
+      },
+      "confidence": 0.5491527083771324,
+      "milliseconds": 2193.0,
+      "tokens": {
+       "input_tokens": 227,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Require a revision when compiling an intent into a contract.",
+      "expected": "FULL",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "STANDARD",
+      "probabilities": {
+       "FAST": 0.10686644825284752,
+       "STANDARD": 0.6039786604584412,
+       "FULL": 0.2891548912887114
+      },
+      "confidence": 0.40596799068766176,
+      "milliseconds": 2126.5,
+      "tokens": {
+       "input_tokens": 225,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Return a structured turn result through the public turn lifecycle API.",
+      "expected": "FULL",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "STANDARD",
+      "probabilities": {
+       "FAST": 0.10925430986281753,
+       "STANDARD": 0.6942900489068745,
+       "FULL": 0.196455641230308
+      },
+      "confidence": 0.5414350733603117,
+      "milliseconds": 2191.2,
+      "tokens": {
+       "input_tokens": 230,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Move evidence ownership from the CLI harness to the MCP adapter.",
+      "expected": "FULL",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "FULL",
+      "probabilities": {
+       "FAST": 0.057285411813206115,
+       "STANDARD": 0.19907215736562647,
+       "FULL": 0.7436424308211674
+      },
+      "confidence": 0.6154636462317511,
+      "milliseconds": 2211.8,
+      "tokens": {
+       "input_tokens": 229,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Allow the compiler to import the transport layer by changing the dependency policy.",
+      "expected": "FULL",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "FULL",
+      "probabilities": {
+       "FAST": 0.04370174873932256,
+       "STANDARD": 0.1403258772400473,
+       "FULL": 0.8159723740206302
+      },
+      "confidence": 0.7239585610309454,
+      "milliseconds": 2237.4,
+      "tokens": {
+       "input_tokens": 229,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     },
+     {
+      "request": "Change which task profiles require human approval in the agent policy.",
+      "expected": "FULL",
+      "provider": "deem-4b-q4km",
+      "protocol": "systemone",
+      "prediction": "FULL",
+      "probabilities": {
+       "FAST": 0.05501402638632154,
+       "STANDARD": 0.12735420663343294,
+       "FULL": 0.8176317669802455
+      },
+      "confidence": 0.7264476504703683,
+      "milliseconds": 2232.3,
+      "tokens": {
+       "input_tokens": 227,
+       "output_tokens": 1
+      },
+      "abstained_90": false
+     }
+    ],
+    "metrics": {
+     "correct": 12,
+     "total": 14,
+     "missed_full": 2,
+     "unnecessary_full": 0,
+     "model_calls": 14,
+     "median_ms": 2186.1
+    }
+   }
+  }
+ },
+ "notes": {
+  "systemone": "http://127.0.0.1:8020/v1/systemone",
+  "chat": "http://127.0.0.1:8010/v1/chat/completions",
+  "conformal_90_choice": 0.505204,
+  "cpu_threads": 8,
+  "gpu": "chat protocol only, llama.cpp b12521 Vulkan -ngl 99"
+ }
+}

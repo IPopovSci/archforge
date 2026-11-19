@@ -1,0 +1,111 @@
+{
+ "rows": [
+  {
+   "case": "demo green",
+   "satisfied": true,
+   "choice": "satisfied",
+   "choice_probabilities": {
+    "satisfied": 0.8363551551208317,
+    "unsatisfied": 0.16364484487916836
+   },
+   "score": 0.9267759685116514,
+   "score_levels": null,
+   "noul": 0.5980562181032505,
+   "latency_ms": 3111.4,
+   "tokens": {
+    "input_tokens": 321,
+    "output_tokens": 3
+   }
+  },
+  {
+   "case": "demo red",
+   "satisfied": false,
+   "choice": "unsatisfied",
+   "choice_probabilities": {
+    "satisfied": 0.054546196745236246,
+    "unsatisfied": 0.9454538032547637
+   },
+   "score": 1.2485551710263811,
+   "score_levels": null,
+   "noul": 0.04879920473970059,
+   "latency_ms": 3373.5,
+   "tokens": {
+    "input_tokens": 351,
+    "output_tokens": 3
+   }
+  },
+  {
+   "case": "demo scope violation",
+   "satisfied": false,
+   "choice": "unsatisfied",
+   "choice_probabilities": {
+    "satisfied": 0.054293725541713134,
+    "unsatisfied": 0.9457062744582869
+   },
+   "score": 0.6220791474411352,
+   "score_levels": null,
+   "noul": 0.05038485995933443,
+   "latency_ms": 3040.9,
+   "tokens": {
+    "input_tokens": 318,
+    "output_tokens": 3
+   }
+  },
+  {
+   "case": "seam verified",
+   "satisfied": true,
+   "choice": "satisfied",
+   "choice_probabilities": {
+    "satisfied": 0.8131423209672077,
+    "unsatisfied": 0.1868576790327923
+   },
+   "score": 0.7001824088851852,
+   "score_levels": null,
+   "noul": 0.42492038148766853,
+   "latency_ms": 3158.0,
+   "tokens": {
+    "input_tokens": 329,
+    "output_tokens": 3
+   }
+  },
+  {
+   "case": "seam dropped requirement",
+   "satisfied": false,
+   "choice": "unsatisfied",
+   "choice_probabilities": {
+    "satisfied": 0.04735388571761088,
+    "unsatisfied": 0.9526461142823892
+   },
+   "score": 0.2933991303719769,
+   "score_levels": null,
+   "noul": 0.04767642303768935,
+   "latency_ms": 3229.5,
+   "tokens": {
+    "input_tokens": 341,
+    "output_tokens": 3
+   }
+  },
+  {
+   "case": "seam unapproved interface",
+   "satisfied": false,
+   "choice": "unsatisfied",
+   "choice_probabilities": {
+    "satisfied": 0.03953541387670915,
+    "unsatisfied": 0.9604645861232909
+   },
+   "score": 0.41259436316520537,
+   "score_levels": null,
+   "noul": 0.04844513492985811,
+   "latency_ms": 3348.1,
+   "tokens": {
+    "input_tokens": 348,
+    "output_tokens": 3
+   }
+  }
+ ],
+ "correct_choice": 6,
+ "total": 6,
+ "notes": {
+  "protocol": "systemone multi-question (choice+score+noul per request)"
+ }
+}

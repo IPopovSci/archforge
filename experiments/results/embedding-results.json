@@ -1,0 +1,1188 @@
+﻿{
+  "corpus_revision": "228066d5fa95ef33ae677338365a53c1adc62579",
+  "graph_path": "graft/.graph/wiring.json",
+  "device": "cpu",
+  "threads": 4,
+  "torch_interop_threads": 1,
+  "model_directories": {
+    "minilm": "E:\\projects\\arch_harness\\.harness\\models\\minilm-1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "bge": "E:\\projects\\arch_harness\\.harness\\models\\bge-5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+  },
+  "counts": {
+    "catalog_modules": 9,
+    "indexed_modules": 7,
+    "candidates": 35,
+    "retrieval_queries": 12,
+    "routing_training": 13,
+    "routing_test": 14
+  },
+  "protocol": {
+    "trail_arguments": [
+      "ask",
+      "<query>",
+      ".",
+      "--json",
+      "-n",
+      "20"
+    ],
+    "rank_cutoff": 20,
+    "rrf_k": 60,
+    "unmapped_trail_hits": "retain original rank positions",
+    "routing_floor": "intended paths",
+    "routing_training": "CASES",
+    "routing_test": "_SELECTIVE_CASES",
+    "routing_disjoint": true,
+    "document_character_cap": 1000,
+    "encoder_token_cap": 256,
+    "encoder_batch_size": 16
+  },
+  "timings": {
+    "corpus_seconds": 0.04139339999983349,
+    "reference": {
+      "catalog_seconds": 1.022217300000193,
+      "query_batch_seconds": 8.247119300000122,
+      "path_floor_seconds": 0.0031044000002111716
+    },
+    "encoder_import_seconds": 2.536439099999825,
+    "methods": {
+      "tfidf": {
+        "load_seconds": 4.185730300000159,
+        "retrieval": {
+          "index_seconds": 0.010753699999895616,
+          "query_batch_seconds": 0.0006874000000607339
+        },
+        "routing": {
+          "index_seconds": 0.0009131000001616485,
+          "query_batch_seconds": 0.0005751999997301027
+        }
+      },
+      "minilm": {
+        "load_seconds": 1.6960793999996895,
+        "retrieval": {
+          "index_seconds": 0.797704099999919,
+          "query_batch_seconds": 0.019838999999592488
+        },
+        "routing": {
+          "index_seconds": 0.023331499999585503,
+          "query_batch_seconds": 0.02422230000001946
+        }
+      },
+      "bge": {
+        "load_seconds": 0.14902269999993223,
+        "retrieval": {
+          "index_seconds": 1.523083300000053,
+          "query_batch_seconds": 0.05091749999974127
+        },
+        "routing": {
+          "index_seconds": 0.04856500000005326,
+          "query_batch_seconds": 0.04585259999976188
+        }
+      }
+    }
+  },
+  "retrieval": {
+    "rows": [
+      {
+        "query": "ticket_digest",
+        "target_id": "harness.py#ticket_digest",
+        "group": "exact",
+        "ranks": {
+          "tfidf": 1,
+          "minilm": 1,
+          "bge": 1,
+          "trail": 1,
+          "trail_minilm_rrf": 1,
+          "trail_bge_rrf": 1
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "harness.py#ticket_digest",
+          "server.py#compile_ticket",
+          "scripts/codex_role.py#_validate_edit",
+          "scripts/live_fixture.py#main",
+          "scripts/demo.py#main",
+          null,
+          null,
+          null,
+          "harness.py#compile_ticket",
+          null,
+          null,
+          null,
+          "harness.py#cli",
+          null,
+          null,
+          "harness.py#public_api_digest",
+          "harness.py#_validate_review",
+          null,
+          "harness.py#verify",
+          null
+        ],
+        "unmapped_trail_positions": [
+          6,
+          7,
+          8,
+          10,
+          11,
+          12,
+          14,
+          15,
+          18,
+          20
+        ]
+      },
+      {
+        "query": "compile_ticket",
+        "target_id": "harness.py#compile_ticket",
+        "group": "exact",
+        "ranks": {
+          "tfidf": 2,
+          "minilm": 2,
+          "bge": 2,
+          "trail": 1,
+          "trail_minilm_rrf": 1,
+          "trail_bge_rrf": 1
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "harness.py#compile_ticket",
+          "server.py#compile_ticket",
+          "scripts/demo.py#main",
+          "scripts/live_fixture.py#main",
+          null,
+          null,
+          null,
+          "harness.py#ticket_digest",
+          null,
+          null,
+          "harness.py#cli",
+          null,
+          null,
+          "harness.py#_validate_review",
+          null,
+          null,
+          "harness.py#verify",
+          null,
+          "harness.py#catalog",
+          "harness.py#clean_revision"
+        ],
+        "unmapped_trail_positions": [
+          5,
+          6,
+          7,
+          9,
+          10,
+          12,
+          13,
+          15,
+          16,
+          18
+        ]
+      },
+      {
+        "query": "apply_poison",
+        "target_id": "fixture/combat.py#apply_poison",
+        "group": "exact",
+        "ranks": {
+          "tfidf": 1,
+          "minilm": 1,
+          "bge": 1,
+          "trail": 1,
+          "trail_minilm_rrf": 1,
+          "trail_bge_rrf": 1
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "fixture/combat.py#apply_poison",
+          null,
+          "fixture/turn_lifecycle.py#advance",
+          null,
+          "scripts/demo.py#main",
+          "scripts/codex_role.py#_main",
+          "scripts/live_fixture.py#main",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "unmapped_trail_positions": [
+          2,
+          4,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13
+        ]
+      },
+      {
+        "query": "public_api_digest",
+        "target_id": "harness.py#public_api_digest",
+        "group": "exact",
+        "ranks": {
+          "tfidf": 3,
+          "minilm": 8,
+          "bge": 1,
+          "trail": 1,
+          "trail_minilm_rrf": 2,
+          "trail_bge_rrf": 1
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "harness.py#public_api_digest",
+          "scripts/codex_role.py#_validate_edit",
+          null,
+          "scripts/live_fixture.py#main",
+          null,
+          null,
+          "harness.py#_api_changes",
+          "scripts/codex_role.py#_edit_file",
+          null,
+          null,
+          null,
+          "harness.py#cli",
+          null,
+          null,
+          "harness.py#recheck",
+          "harness.py#ticket_digest",
+          "harness.py#_validate_review",
+          null,
+          "harness.py#verify",
+          "harness.py#compile_ticket"
+        ],
+        "unmapped_trail_positions": [
+          3,
+          5,
+          6,
+          9,
+          10,
+          11,
+          13,
+          14,
+          18
+        ]
+      },
+      {
+        "query": "Which check catches a work order whose approval was signed for another revision?",
+        "target_id": "harness.py#_validate_review",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": 3,
+          "minilm": 3,
+          "bge": 3,
+          "trail": null,
+          "trail_minilm_rrf": 12,
+          "trail_bge_rrf": 13
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "harness.py#clean_revision",
+          "scripts/demo.py#main",
+          "scripts/codex_role.py#_edit_file",
+          "scripts/live_fixture.py#main",
+          null,
+          "server.py#capability_catalog",
+          null,
+          "harness.py#verify",
+          "scripts/codex_role.py#invoke",
+          "scripts/live_fixture.py#main.ask",
+          null,
+          "server.py#retrieve_context",
+          null,
+          "harness.py#run",
+          null,
+          "harness.py#_api_changes",
+          null,
+          "harness.py#catalog",
+          "harness.py#compile_ticket",
+          "harness.py#recheck"
+        ],
+        "unmapped_trail_positions": [
+          5,
+          7,
+          11,
+          13,
+          15,
+          17
+        ]
+      },
+      {
+        "query": "Find edits someone made that Git is not tracking yet",
+        "target_id": "harness.py#diff_paths",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": 9,
+          "minilm": 2,
+          "bge": 5,
+          "trail": null,
+          "trail_minilm_rrf": 9,
+          "trail_bge_rrf": 13
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "harness.py#git",
+          "scripts/codex_role.py#invoke",
+          null,
+          "scripts/demo.py#main",
+          "scripts/live_fixture.py#main",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "harness.py#verify",
+          "scripts/codex_role.py#_edit_file",
+          null,
+          "scripts/demo.py#commit",
+          "scripts/live_fixture.py#main.ask",
+          null,
+          null,
+          null,
+          "harness.py#trail"
+        ],
+        "unmapped_trail_positions": [
+          3,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          14,
+          17,
+          18,
+          19
+        ]
+      },
+      {
+        "query": "Where do we catch a worker that said done but touched nothing?",
+        "target_id": "scripts/codex_role.py#_write_result",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": null,
+          "minilm": 10,
+          "bge": 19,
+          "trail": null,
+          "trail_minilm_rrf": 10,
+          "trail_bge_rrf": 19
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [],
+        "unmapped_trail_positions": []
+      },
+      {
+        "query": "Where is an isolated engineer conversation started and its identity recorded?",
+        "target_id": "scripts/codex_role.py#invoke",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": 1,
+          "minilm": 13,
+          "bge": 19,
+          "trail": 7,
+          "trail_minilm_rrf": 5,
+          "trail_bge_rrf": 6
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          null,
+          null,
+          "harness.py#clean_revision",
+          null,
+          null,
+          null,
+          "scripts/codex_role.py#invoke",
+          "scripts/demo.py#main",
+          "scripts/live_fixture.py#main",
+          null,
+          null,
+          "scripts/codex_role.py#_main",
+          "scripts/demo.py#commit",
+          "scripts/live_fixture.py#main.ask",
+          null,
+          "scripts/codex_role.py#_edit_file",
+          "scripts/demo.py#main.save",
+          "scripts/codex_role.py#_validate_edit",
+          "scripts/codex_role.py#_write_result",
+          "scripts/codex_role.py#_command"
+        ],
+        "unmapped_trail_positions": [
+          1,
+          2,
+          4,
+          5,
+          6,
+          10,
+          11,
+          15
+        ]
+      },
+      {
+        "query": "How are passing examples matched to each promised behavior?",
+        "target_id": "harness.py#verify",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": null,
+          "minilm": 8,
+          "bge": 5,
+          "trail": 7,
+          "trail_minilm_rrf": 2,
+          "trail_bge_rrf": 2
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "scripts/demo.py#main",
+          null,
+          "scripts/live_fixture.py#main",
+          null,
+          null,
+          "scripts/demo.py#commit",
+          "harness.py#verify",
+          "scripts/live_fixture.py#main.ask",
+          null,
+          null,
+          null,
+          null,
+          "scripts/demo.py#main.save"
+        ],
+        "unmapped_trail_positions": [
+          2,
+          4,
+          5,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      {
+        "query": "Prevent a proposed rewrite from silently changing the callable interface",
+        "target_id": "scripts/codex_role.py#_validate_edit",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": 4,
+          "minilm": 1,
+          "bge": 1,
+          "trail": 1,
+          "trail_minilm_rrf": 1,
+          "trail_bge_rrf": 1
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "scripts/codex_role.py#_validate_edit",
+          null,
+          "harness.py#public_api_digest",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "scripts/codex_role.py#_write_result",
+          null,
+          "harness.py#recheck",
+          "scripts/live_fixture.py#main"
+        ],
+        "unmapped_trail_positions": [
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          18
+        ]
+      },
+      {
+        "query": "Collect a few source snippets relevant to the request",
+        "target_id": "harness.py#_context",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": 6,
+          "minilm": 2,
+          "bge": 1,
+          "trail": 10,
+          "trail_minilm_rrf": 3,
+          "trail_bge_rrf": 4
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          "scripts/codex_role.py#_edit_file",
+          null,
+          "harness.py#public_api_digest",
+          "server.py#retrieve_context",
+          "scripts/live_fixture.py#main",
+          null,
+          null,
+          "scripts/codex_role.py#_validate_edit",
+          null,
+          "harness.py#_context",
+          "scripts/live_fixture.py#main.ask",
+          null,
+          null,
+          "scripts/codex_role.py#invoke",
+          null,
+          "harness.py#cli",
+          null,
+          "scripts/codex_role.py#_main",
+          null,
+          "harness.py#compile_ticket"
+        ],
+        "unmapped_trail_positions": [
+          2,
+          6,
+          7,
+          9,
+          12,
+          13,
+          15,
+          17,
+          19
+        ]
+      },
+      {
+        "query": "Tick down the remaining lifetime and apply damage for this simulation step",
+        "target_id": "fixture/turn_lifecycle.py#advance",
+        "group": "paraphrase",
+        "ranks": {
+          "tfidf": 20,
+          "minilm": 1,
+          "bge": 2,
+          "trail": null,
+          "trail_minilm_rrf": 2,
+          "trail_bge_rrf": 2
+        },
+        "trail_protocol": {
+          "response_shape": "hits"
+        },
+        "trail_top20": [
+          null,
+          "fixture/combat.py#apply_poison",
+          "scripts/codex_role.py#_main",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "unmapped_trail_positions": [
+          1,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      }
+    ],
+    "metrics": {
+      "exact": {
+        "tfidf": {
+          "total": 4,
+          "missing": 0,
+          "top1": 2,
+          "top3": 4,
+          "mrr": 0.7083333333333334
+        },
+        "minilm": {
+          "total": 4,
+          "missing": 0,
+          "top1": 2,
+          "top3": 3,
+          "mrr": 0.65625
+        },
+        "bge": {
+          "total": 4,
+          "missing": 0,
+          "top1": 3,
+          "top3": 4,
+          "mrr": 0.875
+        },
+        "trail": {
+          "total": 4,
+          "missing": 0,
+          "top1": 4,
+          "top3": 4,
+          "mrr": 1.0
+        },
+        "trail_minilm_rrf": {
+          "total": 4,
+          "missing": 0,
+          "top1": 3,
+          "top3": 4,
+          "mrr": 0.875
+        },
+        "trail_bge_rrf": {
+          "total": 4,
+          "missing": 0,
+          "top1": 4,
+          "top3": 4,
+          "mrr": 1.0
+        }
+      },
+      "paraphrase": {
+        "tfidf": {
+          "total": 8,
+          "missing": 2,
+          "top1": 1,
+          "top3": 2,
+          "mrr": 0.23888888888888887
+        },
+        "minilm": {
+          "total": 8,
+          "missing": 0,
+          "top1": 2,
+          "top3": 5,
+          "mrr": 0.4544070512820513
+        },
+        "bge": {
+          "total": 8,
+          "missing": 0,
+          "top1": 2,
+          "top3": 4,
+          "mrr": 0.41732456140350876
+        },
+        "trail": {
+          "total": 8,
+          "missing": 4,
+          "top1": 1,
+          "top3": 1,
+          "mrr": 0.1732142857142857
+        },
+        "trail_minilm_rrf": {
+          "total": 8,
+          "missing": 0,
+          "top1": 1,
+          "top3": 4,
+          "mrr": 0.35347222222222224
+        },
+        "trail_bge_rrf": {
+          "total": 8,
+          "missing": 0,
+          "top1": 1,
+          "top3": 3,
+          "mrr": 0.3278930499325236
+        }
+      }
+    }
+  },
+  "routing": {
+    "rows": [
+      {
+        "request": "Update the README heading for the offline routing example.",
+        "paths": [
+          "README.md"
+        ],
+        "expected": "FAST",
+        "path_floor": "FAST",
+        "predictions": {
+          "path_only": {
+            "raw": "FAST",
+            "floor_constrained": "FAST"
+          },
+          "tfidf": {
+            "raw": "FAST",
+            "floor_constrained": "FAST",
+            "nearest_training_request": "Correct a spelling error in the readme."
+          },
+          "minilm": {
+            "raw": "FAST",
+            "floor_constrained": "FAST",
+            "nearest_training_request": "Fix the punctuation in the setup guide."
+          },
+          "bge": {
+            "raw": "FAST",
+            "floor_constrained": "FAST",
+            "nearest_training_request": "Fix a broken Markdown link in the readme."
+          }
+        }
+      },
+      {
+        "request": "Clarify where to launch the CLI in the usage checklist.",
+        "paths": [
+          "docs/usage/checklist.md"
+        ],
+        "expected": "FAST",
+        "path_floor": "FAST",
+        "predictions": {
+          "path_only": {
+            "raw": "FAST",
+            "floor_constrained": "FAST"
+          },
+          "tfidf": {
+            "raw": "FAST",
+            "floor_constrained": "FAST",
+            "nearest_training_request": "Clarify the example command in the usage instructions."
+          },
+          "minilm": {
+            "raw": "FAST",
+            "floor_constrained": "FAST",
+            "nearest_training_request": "Clarify the example command in the usage instructions."
+          },
+          "bge": {
+            "raw": "FAST",
+            "floor_constrained": "FAST",
+            "nearest_training_request": "Clarify the example command in the usage instructions."
+          }
+        }
+      },
+      {
+        "request": "Add a regression test for a rejected revision in the evidence report.",
+        "paths": [
+          "tests/test_regression.py"
+        ],
+        "expected": "STANDARD",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Add a regression assertion for the unchanged public stacking behavior."
+          },
+          "minilm": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Add a regression assertion for the unchanged public stacking behavior."
+          },
+          "bge": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Add a regression assertion for the unchanged public stacking behavior."
+          }
+        }
+      },
+      {
+        "request": "Add assertions for the existing routing and compiler error messages.",
+        "paths": [
+          "tests/test_routing.py",
+          "tests/test_compiler.py"
+        ],
+        "expected": "STANDARD",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Add a regression assertion for the unchanged public stacking behavior."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "bge": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Add a regression assertion for the unchanged public stacking behavior."
+          }
+        }
+      },
+      {
+        "request": "Fix extra whitespace in the compiled contract output.",
+        "paths": [
+          "harness.py"
+        ],
+        "expected": "STANDARD",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "FAST",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Fix the punctuation in the setup guide."
+          },
+          "minilm": {
+            "raw": "FAST",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Fix the punctuation in the setup guide."
+          },
+          "bge": {
+            "raw": "FAST",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Fix the punctuation in the setup guide."
+          }
+        }
+      },
+      {
+        "request": "Limit a combat score to its permitted range.",
+        "paths": [
+          "fixture/combat.py"
+        ],
+        "expected": "STANDARD",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change what agents are authorized to edit."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the required arguments of the public combat API."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the required arguments of the public combat API."
+          }
+        }
+      },
+      {
+        "request": "Fix the MCP adapter to preserve false values in evidence results.",
+        "paths": [
+          "server.py"
+        ],
+        "expected": "STANDARD",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          }
+        }
+      },
+      {
+        "request": "Define a new plugin lifecycle inside the harness runner.",
+        "paths": [
+          "harness.py"
+        ],
+        "expected": "FULL",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Add a new subsystem and define its dependency rules."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Add a new subsystem and define its dependency rules."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Add a new subsystem and define its dependency rules."
+          }
+        }
+      },
+      {
+        "request": "Design a versioned report format for the MCP adapter's consumers.",
+        "paths": [
+          "server.py"
+        ],
+        "expected": "FULL",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          }
+        }
+      },
+      {
+        "request": "Require a revision when compiling an intent into a contract.",
+        "paths": [
+          "harness.py"
+        ],
+        "expected": "FULL",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "FAST",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Correct a spelling error in the readme."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change what agents are authorized to edit."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Revise the locked replay contract in the game design bible."
+          }
+        }
+      },
+      {
+        "request": "Return a structured turn result through the public turn lifecycle API.",
+        "paths": [
+          "fixture/turn_lifecycle.py"
+        ],
+        "expected": "FULL",
+        "path_floor": "STANDARD",
+        "predictions": {
+          "path_only": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD"
+          },
+          "tfidf": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the required arguments of the public combat API."
+          },
+          "minilm": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Correct arithmetic in one turn without changing its interface."
+          },
+          "bge": {
+            "raw": "STANDARD",
+            "floor_constrained": "STANDARD",
+            "nearest_training_request": "Correct arithmetic in one turn without changing its interface."
+          }
+        }
+      },
+      {
+        "request": "Move evidence ownership from the CLI harness to the MCP adapter.",
+        "paths": [
+          "harness.py",
+          "server.py"
+        ],
+        "expected": "FULL",
+        "path_floor": "FULL",
+        "predictions": {
+          "path_only": {
+            "raw": "FULL",
+            "floor_constrained": "FULL"
+          },
+          "tfidf": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          }
+        }
+      },
+      {
+        "request": "Allow the compiler to import the transport layer by changing the dependency policy.",
+        "paths": [
+          "tach.toml"
+        ],
+        "expected": "FULL",
+        "path_floor": "FULL",
+        "predictions": {
+          "path_only": {
+            "raw": "FULL",
+            "floor_constrained": "FULL"
+          },
+          "tfidf": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change the public schema used by the compiler and its MCP adapter."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Add a new subsystem and define its dependency rules."
+          }
+        }
+      },
+      {
+        "request": "Change which task profiles require human approval in the agent policy.",
+        "paths": [
+          "AGENTS.md"
+        ],
+        "expected": "FULL",
+        "path_floor": "FULL",
+        "predictions": {
+          "path_only": {
+            "raw": "FULL",
+            "floor_constrained": "FULL"
+          },
+          "tfidf": {
+            "raw": "FAST",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Fix the punctuation in the setup guide."
+          },
+          "minilm": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change what agents are authorized to edit."
+          },
+          "bge": {
+            "raw": "FULL",
+            "floor_constrained": "FULL",
+            "nearest_training_request": "Change what agents are authorized to edit."
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "path_only": {
+        "raw": {
+          "total": 14,
+          "correct": 10,
+          "missed_full": 4,
+          "unnecessary_full": 0,
+          "unnecessary_promotions": 0
+        },
+        "floor_constrained": {
+          "total": 14,
+          "correct": 10,
+          "missed_full": 4,
+          "unnecessary_full": 0,
+          "unnecessary_promotions": 0
+        }
+      },
+      "tfidf": {
+        "raw": {
+          "total": 14,
+          "correct": 9,
+          "missed_full": 2,
+          "unnecessary_full": 2,
+          "unnecessary_promotions": 2
+        },
+        "floor_constrained": {
+          "total": 14,
+          "correct": 11,
+          "missed_full": 1,
+          "unnecessary_full": 2,
+          "unnecessary_promotions": 2
+        }
+      },
+      "minilm": {
+        "raw": {
+          "total": 14,
+          "correct": 9,
+          "missed_full": 1,
+          "unnecessary_full": 3,
+          "unnecessary_promotions": 3
+        },
+        "floor_constrained": {
+          "total": 14,
+          "correct": 10,
+          "missed_full": 1,
+          "unnecessary_full": 3,
+          "unnecessary_promotions": 3
+        }
+      },
+      "bge": {
+        "raw": {
+          "total": 14,
+          "correct": 10,
+          "missed_full": 1,
+          "unnecessary_full": 2,
+          "unnecessary_promotions": 2
+        },
+        "floor_constrained": {
+          "total": 14,
+          "correct": 11,
+          "missed_full": 1,
+          "unnecessary_full": 2,
+          "unnecessary_promotions": 2
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1256 @@
+{
+ "menu_size": 16,
+ "cases": 14,
+ "gliner_load_s": 4.8,
+ "rows": {
+  "deem_top1": [
+   {
+    "prediction": "scripts.opencode_project",
+    "confidence": 0.5002806780471613,
+    "latency_ms": 4721.4,
+    "tokens": {
+     "input_tokens": 523,
+     "output_tokens": 1
+    },
+    "ticket": "BENCH-OPENCODE-001",
+    "truth": [
+     "scripts.benchmark"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "fixture.turn_lifecycle",
+    "confidence": 0.6015857390135487,
+    "latency_ms": 4864.5,
+    "tokens": {
+     "input_tokens": 516,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-042",
+    "truth": [
+     "fixture.combat",
+     "fixture.turn_lifecycle"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.42052380739924267,
+    "latency_ms": 5006.0,
+    "tokens": {
+     "input_tokens": 524,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-AGENT-RULES-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.42389363126433255,
+    "latency_ms": 5090.9,
+    "tokens": {
+     "input_tokens": 521,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-DAG-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.508734580980843,
+    "latency_ms": 5322.5,
+    "tokens": {
+     "input_tokens": 542,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-DECIDE-ADAPT-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "scripts.shadow_decisions",
+    "confidence": 0.8747856273455102,
+    "latency_ms": 5029.8,
+    "tokens": {
+     "input_tokens": 520,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-DECIDE-LOCAL-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.shadow_decisions",
+    "confidence": 0.39997841050763216,
+    "latency_ms": 5385.1,
+    "tokens": {
+     "input_tokens": 537,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-DECIDE-SEAM-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "scripts.doc_catalog",
+    "confidence": 0.6870421385589583,
+    "latency_ms": 5371.4,
+    "tokens": {
+     "input_tokens": 532,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-DOC-LAYER-001",
+    "truth": [
+     "scripts.doc_catalog"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.godot_boundaries",
+    "confidence": 0.4482060826518033,
+    "latency_ms": 5334.2,
+    "tokens": {
+     "input_tokens": 539,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-GDSCRIPT-001",
+    "truth": [
+     "scripts.godot_boundaries",
+     "scripts.godot_check"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.godot_check",
+    "confidence": 0.28906340681222215,
+    "latency_ms": 5363.7,
+    "tokens": {
+     "input_tokens": 529,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-GODOT-HYGIENE-001",
+    "truth": [
+     "scripts.godot_boundaries"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.6198574434471308,
+    "latency_ms": 5382.5,
+    "tokens": {
+     "input_tokens": 536,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-NAMING-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.396283880824251,
+    "latency_ms": 5292.0,
+    "tokens": {
+     "input_tokens": 531,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-PHASES-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.codex_role",
+    "confidence": 0.3843179316557015,
+    "latency_ms": 5435.4,
+    "tokens": {
+     "input_tokens": 533,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-ROLE-FENCE-001",
+    "truth": [
+     "scripts.codex_role"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.5021813672896531,
+    "latency_ms": 5259.8,
+    "tokens": {
+     "input_tokens": 536,
+     "output_tokens": 1
+    },
+    "ticket": "FEAT-VERIFY-CHECKS-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": true
+   }
+  ],
+  "gliner_top1": [
+   {
+    "prediction": "scripts.opencode_project",
+    "confidence": 0.4771502614021301,
+    "latency_ms": 364.9,
+    "ticket": "BENCH-OPENCODE-001",
+    "truth": [
+     "scripts.benchmark"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "fixture.turn_lifecycle",
+    "confidence": 0.22819142043590546,
+    "latency_ms": 331.6,
+    "ticket": "FEAT-042",
+    "truth": [
+     "fixture.combat",
+     "fixture.turn_lifecycle"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.doc_catalog",
+    "confidence": 0.2183523029088974,
+    "latency_ms": 348.7,
+    "ticket": "FEAT-AGENT-RULES-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "scripts.codex_project",
+    "confidence": 0.1349678784608841,
+    "latency_ms": 342.2,
+    "ticket": "FEAT-DAG-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "scripts.shadow_decisions",
+    "confidence": 0.19513942301273346,
+    "latency_ms": 370.8,
+    "ticket": "FEAT-DECIDE-ADAPT-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.shadow_decisions",
+    "confidence": 0.9676302075386047,
+    "latency_ms": 342.1,
+    "ticket": "FEAT-DECIDE-LOCAL-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.9994706511497498,
+    "latency_ms": 364.6,
+    "ticket": "FEAT-DECIDE-SEAM-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.6631139516830444,
+    "latency_ms": 362.7,
+    "ticket": "FEAT-DOC-LAYER-001",
+    "truth": [
+     "scripts.doc_catalog"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "scripts.godot_boundaries",
+    "confidence": 0.7233321666717529,
+    "latency_ms": 352.0,
+    "ticket": "FEAT-GDSCRIPT-001",
+    "truth": [
+     "scripts.godot_boundaries",
+     "scripts.godot_check"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.codex_project",
+    "confidence": 0.26478224992752075,
+    "latency_ms": 347.7,
+    "ticket": "FEAT-GODOT-HYGIENE-001",
+    "truth": [
+     "scripts.godot_boundaries"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "harness",
+    "confidence": 0.9349506497383118,
+    "latency_ms": 358.9,
+    "ticket": "FEAT-NAMING-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.doc_catalog",
+    "confidence": 0.3350870609283447,
+    "latency_ms": 354.2,
+    "ticket": "FEAT-PHASES-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": false
+   },
+   {
+    "prediction": "scripts.codex_role",
+    "confidence": 0.43258193135261536,
+    "latency_ms": 358.5,
+    "ticket": "FEAT-ROLE-FENCE-001",
+    "truth": [
+     "scripts.codex_role"
+    ],
+    "in_set": true
+   },
+   {
+    "prediction": "scripts.godot_check",
+    "confidence": 0.3302353620529175,
+    "latency_ms": 354.4,
+    "ticket": "FEAT-VERIFY-CHECKS-001",
+    "truth": [
+     "harness"
+    ],
+    "in_set": false
+   }
+  ],
+  "deem_set": [
+   {
+    "prediction": [
+     "scripts.benchmark",
+     "scripts.opencode_project"
+    ],
+    "scores": {
+     "fixture.combat": 0.121,
+     "fixture.entities": 0.111,
+     "fixture.turn_lifecycle": 0.081,
+     "harness": 0.373,
+     "scripts.benchmark": 0.828,
+     "scripts.codex_project": 0.274,
+     "scripts.codex_role": 0.192,
+     "scripts.demo": 0.215,
+     "scripts.doc_catalog": 0.141,
+     "scripts.godot_boundaries": 0.147,
+     "scripts.godot_check": 0.213,
+     "scripts.live_fixture": 0.316,
+     "scripts.opencode_project": 0.842,
+     "scripts.roles": 0.238,
+     "scripts.shadow_decisions": 0.22,
+     "server": 0.187
+    },
+    "latency_ms": 11609.5,
+    "tokens": {
+     "input_tokens": 1262,
+     "output_tokens": 16
+    },
+    "ticket": "BENCH-OPENCODE-001",
+    "truth": [
+     "scripts.benchmark"
+    ],
+    "exact": false,
+    "precision": 0.5,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.turn_lifecycle"
+    ],
+    "scores": {
+     "fixture.combat": 0.4,
+     "fixture.entities": 0.366,
+     "fixture.turn_lifecycle": 0.827,
+     "harness": 0.341,
+     "scripts.benchmark": 0.198,
+     "scripts.codex_project": 0.175,
+     "scripts.codex_role": 0.149,
+     "scripts.demo": 0.164,
+     "scripts.doc_catalog": 0.098,
+     "scripts.godot_boundaries": 0.177,
+     "scripts.godot_check": 0.212,
+     "scripts.live_fixture": 0.266,
+     "scripts.opencode_project": 0.179,
+     "scripts.roles": 0.148,
+     "scripts.shadow_decisions": 0.155,
+     "server": 0.182
+    },
+    "latency_ms": 11772.3,
+    "tokens": {
+     "input_tokens": 1255,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-042",
+    "truth": [
+     "fixture.combat",
+     "fixture.turn_lifecycle"
+    ],
+    "exact": false,
+    "precision": 1.0,
+    "recall": 0.5
+   },
+   {
+    "prediction": [],
+    "scores": {
+     "fixture.combat": 0.182,
+     "fixture.entities": 0.172,
+     "fixture.turn_lifecycle": 0.153,
+     "harness": 0.247,
+     "scripts.benchmark": 0.139,
+     "scripts.codex_project": 0.166,
+     "scripts.codex_role": 0.128,
+     "scripts.demo": 0.131,
+     "scripts.doc_catalog": 0.11,
+     "scripts.godot_boundaries": 0.146,
+     "scripts.godot_check": 0.137,
+     "scripts.live_fixture": 0.166,
+     "scripts.opencode_project": 0.16,
+     "scripts.roles": 0.175,
+     "scripts.shadow_decisions": 0.135,
+     "server": 0.211
+    },
+    "latency_ms": 11904.5,
+    "tokens": {
+     "input_tokens": 1263,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-AGENT-RULES-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": null,
+    "recall": 0.0
+   },
+   {
+    "prediction": [],
+    "scores": {
+     "fixture.combat": 0.279,
+     "fixture.entities": 0.352,
+     "fixture.turn_lifecycle": 0.212,
+     "harness": 0.333,
+     "scripts.benchmark": 0.155,
+     "scripts.codex_project": 0.19,
+     "scripts.codex_role": 0.14,
+     "scripts.demo": 0.161,
+     "scripts.doc_catalog": 0.12,
+     "scripts.godot_boundaries": 0.163,
+     "scripts.godot_check": 0.184,
+     "scripts.live_fixture": 0.19,
+     "scripts.opencode_project": 0.189,
+     "scripts.roles": 0.179,
+     "scripts.shadow_decisions": 0.145,
+     "server": 0.167
+    },
+    "latency_ms": 12234.2,
+    "tokens": {
+     "input_tokens": 1260,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-DAG-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": null,
+    "recall": 0.0
+   },
+   {
+    "prediction": [],
+    "scores": {
+     "fixture.combat": 0.204,
+     "fixture.entities": 0.188,
+     "fixture.turn_lifecycle": 0.156,
+     "harness": 0.292,
+     "scripts.benchmark": 0.126,
+     "scripts.codex_project": 0.141,
+     "scripts.codex_role": 0.127,
+     "scripts.demo": 0.113,
+     "scripts.doc_catalog": 0.075,
+     "scripts.godot_boundaries": 0.096,
+     "scripts.godot_check": 0.091,
+     "scripts.live_fixture": 0.127,
+     "scripts.opencode_project": 0.115,
+     "scripts.roles": 0.143,
+     "scripts.shadow_decisions": 0.107,
+     "server": 0.138
+    },
+    "latency_ms": 12383.7,
+    "tokens": {
+     "input_tokens": 1281,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-DECIDE-ADAPT-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "exact": false,
+    "precision": null,
+    "recall": 0.0
+   },
+   {
+    "prediction": [
+     "scripts.shadow_decisions"
+    ],
+    "scores": {
+     "fixture.combat": 0.153,
+     "fixture.entities": 0.114,
+     "fixture.turn_lifecycle": 0.1,
+     "harness": 0.219,
+     "scripts.benchmark": 0.198,
+     "scripts.codex_project": 0.139,
+     "scripts.codex_role": 0.102,
+     "scripts.demo": 0.097,
+     "scripts.doc_catalog": 0.067,
+     "scripts.godot_boundaries": 0.114,
+     "scripts.godot_check": 0.152,
+     "scripts.live_fixture": 0.157,
+     "scripts.opencode_project": 0.128,
+     "scripts.roles": 0.132,
+     "scripts.shadow_decisions": 0.887,
+     "server": 0.26
+    },
+    "latency_ms": 12162.0,
+    "tokens": {
+     "input_tokens": 1259,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-DECIDE-LOCAL-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "exact": true,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "harness"
+    ],
+    "scores": {
+     "fixture.combat": 0.252,
+     "fixture.entities": 0.166,
+     "fixture.turn_lifecycle": 0.219,
+     "harness": 0.547,
+     "scripts.benchmark": 0.12,
+     "scripts.codex_project": 0.143,
+     "scripts.codex_role": 0.144,
+     "scripts.demo": 0.113,
+     "scripts.doc_catalog": 0.097,
+     "scripts.godot_boundaries": 0.157,
+     "scripts.godot_check": 0.161,
+     "scripts.live_fixture": 0.178,
+     "scripts.opencode_project": 0.19,
+     "scripts.roles": 0.157,
+     "scripts.shadow_decisions": 0.356,
+     "server": 0.229
+    },
+    "latency_ms": 12680.8,
+    "tokens": {
+     "input_tokens": 1276,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-DECIDE-SEAM-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": true,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "harness",
+     "scripts.doc_catalog"
+    ],
+    "scores": {
+     "fixture.combat": 0.145,
+     "fixture.entities": 0.117,
+     "fixture.turn_lifecycle": 0.081,
+     "harness": 0.705,
+     "scripts.benchmark": 0.104,
+     "scripts.codex_project": 0.283,
+     "scripts.codex_role": 0.184,
+     "scripts.demo": 0.182,
+     "scripts.doc_catalog": 0.826,
+     "scripts.godot_boundaries": 0.296,
+     "scripts.godot_check": 0.278,
+     "scripts.live_fixture": 0.265,
+     "scripts.opencode_project": 0.385,
+     "scripts.roles": 0.284,
+     "scripts.shadow_decisions": 0.241,
+     "server": 0.162
+    },
+    "latency_ms": 12557.1,
+    "tokens": {
+     "input_tokens": 1271,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-DOC-LAYER-001",
+    "truth": [
+     "scripts.doc_catalog"
+    ],
+    "exact": false,
+    "precision": 0.5,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "scripts.godot_boundaries",
+     "scripts.godot_check"
+    ],
+    "scores": {
+     "fixture.combat": 0.13,
+     "fixture.entities": 0.145,
+     "fixture.turn_lifecycle": 0.099,
+     "harness": 0.439,
+     "scripts.benchmark": 0.163,
+     "scripts.codex_project": 0.157,
+     "scripts.codex_role": 0.136,
+     "scripts.demo": 0.136,
+     "scripts.doc_catalog": 0.095,
+     "scripts.godot_boundaries": 0.9,
+     "scripts.godot_check": 0.895,
+     "scripts.live_fixture": 0.205,
+     "scripts.opencode_project": 0.261,
+     "scripts.roles": 0.151,
+     "scripts.shadow_decisions": 0.167,
+     "server": 0.146
+    },
+    "latency_ms": 12595.5,
+    "tokens": {
+     "input_tokens": 1278,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-GDSCRIPT-001",
+    "truth": [
+     "scripts.godot_boundaries",
+     "scripts.godot_check"
+    ],
+    "exact": true,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "scripts.godot_boundaries",
+     "scripts.godot_check"
+    ],
+    "scores": {
+     "fixture.combat": 0.18,
+     "fixture.entities": 0.165,
+     "fixture.turn_lifecycle": 0.118,
+     "harness": 0.325,
+     "scripts.benchmark": 0.178,
+     "scripts.codex_project": 0.249,
+     "scripts.codex_role": 0.163,
+     "scripts.demo": 0.204,
+     "scripts.doc_catalog": 0.19,
+     "scripts.godot_boundaries": 0.617,
+     "scripts.godot_check": 0.561,
+     "scripts.live_fixture": 0.278,
+     "scripts.opencode_project": 0.365,
+     "scripts.roles": 0.236,
+     "scripts.shadow_decisions": 0.219,
+     "server": 0.16
+    },
+    "latency_ms": 12781.6,
+    "tokens": {
+     "input_tokens": 1268,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-GODOT-HYGIENE-001",
+    "truth": [
+     "scripts.godot_boundaries"
+    ],
+    "exact": false,
+    "precision": 0.5,
+    "recall": 1.0
+   },
+   {
+    "prediction": [],
+    "scores": {
+     "fixture.combat": 0.113,
+     "fixture.entities": 0.145,
+     "fixture.turn_lifecycle": 0.123,
+     "harness": 0.22,
+     "scripts.benchmark": 0.125,
+     "scripts.codex_project": 0.116,
+     "scripts.codex_role": 0.081,
+     "scripts.demo": 0.14,
+     "scripts.doc_catalog": 0.109,
+     "scripts.godot_boundaries": 0.11,
+     "scripts.godot_check": 0.098,
+     "scripts.live_fixture": 0.126,
+     "scripts.opencode_project": 0.112,
+     "scripts.roles": 0.152,
+     "scripts.shadow_decisions": 0.12,
+     "server": 0.178
+    },
+    "latency_ms": 12657.3,
+    "tokens": {
+     "input_tokens": 1275,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-NAMING-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": null,
+    "recall": 0.0
+   },
+   {
+    "prediction": [],
+    "scores": {
+     "fixture.combat": 0.194,
+     "fixture.entities": 0.169,
+     "fixture.turn_lifecycle": 0.292,
+     "harness": 0.383,
+     "scripts.benchmark": 0.162,
+     "scripts.codex_project": 0.25,
+     "scripts.codex_role": 0.198,
+     "scripts.demo": 0.201,
+     "scripts.doc_catalog": 0.157,
+     "scripts.godot_boundaries": 0.174,
+     "scripts.godot_check": 0.156,
+     "scripts.live_fixture": 0.202,
+     "scripts.opencode_project": 0.22,
+     "scripts.roles": 0.291,
+     "scripts.shadow_decisions": 0.219,
+     "server": 0.249
+    },
+    "latency_ms": 12784.7,
+    "tokens": {
+     "input_tokens": 1270,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-PHASES-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": null,
+    "recall": 0.0
+   },
+   {
+    "prediction": [],
+    "scores": {
+     "fixture.combat": 0.206,
+     "fixture.entities": 0.16,
+     "fixture.turn_lifecycle": 0.166,
+     "harness": 0.315,
+     "scripts.benchmark": 0.181,
+     "scripts.codex_project": 0.19,
+     "scripts.codex_role": 0.22,
+     "scripts.demo": 0.176,
+     "scripts.doc_catalog": 0.138,
+     "scripts.godot_boundaries": 0.184,
+     "scripts.godot_check": 0.171,
+     "scripts.live_fixture": 0.184,
+     "scripts.opencode_project": 0.151,
+     "scripts.roles": 0.253,
+     "scripts.shadow_decisions": 0.177,
+     "server": 0.201
+    },
+    "latency_ms": 13023.5,
+    "tokens": {
+     "input_tokens": 1272,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-ROLE-FENCE-001",
+    "truth": [
+     "scripts.codex_role"
+    ],
+    "exact": false,
+    "precision": null,
+    "recall": 0.0
+   },
+   {
+    "prediction": [],
+    "scores": {
+     "fixture.combat": 0.141,
+     "fixture.entities": 0.157,
+     "fixture.turn_lifecycle": 0.124,
+     "harness": 0.405,
+     "scripts.benchmark": 0.134,
+     "scripts.codex_project": 0.179,
+     "scripts.codex_role": 0.132,
+     "scripts.demo": 0.136,
+     "scripts.doc_catalog": 0.119,
+     "scripts.godot_boundaries": 0.169,
+     "scripts.godot_check": 0.228,
+     "scripts.live_fixture": 0.174,
+     "scripts.opencode_project": 0.224,
+     "scripts.roles": 0.19,
+     "scripts.shadow_decisions": 0.162,
+     "server": 0.217
+    },
+    "latency_ms": 12319.6,
+    "tokens": {
+     "input_tokens": 1275,
+     "output_tokens": 16
+    },
+    "ticket": "FEAT-VERIFY-CHECKS-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": null,
+    "recall": 0.0
+   }
+  ],
+  "gliner_set": [
+   {
+    "prediction": [
+     "fixture.combat",
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.demo",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.godot_check",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions",
+     "server"
+    ],
+    "latency_ms": 270.9,
+    "total_ms": 4353.6,
+    "ticket": "BENCH-OPENCODE-001",
+    "truth": [
+     "scripts.benchmark"
+    ],
+    "exact": false,
+    "precision": 0.06,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.demo",
+     "scripts.godot_boundaries",
+     "scripts.live_fixture",
+     "scripts.roles",
+     "server"
+    ],
+    "latency_ms": 244.9,
+    "total_ms": 3916.6,
+    "ticket": "FEAT-042",
+    "truth": [
+     "fixture.combat",
+     "fixture.turn_lifecycle"
+    ],
+    "exact": false,
+    "precision": 0.09,
+    "recall": 0.5
+   },
+   {
+    "prediction": [
+     "harness"
+    ],
+    "latency_ms": 249.1,
+    "total_ms": 4016.3,
+    "ticket": "FEAT-AGENT-RULES-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": true,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.demo",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.godot_check",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions",
+     "server"
+    ],
+    "latency_ms": 252.1,
+    "total_ms": 4032.7,
+    "ticket": "FEAT-DAG-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": 0.07,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.combat",
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.godot_check",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions",
+     "server"
+    ],
+    "latency_ms": 264.1,
+    "total_ms": 4247.8,
+    "ticket": "FEAT-DECIDE-ADAPT-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "exact": false,
+    "precision": 0.07,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions",
+     "server"
+    ],
+    "latency_ms": 252.6,
+    "total_ms": 4035.9,
+    "ticket": "FEAT-DECIDE-LOCAL-001",
+    "truth": [
+     "scripts.shadow_decisions"
+    ],
+    "exact": false,
+    "precision": 0.09,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.combat",
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.demo",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions"
+    ],
+    "latency_ms": 271.2,
+    "total_ms": 4323.0,
+    "ticket": "FEAT-DECIDE-SEAM-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": 0.07,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "harness",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.live_fixture",
+     "scripts.opencode_project"
+    ],
+    "latency_ms": 256.6,
+    "total_ms": 4124.8,
+    "ticket": "FEAT-DOC-LAYER-001",
+    "truth": [
+     "scripts.doc_catalog"
+    ],
+    "exact": false,
+    "precision": 0.14,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.combat",
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.demo",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.godot_check",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions",
+     "server"
+    ],
+    "latency_ms": 265.9,
+    "total_ms": 4256.7,
+    "ticket": "FEAT-GDSCRIPT-001",
+    "truth": [
+     "scripts.godot_boundaries",
+     "scripts.godot_check"
+    ],
+    "exact": false,
+    "precision": 0.12,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.benchmark",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.demo",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.godot_check",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions"
+    ],
+    "latency_ms": 263.0,
+    "total_ms": 4214.9,
+    "ticket": "FEAT-GODOT-HYGIENE-001",
+    "truth": [
+     "scripts.godot_boundaries"
+    ],
+    "exact": false,
+    "precision": 0.07,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.combat",
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.opencode_project",
+     "scripts.shadow_decisions"
+    ],
+    "latency_ms": 261.6,
+    "total_ms": 4182.2,
+    "ticket": "FEAT-NAMING-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": 0.1,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "harness",
+     "scripts.codex_role",
+     "scripts.doc_catalog",
+     "scripts.roles",
+     "scripts.shadow_decisions"
+    ],
+    "latency_ms": 261.1,
+    "total_ms": 4157.8,
+    "ticket": "FEAT-PHASES-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": 0.2,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "fixture.combat",
+     "fixture.entities",
+     "fixture.turn_lifecycle",
+     "harness",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions",
+     "server"
+    ],
+    "latency_ms": 258.9,
+    "total_ms": 4124.2,
+    "ticket": "FEAT-ROLE-FENCE-001",
+    "truth": [
+     "scripts.codex_role"
+    ],
+    "exact": false,
+    "precision": 0.08,
+    "recall": 1.0
+   },
+   {
+    "prediction": [
+     "harness",
+     "scripts.codex_project",
+     "scripts.codex_role",
+     "scripts.doc_catalog",
+     "scripts.godot_boundaries",
+     "scripts.godot_check",
+     "scripts.live_fixture",
+     "scripts.opencode_project",
+     "scripts.roles",
+     "scripts.shadow_decisions",
+     "server"
+    ],
+    "latency_ms": 256.9,
+    "total_ms": 4129.1,
+    "ticket": "FEAT-VERIFY-CHECKS-001",
+    "truth": [
+     "harness"
+    ],
+    "exact": false,
+    "precision": 0.09,
+    "recall": 1.0
+   }
+  ]
+ },
+ "deem_top1": {
+  "in_set": 10,
+  "total": 14,
+  "median_ms": 5307.25
+ },
+ "gliner_top1": {
+  "in_set": 7,
+  "total": 14,
+  "median_ms": 354.29999999999995
+ },
+ "deem_set": {
+  "exact": 3,
+  "mean_precision": 0.79,
+  "mean_recall": 0.46,
+  "median_ms": 12470.400000000001
+ },
+ "gliner_set": {
+  "exact": 1,
+  "mean_precision": 0.16,
+  "mean_recall": 0.96,
+  "median_ms": 260.0
+ },
+ "gliner_triage": {
+  "rows": [
+   {
+    "case": "demo green",
+    "satisfied": true,
+    "prediction": "satisfied",
+    "confidence": 0.999840497970581,
+    "correct": true,
+    "latency_ms": 257.5
+   },
+   {
+    "case": "demo red",
+    "satisfied": false,
+    "prediction": "unsatisfied",
+    "confidence": 0.9995189905166626,
+    "correct": true,
+    "latency_ms": 296.1
+   },
+   {
+    "case": "demo scope violation",
+    "satisfied": false,
+    "prediction": "unsatisfied",
+    "confidence": 0.9997715353965759,
+    "correct": true,
+    "latency_ms": 252.6
+   },
+   {
+    "case": "seam verified",
+    "satisfied": true,
+    "prediction": "satisfied",
+    "confidence": 0.9998384714126587,
+    "correct": true,
+    "latency_ms": 269.0
+   },
+   {
+    "case": "seam dropped requirement",
+    "satisfied": false,
+    "prediction": "unsatisfied",
+    "confidence": 0.999786913394928,
+    "correct": true,
+    "latency_ms": 278.5
+   },
+   {
+    "case": "seam unapproved interface",
+    "satisfied": false,
+    "prediction": "unsatisfied",
+    "confidence": 0.999932050704956,
+    "correct": true,
+    "latency_ms": 293.5
+   }
+  ],
+  "correct": 6,
+  "total": 6
+ }
+}

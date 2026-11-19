@@ -1,0 +1,142 @@
+﻿{
+  "checkpoint": "gliner-9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90",
+  "device": "cpu",
+  "threads": 4,
+  "load_seconds": 4.5,
+  "median_ms": 282.0,
+  "model_correct": 9,
+  "rules_correct": 12,
+  "rows": [
+    {
+      "request": "Correct a spelling error in the readme.",
+      "paths": [
+        "README.md"
+      ],
+      "expected": "FAST",
+      "enforced": "FAST",
+      "prediction": "FAST",
+      "milliseconds": 286.3
+    },
+    {
+      "request": "Fix the punctuation in the setup guide.",
+      "paths": [
+        "docs/usage/checklist.md"
+      ],
+      "expected": "FAST",
+      "enforced": "FAST",
+      "prediction": "FAST",
+      "milliseconds": 279.1
+    },
+    {
+      "request": "Clarify the example command in the usage instructions.",
+      "paths": [
+        "docs/usage/checklist.md"
+      ],
+      "expected": "FAST",
+      "enforced": "FAST",
+      "prediction": "FAST",
+      "milliseconds": 283.7
+    },
+    {
+      "request": "Fix a broken Markdown link in the readme.",
+      "paths": [
+        "README.md"
+      ],
+      "expected": "FAST",
+      "enforced": "FAST",
+      "prediction": "FAST",
+      "milliseconds": 277.9
+    },
+    {
+      "request": "Fix an off-by-one in the poison timer.",
+      "paths": [
+        "fixture/turn_lifecycle.py"
+      ],
+      "expected": "STANDARD",
+      "enforced": "STANDARD",
+      "prediction": "STANDARD",
+      "milliseconds": 295.2
+    },
+    {
+      "request": "Repair the stack calculation inside the existing combat function.",
+      "paths": [
+        "fixture/combat.py"
+      ],
+      "expected": "STANDARD",
+      "enforced": "STANDARD",
+      "prediction": "STANDARD",
+      "milliseconds": 281.7
+    },
+    {
+      "request": "Add a regression assertion for the unchanged public stacking behavior.",
+      "paths": [
+        "tests/test_regression.py"
+      ],
+      "expected": "STANDARD",
+      "enforced": "STANDARD",
+      "prediction": "STANDARD",
+      "milliseconds": 290.7
+    },
+    {
+      "request": "Correct arithmetic in one turn without changing its interface.",
+      "paths": [
+        "fixture/turn_lifecycle.py"
+      ],
+      "expected": "STANDARD",
+      "enforced": "STANDARD",
+      "prediction": "STANDARD",
+      "milliseconds": 282.1
+    },
+    {
+      "request": "Add a new subsystem and define its dependency rules.",
+      "paths": [
+        "tach.toml"
+      ],
+      "expected": "FULL",
+      "enforced": "FULL",
+      "prediction": "FULL",
+      "milliseconds": 281.4
+    },
+    {
+      "request": "Change the public schema used by the compiler and its MCP adapter.",
+      "paths": [
+        "harness.py",
+        "server.py"
+      ],
+      "expected": "FULL",
+      "enforced": "FULL",
+      "prediction": "STANDARD",
+      "milliseconds": 286.8
+    },
+    {
+      "request": "Change what agents are authorized to edit.",
+      "paths": [
+        "AGENTS.md"
+      ],
+      "expected": "FULL",
+      "enforced": "FULL",
+      "prediction": "FAST",
+      "milliseconds": 279.4
+    },
+    {
+      "request": "Revise the locked replay contract in the game design bible.",
+      "paths": [
+        "project_example/lines-master-design-bible.md"
+      ],
+      "expected": "FULL",
+      "enforced": "FULL",
+      "prediction": "FAST",
+      "milliseconds": 282.0
+    },
+    {
+      "request": "Change the required arguments of the public combat API.",
+      "paths": [
+        "fixture/combat.py"
+      ],
+      "expected": "FULL",
+      "enforced": "STANDARD",
+      "prediction": "STANDARD",
+      "milliseconds": 280.5
+    }
+  ]
+}

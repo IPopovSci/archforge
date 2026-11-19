@@ -64,3 +64,23 @@ depends_on = []
 [[modules]]
 path = "scripts.doc_catalog"
 depends_on = []
+
+[[modules]]
+path = "experiments.adapt_suite"
+depends_on = ["harness", "scripts.shadow_decisions", "experiments.deem_routing"]
+
+[[modules]]
+path = "experiments.deem_routing"
+depends_on = ["harness", "scripts.shadow_decisions"]
+
+[[modules]]
+path = "experiments.decide_suite"
+depends_on = ["harness"]
+
+[[modules]]
+path = "experiments.capability_comparison"
+depends_on = []
+
+[[modules]]
+path = "experiments.evidence_triage"
+depends_on = []

@@ -46,7 +46,7 @@ The paired evaluation ran GLiNER once per case and reused each prediction to cal
 .\.harness\decision-env\Scripts\python scripts/shadow_decisions.py $checkpoint --base HEAD --request "Design a versioned report format" --paths server.py
 ```
 
-For another machine, create a virtualenv under .harness/decision-env, install `gliner2[local]==2.1.0`, `torch==2.15.0` and `transformers==5.23.0`, and use Hugging Face's `hf download fastino/GLiNER2.5-Decide --revision 9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90 --local-dir <checkpoint-directory>`. The local installation also retains the complete environment freeze in .harness/decision-env.lock and the measured rows in .harness/shadow-results.json.
+For another machine, create a virtualenv under .harness/decision-env, install `gliner2[local]==2.1.0`, `torch==2.15.0` and `transformers==5.23.0`, and use Hugging Face's `hf download fastino/GLiNER2.5-Decide --revision 9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90 --local-dir <checkpoint-directory>`. The local installation also retains the complete environment freeze in .harness/decision-env.lock and the measured rows in experiments/results/shadow-results.json.
 
 Jev's 4B and 0.8B releases are adapters requiring their corresponding base checkpoints. Their model cards specify CC BY-NC 4.0. They were evaluated for fit from their published interfaces and remain uninstalled and unbenchmarked. [4B model card](https://huggingface.co/JevAgentHarness/AgentDecision-4B) · [0.8B model card](https://huggingface.co/JevAgentHarness/AgentDecision-0.8B)
 
@@ -54,7 +54,7 @@ Jev's 4B and 0.8B releases are adapters requiring their corresponding base check
 
 Deem-4B (JevAlt, Apache-2.0, fine-tuned from Intern-Decision-4B) is a System One decision model: it answers typed questions (Choice, Score, Noul) over a Jev-compatible `POST /v1/systemone` endpoint with calibrated per-option probabilities, spending one output token per decision. The staged Q4_K_M GGUF (2.71 GB, quant parity report and `calibration.json` retained in `.harness/models/deem-4b-q4km-8f30f44881052e93e7bede109e694d4052382833/`) answered the open unknowns of FEAT-DECIDE-LOCAL-001: the candidate model and both runtimes work. `jevalt serve` (isolated `.harness/systemone-env`, freeze in `.harness/systemone-env.lock`) implements `/v1/systemone` over llama.cpp on CPU and loads the published calibration; one caveat for offline setups: calibration is fetched by hub repo id, so a local-only install must load it at the driver level. The plain llama.cpp b12521 Vulkan server (`-ngl 99`, RX 9070 XT) covers the naive chat-completions protocol on GPU. This confirms a System One-compatible local server covers the same question types the seam asks, with calibrated abstention available.
 
-Both frozen suites from the GLiNER experiments were replayed unchanged through the landed floor-first band. Every row is in `.harness/deem-routing-results.json`; per-request latencies are medians over the suite.
+Both frozen suites from the GLiNER experiments were replayed unchanged through the landed floor-first band. Every row is in `experiments/results/deem-routing-results.json`; per-request latencies are medians over the suite.
 
 | Treatment | Correct | Missed FULL | Unnecessary FULL | Calls | Median latency |
 |---|---:|---:|---:|---:|---:|
@@ -73,21 +73,21 @@ Deem alone caught the public-schema, agent-policy and design-bible cases that bo
 
 **GLiNER placement verdict.** On routing evidence Deem dominates GLiNER everywhere at acceptable cost: 13/13 vs 9/13 alone, 14/14 vs 13/14 selective, with 2.1 s CPU (typed) or 0.6 s (chat on GPU) against GLiNER's 282 ms CPU — all far below a cloud reasoning turn, and the in-band policy calls it on only 5 of 14 tasks. Recommendation: demote GLiNER from the routing slot and keep it for its original handoff role (multi-label capability and action classification, where its zero-shot labeling is the right shape), and promote a Deem adapter behind the landed `AdvisoryProvider` seam. Both stay pluggable; the seam keeps the floor deterministic.
 
-**Alternative-use probe.** A second frozen probe tested the compact-evidence review job on six real verification outputs (demo replay artifacts from `.harness/runs` plus the FEAT-DECIDE-SEAM-001 verification with two structural failure variants): choice-with-criteria scored 6/6 on satisfied/unsatisfied, Score tracked severity on five of six, and bare Noul proved unreliable for satisfaction predicates (0.42 on a passing case). A local first-pass triage before a cloud final review is plausible but needs a larger frozen suite before any workflow role; rows are in `.harness/evidence-triage-results.json`.
+**Alternative-use probe.** A second frozen probe tested the compact-evidence review job on six real verification outputs (demo replay artifacts from `.harness/runs` plus the FEAT-DECIDE-SEAM-001 verification with two structural failure variants): choice-with-criteria scored 6/6 on satisfied/unsatisfied, Score tracked severity on five of six, and bare Noul proved unreliable for satisfaction predicates (0.42 on a passing case). A local first-pass triage before a cloud final review is plausible but needs a larger frozen suite before any workflow role; rows are in `experiments/results/evidence-triage-results.json`.
 
 Caveats: both suites are small, synthetic and hand-labeled, and their category wording shaped the criteria in the prompts, so 13/13 and 14/14 are evidence of fit on these suites, not a generalization or cloud-savings estimate. Reproduction:
 
 ```powershell
 .\.harness\systemone-env\Scripts\jevalt.exe serve --model mertkayacs/Deem-4B-GGUF --file <local Deem-4B-Q4_K_M.gguf> --port 8020
-.\.venv\Scripts\python .harness\experiments\deem_routing.py
-.\.venv\Scripts\python .harness\experiments\evidence_triage.py
+.\.venv\Scripts\python experiments\deem_routing.py
+.\.venv\Scripts\python experiments\evidence_triage.py
 ```
 
 Next steps (parked): FEAT-DECIDE-ADAPT-001 registers the wiring and its gate. The larger suite must come from real engineering requests, and the calibrated abstention path is still unexercised: no call reached a conformal threshold, so a suite that triggers abstention is a prerequisite for trusting it. The typed protocol is CPU-only through jevalt's llama.cpp backend; the Vulkan chat protocol is the GPU option at equal accuracy on these suites. The evidence-triage probe needs a larger frozen suite before the compact-evidence review gains a local first-pass gate. Both servers were left running for continuation: jevalt on 127.0.0.1:8020 and llama-server on 8010.
 
 ## Capability classification: Deem vs GLiNER on the committed tickets
 
-The second head-to-head uses real labeled data instead of synthetic cases: every ticket in `tickets/` binds its intent to the catalog components it actually changed, and the menu is the sixteen live `tach.toml` modules. Both models saw the same surface — intent text and module paths only. Fourteen tickets, ground truth committed. Full rows in `.harness/capability-results.json`.
+The second head-to-head uses real labeled data instead of synthetic cases: every ticket in `tickets/` binds its intent to the catalog components it actually changed, and the menu is the sixteen live `tach.toml` modules. Both models saw the same surface — intent text and module paths only. Fourteen tickets, ground truth committed. Full rows in `experiments/results/capability-results.json`.
 
 | Treatment | Top-1 in true set | Set exact | Set precision | Set recall | Median latency |
 |---|---:|---:|---:|---:|---:|
@@ -103,7 +103,7 @@ Deem's four top-1 misses are adjacent-module near-misses at honest low confidenc
 Caveats: fourteen one-line intents are harder than real prose briefs (both models confused the tool a task uses with the component it changes), component lists are single- or two-component tickets, and the in-set metric does not assume a primary component. Reproduction:
 
 ```powershell
-.\.harness\decision-env\Scripts\python .harness\experiments\capability_comparison.py
+.\.harness\decision-env\Scripts\python experiments\capability_comparison.py
 ```
 
 ## Wired Deem-4B advisory adapter
@@ -140,9 +140,89 @@ decision log, which is the collection funnel for that suite.
 ```
 
 The final intent review approved with the open gate recorded. Follow-ups: the
-thirty-request suite on both transports, per-transport calibration seeded by the
-observed disagreement row, GLiNER's cheap-gate candidacy on the same suite, and
-confirming the chat first-word parser against real answer phrasings.
+thirty-request suite on both transports, per-transport calibration seeded by
+the observed disagreement row, GLiNER's cheap-gate candidacy on the same suite, and
+confirming the chat first-word parser against real answer phrasings. All four
+are measured in the next section.
+
+## The REQ-ADAPT-B frozen suite on real engineering requests
+
+The gate wanted a frozen routing suite of at least thirty real engineering
+requests before any default activation. Every row is evidence-bound: the
+recorded request is a commit subject or an executed benchmark task request, the
+intended paths are the files the work actually changed, and the label is
+computed, never hand-imagined:
+
+    expected = max(path rule on the actual paths,
+                   public-API impact of the actual diff)
+
+so the label rule is the harness's own floor logic applied to the real
+outcome. The suite pins main at `c6acd0e` (56 non-merge commit requests after
+deduplicating the branch twins, plus the ten executed benchmark tasks), 66
+rows, 12 FAST / 13 STANDARD / 41 FULL by outcome, 15 rows in the ambiguous
+STANDARD band. The known blind spot stays blind by construction:
+semantic-FULL work inside one file with no interface change is labeled
+STANDARD here, exactly as the earlier suites noted; the up-front semantic
+review covers it. Full rows are in `experiments/results/adapt-suite-results.json`.
+
+| Treatment | Correct | Missed FULL | Unnecessary FULL | Median consult |
+|---|---:|---:|---:|---:|
+| Path rules (floor) | 61/66 | 5 | 0 | — |
+| Floor + selective Deem chat (GPU) | **62/66** | **3** | 1 | 584 ms |
+| Floor + selective Deem typed (CPU) | 59/66 | 5 | 2 | 3.6 s |
+| Floor + selective GLiNER 3-way | 61/66 | 3 | 2 | 202 ms |
+| Floor + selective GLiNER binary gate | 60/66 | 4 | 2 | 199 ms |
+
+Model alone on the same rows: Deem typed 45/66 (14 missed FULL, 6
+unnecessary), Deem chat 40/66 (23 missed, 1 unnecessary — it under-promotes
+systematically), GLiNER 3-way 29/66, the binary gate 9/66.
+
+**Where the floor's five misses live.** All five are seeded removals of a
+public binding inside one owned module: request text describes a contained
+repair, the path rule says STANDARD, the outcome changed the interface. Three
+of the five were missed by every model — no reader of the request alone can
+see them, and the public-API digest covers all five deterministically once a
+diff exists. Deem chat caught two of five for one over-promotion, the only
+treatment to beat the floor. Deem typed caught none and over-promoted twice.
+
+**Calibration and abstention (the parked follow-up).** The transports agreed
+on 41 of 66 rows; chat is a systematic under-promoter and typed the
+conservative one, so their band errors differ. The typed protocol's published
+conformal threshold (0.505) abstained on 11 of 66 rows, 8 of whose votes were
+wrong — on real requests the abstention is protective, and the previously
+unexercised abstention path now has recorded cases. Inside the band it
+abstained twice, both times converting a would-be over-promotion into a
+correct floor fallback (without it, typed selective would be 57/66).
+Calibrated conclusion: chat is the better in-band transport at a seventh of
+the latency; typed's remaining value is its honest abstention channel.
+
+**GLiNER on the same suite.** The 3-way classifier at 202 ms matched the
+floor's total with the same two catches as Deem chat but two over-promotions;
+the binary gate was weaker — it answered "no architecture review needed" on 8
+of 15 band rows, including one case its own 3-way form caught. GLiNER stays
+cheap and pluggable but did not earn the routing slot; the recorded
+cheap-gate candidacy is unchanged.
+
+**Chat parser.** All 66 GPU answers parsed on the first word; the raw answers
+were exactly `FAST`, `STANDARD` and `FULL`, with no reasoning leakage into
+the content field. The parser is confirmed against real answer phrasings.
+
+**Gate verdict.** REQ-ADAPT-B is measured: the wired chat adapter's margin
+over the deterministic floor is one row of 66 (two hidden-interface catches
+against one over-promotion, on 15 band consults). Default activation stays
+off; the advisory remains explicit opt-in, the chat transport stays the
+requested-advisory default, and the decisions log keeps collecting live rows
+as the funnel for any future re-evaluation.
+
+Caveats: commit subjects are terse and name their own outcome, which favors
+models that read the request carefully; the FULL-heavy composition mirrors
+this repository's actual ticket-driven history; and the ten benchmark
+requests are authored but executed with verified scope. Reproduction (both
+servers as recorded above, then):
+
+```powershell
+.\.harness\decision-env\Scripts\python experiments\adapt_suite.py
+```
 
 ## Trail and embedding retrieval
 
@@ -175,7 +255,7 @@ $bge = ".harness/models/bge-$bgeRev"
 .\.harness\decision-env\Scripts\python scripts/shadow_decisions.py --embedding-study $mini $bge
 ```
 
-Run the experiment script by absolute path from a clean checkout of the frozen corpus to reproduce the original comparison. Use absolute model paths in that case. The recorded per-query ranks, timings and revision are in `.harness/embedding-results.json`. Both checkpoints passed SHA-256 verification and ran on CPU with local files only. [MiniLM model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and [BGE model card](https://huggingface.co/BAAI/bge-small-en-v1.5)
+Run the experiment script by absolute path from a clean checkout of the frozen corpus to reproduce the original comparison. Use absolute model paths in that case. The recorded per-query ranks, timings and revision are in `experiments/results/embedding-results.json`. Both checkpoints passed SHA-256 verification and ran on CPU with local files only. [MiniLM model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and [BGE model card](https://huggingface.co/BAAI/bge-small-en-v1.5)
 
 ### Checkout and framework probes
 
