@@ -43,12 +43,13 @@ python harness.py route fixture/combat.py
 python harness.py route project_example/lines-master-design-bible.md
 python harness.py catalog
 python harness.py context "poison damage"
+python harness.py assess "poison damage" fixture/turn_lifecycle.py --base HEAD
 python harness.py schema
 python harness.py compile tickets/FEAT-042.json
 python scripts/demo.py
 ```
 
-FAST records a diff. STANDARD retrieves a bounded context, then runs focused pytest and Tach. Capture the starting commit before edits and run `python harness.py recheck <starting-commit>` before finishing. Consider the union of the initial profile, new information and actual changes. A public contract change always needs FULL review.
+FAST records a diff. STANDARD retrieves a bounded context, then runs focused pytest and Tach. Capture the starting commit before edits and run `python harness.py recheck <starting-commit>` before finishing. Assess a request before implementation with `python harness.py assess <request> <paths> [--base <rev>]`: the deterministic floor comes from path rules and observed interface impact, a decision provider votes only inside the ambiguous STANDARD band, and every assessment is recorded under .harness. Consider the union of the initial profile, new information and actual changes. A public contract change always needs FULL review.
 
 For FULL, start from a clean committed tree. Give the architect the catalog and ticket schema, resolve unknowns, compile the approved intent and retain the returned digest. `tach.toml` is the sole source of module dependency policy. The compiler checks its modules against the fresh Trail graph. Have the engineer describe intended changes and review any material delta before creating an attempt with `git worktree add --detach <path> <compiled-revision>`. Commit the candidate in that worktree. Run the verifier from the original checkout:
 

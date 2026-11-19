@@ -240,6 +240,10 @@ class RuleProvider:
                 "evidence": paths}
 
 
+class AdvisoryProvider(Protocol):
+    def decide(self, request: str, allowed_actions: list[str]) -> dict: ...
+
+
 def diff_paths(base, cwd=None):
     data = run("git", "diff", "--name-only", "--no-renames", "-z", base, "--", cwd=cwd).stdout
     extra = run("git", "ls-files", "--others", "--exclude-standard", "-z", cwd=cwd).stdout
@@ -314,6 +318,69 @@ def recheck(base):
     return result
 
 
+ADVISORY_PROFILES = ("FAST", "STANDARD", "FULL")
+
+
+def _observed_impact(base):
+    for path in diff_paths(base):
+        if not path.endswith(".py") or path.startswith("tests/"):
+            continue
+        before = run("git", "show", f"{base}:{path}", check=False)
+        try:
+            after = Path(path).read_text(encoding="utf-8") if Path(path).exists() else ""
+            changed = public_api_digest(before.stdout) != public_api_digest(after)
+        except (SyntaxError, UnicodeError):
+            changed = True
+        if changed:
+            return "FULL"
+    return None
+
+
+def _predict(request, provider):
+    if provider is None:
+        return None, None, "model_unavailable"
+    try:
+        raw = provider.decide(request, list(ADVISORY_PROFILES))
+    except Exception as exc:
+        return None, None, f"provider_failed ({type(exc).__name__})"
+    identity = raw.get("provider") if isinstance(raw, dict) else None
+    prediction = raw.get("choice") if isinstance(raw, dict) else None
+    if prediction not in ADVISORY_PROFILES:
+        return None, identity, "invalid_response"
+    return prediction, identity, None
+
+
+def _record(row):
+    path = Path(".harness/decisions.jsonl")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(row, sort_keys=True) + "\n")
+
+
+def assess(request, paths, base=None, provider=None):
+    """Advisory assessment of a request against its intended paths: the floor
+    is the routing profile promoted by observed interface impact, the advisory
+    provider is consulted only for an ambiguous STANDARD on non-test source
+    paths, and the recommendation never falls below the floor."""
+    paths = list(paths)
+    impact = _observed_impact(base) if base is not None else None
+    path_rule = profile(paths)
+    floor = max(path_rule, impact, key=ADVISORY_PROFILES.index) if impact is not None else path_rule
+    tests_only = bool(paths) and all(p.startswith("tests/") for p in paths)
+    row = dict(request=request, paths=paths, observed=impact, floor=floor,
+               recommendation=floor, provider=None, prediction=None,
+               abstained=False, abstention_reason=None, disagreement=False)
+    if floor == "STANDARD" and not tests_only:
+        prediction, identity, reason = _predict(request, provider)
+        row.update(provider=identity, prediction=prediction,
+                   abstained=prediction is None, abstention_reason=reason,
+                   disagreement=prediction is not None and prediction != floor)
+        if prediction is not None:
+            row["recommendation"] = max(floor, prediction, key=ADVISORY_PROFILES.index)
+    _record(row)
+    return row
+
+
 def verify(contract, attempt, receipt):
     if not re.fullmatch("[0-9a-f]{64}", contract):
         raise ValueError("Expected compiler digest.")
@@ -380,9 +447,10 @@ def verify(contract, attempt, receipt):
 def cli():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="op", required=True)
-    for name, args in {"route":["paths"], "recheck":["base"], "schema":[], "catalog":[],
-                       "context":["query"], "compile":["ticket"], "ticket-digest":["ticket"],
-                       "api-digest":["source"], "verify":["contract","attempt","receipt"]}.items():
+    for name, args in {"route":["paths"], "recheck":["base"], "assess":["request","paths","--base"],
+                       "schema":[], "catalog":[], "context":["query"], "compile":["ticket"],
+                       "ticket-digest":["ticket"], "api-digest":["source"],
+                       "verify":["contract","attempt","receipt"]}.items():
         p = sub.add_parser(name)
         if name == "compile":
             p.add_argument("--review", help="Reviewer-owned, revision-bound architecture delta JSON")
@@ -393,6 +461,8 @@ def cli():
         result = RuleProvider().decide(args.paths, ["FAST","STANDARD","FULL"])
     elif args.op == "recheck":
         result = recheck(args.base)
+    elif args.op == "assess":
+        result = assess(args.request, args.paths, base=args.base)
     elif args.op == "catalog":
         result = catalog().model_dump()
     elif args.op == "schema":
