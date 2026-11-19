@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "id": "ORCH-1",
+  "intent": "Cast the casting orchestrator as its own fresh invocation, separate from the main input session, so one checkout never hosts two concurrent orchestrators and every cast role lands with its receipt.",
+  "components": [
+    "scripts.codex_role"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "ORCH-CAST": "The orchestrator that casts roles runs as a separate fresh invocation per task, with that task's request and relevant evidence supplied in its prompt, rather than continuing inside the main input session's conversation or improvising a second shared-checkout session.",
+    "ORCH-SINGLE": "One checkout hosts at most one casting orchestrator at a time; a concurrent second cast is detected and recorded instead of silently interleaving commits on shared branches, as happened when two sessions duplicated the same fix on main and the working branch.",
+    "ORCH-RECEIPT": "Every cast role invocation retains its receipt under .harness/roles naming the task, role, client, base revision and thread identity, so a later review can reconstruct who cast what from which session."
+  },
+  "unknowns": [
+    "Enforcement mechanism for one-orchestrator-per-checkout: an advisory policy row in AGENTS.md, a recorded claim under .harness, or a hard lock that fails closed",
+    "Whether the main input session may keep making direct FAST edits while an orchestrator is active in the same checkout"
+  ]
+}
