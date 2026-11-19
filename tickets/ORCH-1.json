@@ -1,20 +1,17 @@
 {
   "version": 1,
   "id": "ORCH-1",
-  "intent": "Cast the casting orchestrator as its own fresh invocation, separate from the main input session, so one checkout never hosts two concurrent orchestrators and every cast role lands with its receipt.",
-  "components": [
-    "scripts.codex_role"
-  ],
-  "actions": [
-    "extend_behavior"
-  ],
+  "intent": "Add a persistent conversational orchestrator session, separate from the user's interactive chat, for the OpenCode client. The user opens or attaches a second native session and types into it directly. At start the orchestrator receives an assigned scope (goal statement, baseline revision, compiled contracts) and does not inherit chat history; its lifespan is bounded to that scope. Within the scope it holds workflow authority: it may run route_task, compile tickets, and verify evidence through MCP or the shared CLI, but it never edits source directly. All execution is delegated to the existing per-task role workers (architect/engineer/reviewer) through scripts/roles.py, with receipts under .harness/roles as today, and workers complete their task directly without spawning further sessions. The orchestrator's scope is bound to its own worktree and paths so it cannot collide with concurrently running sessions. The user's own client session stops being the de facto orchestrator.",
+  "components": ["scripts.roles", "scripts.codex_role", "scripts.opencode_project"],
+  "actions": ["extend_behavior"],
   "requirements": {
-    "ORCH-CAST": "The orchestrator that casts roles runs as a separate fresh invocation per task, with that task's request and relevant evidence supplied in its prompt, rather than continuing inside the main input session's conversation or improvising a second shared-checkout session.",
-    "ORCH-SINGLE": "One checkout hosts at most one casting orchestrator at a time; a concurrent second cast is detected and recorded instead of silently interleaving commits on shared branches, as happened when two sessions duplicated the same fix on main and the working branch.",
-    "ORCH-RECEIPT": "Every cast role invocation retains its receipt under .harness/roles naming the task, role, client, base revision and thread identity, so a later review can reconstruct who cast what from which session."
+    "ORCH-SESSION-SEPARATION": "The orchestrator runs as its own native OpenCode session with a stable recorded identity, distinct from and not inheriting history from the user's interactive chat; it is resumable across turns for the lifetime of its assigned scope.",
+    "ORCH-SCOPED-CONTEXT": "The orchestrator receives its assigned scope (goal statement, baseline revision, compiled contract references) at start; its lifespan ends when the user closes the session or the scope's tickets close.",
+    "ORCH-WORKFLOW-AUTHORITY": "The orchestrator may run route_task, compile tickets and verify evidence via MCP or the shared CLI, but never edits source directly; all source edits go through the bounded engineer path.",
+    "ORCH-DELEGATION": "All execution is delegated through the existing per-task role launcher with receipts under .harness/roles; workers complete their assigned task directly without spawning further agent sessions.",
+    "ORCH-PARALLEL-SAFETY": "The orchestrator's scope is bound to its own worktree and paths so it cannot collide with other concurrently running sessions.",
+    "ORCH-OPENCODE-V1": "The first version targets OpenCode only, through the existing adapter pattern; other clients are not blocked but are out of scope for this ticket."
   },
-  "unknowns": [
-    "Enforcement mechanism for one-orchestrator-per-checkout: an advisory policy row in AGENTS.md, a recorded claim under .harness, or a hard lock that fails closed",
-    "Whether the main input session may keep making direct FAST edits while an orchestrator is active in the same checkout"
-  ]
+  "unknowns": [],
+  "checks": []
 }
