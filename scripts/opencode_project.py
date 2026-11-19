@@ -70,12 +70,69 @@ def _reply(output):
     return sessions.pop(), answer, usage
 
 
+def _balanced_objects(text):
+    """Yield every balanced top-level JSON object embedded in a reply."""
+    start = None
+    depth = 0
+    in_string = False
+    escaped = False
+    for index, char in enumerate(text):
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            continue
+        if char == '"':
+            in_string = True
+        elif char == "{":
+            if depth == 0:
+                start = index
+            depth += 1
+        elif char == "}":
+            if depth:
+                depth -= 1
+                if depth == 0:
+                    try:
+                        yield json.loads(text[start:index + 1])
+                    except ValueError:
+                        pass
+                    start = None
+
+
+def _schema_answer(answer, specification):
+    """Normalize a structured reply. Some models wrap the required JSON in
+    prose or fences: direct JSON passes through unchanged, otherwise exactly
+    one unique schema-valid embedded object is accepted. Anything absent or
+    ambiguous fails closed rather than guessing."""
+    try:
+        json.loads(answer)
+        return answer
+    except ValueError:
+        pass
+    from jsonschema import ValidationError, validate
+    matches = {}
+    for candidate in _balanced_objects(answer):
+        try:
+            validate(candidate, specification)
+        except ValidationError:
+            continue
+        matches[json.dumps(candidate, sort_keys=True)] = candidate
+    if len(matches) == 1:
+        return json.dumps(next(iter(matches.values())))
+    raise ValueError(
+        f"OpenCode reply carried {len(matches)} schema-valid JSON objects, expected one")
+
+
 def _environment():
     return {**os.environ, "HARNESS_CLIENT":"opencode",
             "PATH":str(Path(sys.executable).parent) + os.pathsep + os.environ.get("PATH", "")}
 
 
 def _run(role, model, prompt, cwd, schema):
+    specification = None
     if schema:
         specification = json.loads(schema.read_bytes())
         prompt += "\nReturn only JSON matching this schema:\n" + json.dumps(specification)
@@ -85,7 +142,10 @@ def _run(role, model, prompt, cwd, schema):
                             encoding="utf-8", errors="replace", timeout=1800)
     if result.returncode:
         raise ValueError(f"OpenCode exit {result.returncode}: {result.stderr[-1000:]}")
-    return _reply(result.stdout)
+    thread, answer, usage = _reply(result.stdout)
+    if specification is not None:
+        answer = _schema_answer(answer, specification)
+    return thread, answer, usage
 
 
 def _server_command():

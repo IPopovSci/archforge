@@ -43,6 +43,37 @@ def test_session(monkeypatch, tmp_path):
             native._reply(invalid)
 
 
+def test_schema_answer_extracts_unique_object():
+    specification = {"type": "object",
+                     "properties": {"source": {"type": "string"}},
+                     "required": ["source"],
+                     "additionalProperties": False}
+    bare = '{"source": "x"}'
+    assert native._schema_answer(bare, specification) == bare
+    # The observed OpenCode failure shape: prose, a fenced snippet, then JSON.
+    wrapped = ('I restored the sentence directly after the launcher block:\n\n'
+               '```markdown\nStart the client with the project MCP server:\n```\n\n'
+               '{"source": "restored content"}')
+    assert json.loads(native._schema_answer(wrapped, specification)) == {"source": "restored content"}
+    # An object repeated in prose and fenced still counts once.
+    repeated = wrapped + '\n\nAlso here it is again:\n\n{"source": "restored content"}'
+    assert json.loads(native._schema_answer(repeated, specification)) == {"source": "restored content"}
+
+
+def test_schema_answer_fails_closed():
+    specification = {"type": "object",
+                     "properties": {"source": {"type": "string"}},
+                     "required": ["source"],
+                     "additionalProperties": False}
+    with pytest.raises(ValueError):
+        native._schema_answer("No JSON here at all.", specification)
+    with pytest.raises(ValueError):
+        native._schema_answer('{"other": 1} and {"other": 2}', specification)
+    ambiguous = '{"source": "first"} ... {"source": "second"}'
+    with pytest.raises(ValueError):
+        native._schema_answer(ambiguous, specification)
+
+
 def test_mcp():
     root = Path.cwd()
     python, server = native._server_command()
