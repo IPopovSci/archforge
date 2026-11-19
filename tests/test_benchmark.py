@@ -38,3 +38,16 @@ def test_summary_counts_profiles():
     summary = benchmark._summary(rows)
     assert summary["baseline"]["FAST"]["passed"] == 1
     assert summary["context"]["missed_full"] == 1
+
+
+def test_routed_treatment_is_registered():
+    assert "routed" in benchmark.TREATMENTS
+
+
+def test_routed_context_decision_scales_with_recommendation():
+    fast = {"recommendation": "FAST"}
+    standard = {"recommendation": "STANDARD"}
+    full = {"recommendation": "FULL"}
+    assert benchmark._routed_context_decision(fast) is False
+    assert benchmark._routed_context_decision(standard) is True
+    assert benchmark._routed_context_decision(full) is True

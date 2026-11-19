@@ -14,6 +14,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import harness as h
 from scripts import codex_role as roles
+from scripts import shadow_decisions as shadow
+
+TREATMENTS = ("seed", "baseline", "context", "routed")
 
 
 def load_tasks(path="benchmarks/tasks.json"):
@@ -102,11 +105,25 @@ def _remove_worktree(path):
     h.git("worktree", "remove", "--force", str(path))
 
 
+def _routed_context_decision(assessment):
+    """The decision-assisted evidence policy: the advisory recommendation
+    scales the pipeline weight. FAST keeps the direct path with no evidence
+    gathering; STANDARD and FULL consult Trail first."""
+    return assessment["recommendation"] != "FAST"
+
+
 def _run_task(task, treatment, root, schema):
     name = f"{task['id']}-{treatment}-{uuid.uuid4().hex[:8]}"
+    assessment = None
+    if treatment == "routed":
+        # Live consult through the landed assess seam: the row lands in
+        # .harness/decisions.jsonl and the floor never lowers.
+        assessment = h.assess(task["request"], [task["file"]], provider=shadow.DeemAdvisory("chat"))
     worktree = _worktree(root, name)
     try:
-        context = _clean_context(worktree, task["context_query"]) if treatment == "context" else None
+        context = _clean_context(worktree, task["context_query"]) if (
+            treatment == "context"
+            or (assessment is not None and _routed_context_decision(assessment))) else None
         source = _apply_seed(worktree, task)
         if treatment == "seed":
             metadata = {"client": None, "requested_model": None, "thread_id": None,
@@ -133,6 +150,10 @@ def _run_task(task, treatment, root, schema):
             "test_output": (result.stdout + result.stderr)[-2000:],
             "receipt": metadata.get("receipt"), "worktree": str(worktree),
         }
+        if assessment is not None:
+            record["assessment"] = {key: assessment[key] for key in
+                                    ("floor", "recommendation", "provider", "prediction",
+                                     "abstained", "abstention_reason", "disagreement")}
         return record
     finally:
         _remove_worktree(worktree)
@@ -163,7 +184,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--client", choices=["codex", "opencode"], default="codex")
     parser.add_argument("--tasks", nargs="+", help="Run only these benchmark task IDs")
-    parser.add_argument("--treatments", nargs="+", choices=["seed", "baseline", "context"], default=["baseline", "context"])
+    parser.add_argument("--treatments", nargs="+", choices=TREATMENTS, default=["baseline", "context"])
     parser.add_argument("--dry-run", action="store_true", help="Validate every seeded task without model calls")
     parser.add_argument("--limit", type=int, help="Run only the first N selected tasks")
     args = parser.parse_args()
