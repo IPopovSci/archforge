@@ -28,6 +28,22 @@ For FULL, the pipeline is:
 
 Every path rechecks the actual diff before finishing: a FAST task that starts touching executable code or a contract is promoted. A public contract change always needs FULL review.
 
+## The tools underneath
+
+You do not need to know these tools to use Archforge; this is what they are and how they interact.
+
+| Tool | What it is | What it does here |
+|---|---|---|
+| **Tach** (pip, pinned in `requirements.lock`) | A module-boundary checker for Python. `tach.toml` is the single dependency policy: it declares every module and what each may import. | `tach check` fails on any undeclared import. Archforge also builds its capability catalog from the same policy, so ticket components are always real, policy-owned modules — and any boundary or policy edit routes to FULL. |
+| **Trail** (`@trailhq/trail-code`, npm, pinned in `package.json`) | A code-graph search engine that indexes the repository into symbols and their relationships. | Archforge never hands a model the whole repository. `harness.py context <query>` returns a few bounded source excerpts with file-and-line pointers, and every compiled contract carries Trail evidence frozen at its baseline revision. A local patch (`scripts/patch_trail.mjs`, run by `npm ci`) keeps GDScript indexing working. |
+| **pytest** (pip) | The standard Python test runner. | The deterministic test gate: FULL contracts demand requirement-linked passing acceptance tests, so a green suite is the proof, not a model's self-report. |
+| **Pydantic** (pip) | Typed data models for Python. | The ticket, contract, receipt and catalog formats are typed and validated — malformed intent fails schema validation before any model call. |
+| **MCP** (pip, `mcp` package) | Model Context Protocol — a stdio standard for connecting tools to agent clients. | `server.py` exposes the same operations as the CLI (route, compile, verify, …) so OpenCode and Codex drive the identical workflow through their MCP support. |
+| **jsonschema** (pip) | JSON schema validation. | Validates structured worker answers during role delegation, such as the bounded engineer edit. |
+| **opencode-ai** (npm) | The OpenCode agent client. | What the launchers and role delegation actually spawn for live architect/engineer/reviewer work. |
+
+How they fit together: Tach defines the module world, Trail retrieves bounded evidence from it, Pydantic freezes approved intent into immutable contracts, and pytest plus the structural checks prove the result. The models only ever supply judgment and implementation. Python tools are pinned in `requirements.lock`, Node tools in `package.json`.
+
 ## Local decision models — advisors, not deciders
 
 Routing has a deterministic floor: path rules, diff evidence and observed interface impact. On top of that sits a pluggable advisory seam where small local models can vote, and a model is consulted only when a request lands in the ambiguous STANDARD band:
