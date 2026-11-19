@@ -106,6 +106,44 @@ Caveats: fourteen one-line intents are harder than real prose briefs (both model
 .\.harness\decision-env\Scripts\python .harness\experiments\capability_comparison.py
 ```
 
+## Wired Deem-4B advisory adapter
+
+The registered gate FEAT-DECIDE-ADAPT-001 is wired and verified: `DeemAdvisory`
+in `scripts/shadow_decisions.py` implements the landed `AdvisoryProvider`
+contract over both transports, is constructed only by an explicit
+`--advisory deem` request, and consults through `harness.assess`, so every
+consult lands in `.harness/decisions.jsonl` with provider identity, prediction
+and disagreement while the deterministic floor never lowers. The
+chat-completions transport (llama-server Vulkan GPU) is the local default; the
+System One typed transport (jevalt CPU) abstains below the published 0.505204
+conformal choice threshold. `harness.py` is untouched.
+
+First live rows (real servers, advisory only):
+
+| Request | Transport | Floor | Prediction | Recommendation |
+|---|---|---|---|---|
+| Rename internal routing variables (`harness.py`) | chat GPU | STANDARD | FAST | STANDARD, disagreement recorded |
+| Change the public ticket schema (`harness.py`, `server.py`) | chat GPU | FULL | no consult | FULL |
+| Rename internal routing variables (`harness.py`) | System One typed | STANDARD | STANDARD | STANDARD |
+
+The two transports disagreed on the same in-band request (chat FAST, typed
+STANDARD); the floor held either way, and quantifying per-transport agreement
+and calibration is part of the recorded open gate: default activation stays off
+until the at-least-thirty-real-request frozen suite compares the wired adapter
+with the floor and the GLiNER baselines. Each live consult adds a row to the
+decision log, which is the collection funnel for that suite.
+
+```powershell
+.\.harness\systemone-env\Scripts\jevalt.exe serve --model mertkayacs/Deem-4B-GGUF --file <local Deem-4B-Q4_K_M.gguf> --port 8020
+.\.venv\Scripts\python scripts\shadow_decisions.py --request "Rename the internal result variables in the routing module for clarity" --paths harness.py --advisory deem --protocol chat
+.\.venv\Scripts\python scripts\shadow_decisions.py --request "Rename the internal result variables in the routing module for clarity" --paths harness.py --advisory deem --protocol systemone
+```
+
+The final intent review approved with the open gate recorded. Follow-ups: the
+thirty-request suite on both transports, per-transport calibration seeded by the
+observed disagreement row, GLiNER's cheap-gate candidacy on the same suite, and
+confirming the chat first-word parser against real answer phrasings.
+
 ## Trail and embedding retrieval
 
 The study froze 35 observed function candidates at Git revision `228066d5fa95ef33ae677338365a53c1adc62579`, four exact-name targets and eight behavioral questions before running inference. Dense and TF-IDF methods saw the same symbol text. The operational Trail CLI baseline retains rank positions occupied by files or test symbols. Each question has one designated target, so another useful function can still count as a miss.
