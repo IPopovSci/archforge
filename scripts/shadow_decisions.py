@@ -1,4 +1,9 @@
-"""Offline CPU experiment. Predictions are advisory and never execute a routing action."""
+"""Offline CPU experiments plus the Deem-4B advisory adapter.
+
+Experiments stay offline and advisory. The Deem-4B adapter is constructed
+only by an explicit ``--advisory deem`` request, consults through the landed
+``harness.assess`` seam so every consult is recorded in the decision log, and
+its prediction never lowers the deterministic floor."""
 import argparse
 import ast as _ast
 import contextlib as _contextlib
@@ -13,6 +18,7 @@ import subprocess as _subprocess
 import sys
 import time
 import tokenize as _tokenize
+import urllib.request as _urllib_request
 from pathlib import Path
 from collections.abc import Mapping as _Mapping
 
@@ -20,6 +26,7 @@ from collections.abc import Mapping as _Mapping
 if __name__ != "__main__" or "--embedding-study" not in sys.argv[1:]:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from harness import RuleProvider
+    from harness import assess as _seam_assess
     from harness import diff_paths as _diff_paths
     from harness import public_api_digest as _public_api_digest, recheck as _recheck
 
@@ -182,6 +189,93 @@ def _benchmark(classify):
             model_calls=sum(row.get(f"{treatment}_called", False) for row in rows),
         )
     return dict(rows=rows, metrics=metrics)
+
+
+ADVISORY_CRITERIA = {
+    "FAST": "documentation correction, trivial wording or formatting, no executable code change",
+    "STANDARD": "contained implementation fix inside one module, no public interface change",
+    "FULL": "architecture or interface design, cross-component feature, policy change or new subsystem",
+}
+DEEM_CONFORMAL_90 = 0.505204  # published choice threshold for 90% coverage
+DEEM_ENDPOINTS = {
+    "chat": "http://127.0.0.1:8010/v1/chat/completions",
+    "systemone": "http://127.0.0.1:8020/v1/systemone",
+}
+
+
+def _advisory_post(url, payload, timeout=240):
+    request = _urllib_request.Request(url, data=json.dumps(payload).encode(),
+                                      headers={"Content-Type": "application/json"})
+    started = time.perf_counter()
+    with _urllib_request.urlopen(request, timeout=timeout) as response:
+        body = json.loads(response.read())
+    return body, round((time.perf_counter() - started) * 1000, 1)
+
+
+class DeemAdvisory:
+    """AdvisoryProvider adapter for Deem-4B behind the landed assess seam.
+
+    The llama-server chat-completions protocol is the GPU default on this
+    machine; the System One typed protocol carries per-option probabilities,
+    so its answers abstain below the published conformal threshold. The
+    adapter is constructed only by an explicit advisory request, its raw row
+    records the transport and endpoint, and ``harness.assess`` never lets its
+    prediction lower the deterministic floor."""
+
+    def __init__(self, protocol="chat", endpoint=None, timeout=240):
+        if protocol not in DEEM_ENDPOINTS:
+            raise ValueError(f"Unknown advisory protocol: {protocol}")
+        self.protocol = protocol
+        self.endpoint = endpoint or DEEM_ENDPOINTS[protocol]
+        self.timeout = timeout
+
+    def decide(self, request, allowed_actions):
+        allowed = list(allowed_actions)
+        if self.protocol == "systemone":
+            return self._typed(request, allowed)
+        return self._chat(request, allowed)
+
+    def _typed(self, request, allowed_actions):
+        criteria = {profile: ADVISORY_CRITERIA[profile] for profile in allowed_actions
+                    if profile in ADVISORY_CRITERIA}
+        body, milliseconds = _advisory_post(self.endpoint, {
+            "state": f'Software change request: "{request}"',
+            "questions": {"profile": {"type": "choice",
+                                      "instructions": "Which review profile does this change need?",
+                                      "criteria": criteria}},
+            "reasoning": "off", "abstain": False}, self.timeout)
+        answer = body["answers"]["profile"]
+        choice = answer.get("choice")
+        probabilities = answer.get("probabilities") or {}
+        row = dict(provider="deem-4b-q4km-systemone", protocol="systemone",
+                   endpoint=self.endpoint, milliseconds=milliseconds,
+                   probabilities=probabilities, confidence=answer.get("confidence"))
+        if choice not in allowed_actions:
+            row.update(choice=None, abstention="outside_allowed_actions")
+        elif probabilities.get(choice, 0.0) < DEEM_CONFORMAL_90:
+            # Calibrated abstention: the published conformal threshold for 90% coverage.
+            row.update(choice=None, abstention="below_conformal_threshold")
+        else:
+            row["choice"] = choice
+        return row
+
+    def _chat(self, request, allowed_actions):
+        criteria = "".join(f"- {profile}: {ADVISORY_CRITERIA[profile]}\n"
+                           for profile in allowed_actions if profile in ADVISORY_CRITERIA)
+        prompt = (f"You are deciding how much review a software change needs.\n"
+                  f"Choose exactly one profile:\n{criteria}\n"
+                  f'Software change request: "{request}"\n\n'
+                  f"Answer with exactly one word: {' or '.join(allowed_actions)}.")
+        body, milliseconds = _advisory_post(self.endpoint, {
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0, "max_tokens": 1024}, self.timeout)
+        text = (body["choices"][0]["message"].get("content") or "").strip().upper()
+        choice = next((profile for profile in allowed_actions if profile in text.split()), None)
+        row = dict(provider="deem-4b-q4km-chat", protocol="chat", endpoint=self.endpoint,
+                   milliseconds=milliseconds, raw_answer=text[:40], choice=choice)
+        if choice is None:
+            row["abstention"] = "unparseable_answer"
+        return row
 
 
 _EMBEDDING_RETRIEVAL_CASES = (
@@ -754,6 +848,11 @@ def main():
     parser.add_argument("--request", help="Assess one engineering request")
     parser.add_argument("--paths", nargs="+", help="Intended repository-relative paths")
     parser.add_argument("--base", help="Recheck the diff against this Git revision")
+    parser.add_argument("--advisory", choices=["deem"],
+                        help="Consult the Deem-4B advisory provider through the landed assess seam")
+    parser.add_argument("--protocol", choices=["chat", "systemone"],
+                        help="Advisory transport: llama-server chat (GPU default) or System One typed")
+    parser.add_argument("--endpoint", help="Override the advisory transport endpoint")
     parser.add_argument("--benchmark-selective", action="store_true", help="Run the selective benchmark")
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--semantic-query", help="Return up to three source matches")
@@ -763,9 +862,15 @@ def main():
     parser.add_argument("--embedding-study", nargs=2, type=Path, metavar=("MINILM_DIR", "BGE_DIR"),
                         help="Run the experimental offline retrieval and routing study")
     args = parser.parse_args()
+    if args.advisory is None and (args.protocol is not None or args.endpoint is not None):
+        parser.error("--protocol and --endpoint require --advisory")
+    if args.advisory is not None and args.request is None:
+        parser.error("--advisory requires --request and --paths")
+    if args.advisory is not None and args.model_directory is not None:
+        parser.error("--advisory cannot be combined with a GLiNER checkpoint")
     if args.semantic_query is not None or args.lookup is not None or args.snapshot or args.prepare_lookup:
         if (args.threads < 1 or args.embedding_study or args.request is not None
-                or args.paths or args.base or args.benchmark_selective):
+                or args.paths or args.base or args.benchmark_selective or args.advisory is not None):
             parser.error("--semantic-query requires a local MiniLM directory and optional positive --threads")
         stage = "snapshot" if args.snapshot else "prepare" if args.prepare_lookup else "query"
         result = _lookup(args.lookup if args.lookup is not None else args.semantic_query,
@@ -776,7 +881,7 @@ def main():
         parser.error("Expected a positive CPU thread count")
     if args.embedding_study is not None:
         if any(value is not None for value in (args.model_directory, args.request, args.paths, args.base)) \
-                or args.benchmark_selective:
+                or args.benchmark_selective or args.advisory is not None:
             parser.error("--embedding-study can only be combined with --threads")
         try:
             with _contextlib.redirect_stdout(sys.stderr):
@@ -811,7 +916,13 @@ def main():
         except (OSError, ValueError) as exc:
             parser.error(str(exc))
 
-        row = _assess(args.request, sorted(set(args.paths) | set(changed)), observed, None)
+        paths = sorted(set(args.paths) | set(changed))
+        if args.advisory is not None:
+            provider = DeemAdvisory(args.protocol or "chat", args.endpoint)
+            print(json.dumps(_seam_assess(args.request, paths, base=args.base,
+                                          provider=provider), indent=2))
+            return
+        row = _assess(args.request, paths, observed, None)
         load_seconds = None
         if row["abstained"] and args.model_directory is not None:
             try:
