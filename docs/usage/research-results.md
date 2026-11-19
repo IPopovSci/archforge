@@ -50,6 +50,41 @@ For another machine, create a virtualenv under .harness/decision-env, install `g
 
 Jev's 4B and 0.8B releases are adapters requiring their corresponding base checkpoints. Their model cards specify CC BY-NC 4.0. They were evaluated for fit from their published interfaces and remain uninstalled and unbenchmarked. [4B model card](https://huggingface.co/JevAgentHarness/AgentDecision-4B) · [0.8B model card](https://huggingface.co/JevAgentHarness/AgentDecision-0.8B)
 
+## Deem-4B decision experiments on the landed assess seam
+
+Deem-4B (JevAlt, Apache-2.0, fine-tuned from Intern-Decision-4B) is a System One decision model: it answers typed questions (Choice, Score, Noul) over a Jev-compatible `POST /v1/systemone` endpoint with calibrated per-option probabilities, spending one output token per decision. The staged Q4_K_M GGUF (2.71 GB, quant parity report and `calibration.json` retained in `.harness/models/deem-4b-q4km-8f30f44881052e93e7bede109e694d4052382833/`) answered the open unknowns of FEAT-DECIDE-LOCAL-001: the candidate model and both runtimes work. `jevalt serve` (isolated `.harness/systemone-env`, freeze in `.harness/systemone-env.lock`) implements `/v1/systemone` over llama.cpp on CPU and loads the published calibration; one caveat for offline setups: calibration is fetched by hub repo id, so a local-only install must load it at the driver level. The plain llama.cpp b12521 Vulkan server (`-ngl 99`, RX 9070 XT) covers the naive chat-completions protocol on GPU. This confirms a System One-compatible local server covers the same question types the seam asks, with calibrated abstention available.
+
+Both frozen suites from the GLiNER experiments were replayed unchanged through the landed floor-first band. Every row is in `.harness/deem-routing-results.json`; per-request latencies are medians over the suite.
+
+| Treatment | Correct | Missed FULL | Unnecessary FULL | Calls | Median latency |
+|---|---:|---:|---:|---:|---:|
+| Path rules (13-case suite, recorded) | 12/13 | 1 | 0 | 0 | 0 |
+| GLiNER alone (13-case, recorded) | 9/13 | 4 | 0 | 13 | 282 ms CPU |
+| Deem alone (typed, 13-case) | **13/13** | **0** | **0** | 13 | 2.1 s CPU |
+| Path rules (14-case suite, recorded) | 10/14 | 4 | 0 | 0 | 0 |
+| Rules + observed impact (recorded) | 12/14 | 2 | 0 | 0 | 0 |
+| GLiNER alone (14-case, recorded) | 6/14 | 5 | 0 | 14 | 282 ms CPU |
+| Deem alone (typed, 14-case) | 12/14 | 2 | 0 | 14 | 2.2 s CPU |
+| Floor + selective GLiNER (recorded) | 13/14 | 1 | 0 | 5 | 282 ms CPU |
+| Floor + selective Deem (typed) | **14/14** | **0** | **0** | 5 | 2.2 s CPU |
+| Floor + selective Deem (chat, GPU) | **14/14** | **0** | **0** | 5 | 592 ms GPU |
+
+Deem alone caught the public-schema, agent-policy and design-bible cases that both GLiNER and the path rules missed. Its two suite-B misses are exactly the two public-signature changes the deterministic public-API digest covers: floor and model each catch what the other misses, and the union is complete. No call fell below the published 90% conformal choice threshold (0.505); the lowest-confidence answer (0.378) was still correct, so the calibrated abstention path remains unexercised on these suites. The model card's warning that planted instructions flip 14% of answers is a direct endorsement of the landed design: authorization stays in deterministic code, the model only advises inside the band.
+
+**GLiNER placement verdict.** On routing evidence Deem dominates GLiNER everywhere at acceptable cost: 13/13 vs 9/13 alone, 14/14 vs 13/14 selective, with 2.1 s CPU (typed) or 0.6 s (chat on GPU) against GLiNER's 282 ms CPU — all far below a cloud reasoning turn, and the in-band policy calls it on only 5 of 14 tasks. Recommendation: demote GLiNER from the routing slot and keep it for its original handoff role (multi-label capability and action classification, where its zero-shot labeling is the right shape), and promote a Deem adapter behind the landed `AdvisoryProvider` seam. Both stay pluggable; the seam keeps the floor deterministic.
+
+**Alternative-use probe.** A second frozen probe tested the compact-evidence review job on six real verification outputs (demo replay artifacts from `.harness/runs` plus the FEAT-DECIDE-SEAM-001 verification with two structural failure variants): choice-with-criteria scored 6/6 on satisfied/unsatisfied, Score tracked severity on five of six, and bare Noul proved unreliable for satisfaction predicates (0.42 on a passing case). A local first-pass triage before a cloud final review is plausible but needs a larger frozen suite before any workflow role; rows are in `.harness/evidence-triage-results.json`.
+
+Caveats: both suites are small, synthetic and hand-labeled, and their category wording shaped the criteria in the prompts, so 13/13 and 14/14 are evidence of fit on these suites, not a generalization or cloud-savings estimate. Reproduction:
+
+```powershell
+.\.harness\systemone-env\Scripts\jevalt.exe serve --model mertkayacs/Deem-4B-GGUF --file <local Deem-4B-Q4_K_M.gguf> --port 8020
+.\.venv\Scripts\python .harness\experiments\deem_routing.py
+.\.venv\Scripts\python .harness\experiments\evidence_triage.py
+```
+
+Next steps (parked): FEAT-DECIDE-ADAPT-001 registers the wiring and its gate. The larger suite must come from real engineering requests, and the calibrated abstention path is still unexercised: no call reached a conformal threshold, so a suite that triggers abstention is a prerequisite for trusting it. The typed protocol is CPU-only through jevalt's llama.cpp backend; the Vulkan chat protocol is the GPU option at equal accuracy on these suites. The evidence-triage probe needs a larger frozen suite before the compact-evidence review gains a local first-pass gate. Both servers were left running for continuation: jevalt on 127.0.0.1:8020 and llama-server on 8010.
+
 ## Trail and embedding retrieval
 
 The study froze 35 observed function candidates at Git revision `228066d5fa95ef33ae677338365a53c1adc62579`, four exact-name targets and eight behavioral questions before running inference. Dense and TF-IDF methods saw the same symbol text. The operational Trail CLI baseline retains rank positions occupied by files or test symbols. Each question has one designated target, so another useful function can still count as a miss.
