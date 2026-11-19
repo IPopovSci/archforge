@@ -150,7 +150,7 @@ To compare a plain model prompt with a Trail-context prompt on the same tasks:
 .\.venv\Scripts\python scripts/benchmark.py --client codex --tasks docs-codex
 ```
 
-Use `--client opencode` for the same suite through the OpenCode adapter. Each run records per-task client, model, session ID, timing, tokens, changed files, test results and receipts under `.harness/benchmark/results/`.
+Use `--client opencode` for the same suite through the OpenCode adapter. Each run records per-task client, model, session ID, timing, tokens, changed files, test results and receipts under `.harness/benchmark/results/`; completed run evidence is kept in `experiments/results/`.
 
 ## Status and evidence
 
@@ -158,7 +158,7 @@ Archforge works on itself: its catalog covers the compiler, MCP adapter, enginee
 
 - End-to-end FULL fixtures have passed live through the role launcher, with independent verification of every claim.
 - Decision-model experiments (Deem-4B, GLiNER, offline embeddings) are measured and recorded, with default activation gated on a larger frozen suite rather than assumed.
-- A ten-task paired benchmark completed on Codex; the OpenCode comparison is open.
+- A ten-task paired benchmark completed on Codex and OpenCode, including a live decision-assisted arm whose consults promoted exactly the two hidden public-binding tasks; see the research results.
 - Framework evaluations (agent-spec, SIGIL) are recorded probes, not adopted dependencies.
 
 All measured rows and reproduction commands live in [docs/usage/research-results.md](docs/usage/research-results.md).

@@ -16,7 +16,7 @@ The live artifacts are in `.harness/live/6fd4c3c3dc134e1da2b7018022b5bc9b/`. Com
 - [x] Use one harness for the compiler, server, engineering scripts and fixture. Trail retrieves the compiler definition. Tach rejects a reverse dependency from the compiler to the server.
 - [x] Compile and verify a synthetic new tool component against a reviewed policy. Exercise a public-signature change with and without approval, including rejection of policy drift.
 - [ ] Verify normal interactive use on a second checkout, including starting with unrelated uncommitted user work. Compilation currently requires a clean tree.
-- [ ] Benchmark baseline Codex, compiler-assisted Codex and decision-assisted Codex on the same 10–30 tasks by profile. Compare completion, time, turns, tokens and repair counts.
+- [ ] Benchmark baseline Codex, compiler-assisted Codex and decision-assisted Codex on the same 10–30 tasks by profile. Compare completion, time, turns, tokens and repair counts. Baseline and compiler-assisted Codex are recorded; the decision-assisted `routed` treatment is implemented in the runner and measured live on OpenCode (see research-results), and a decision-assisted Codex arm remains if cross-client symmetry is wanted.
 - [x] Run GLiNER locally against a labeled shadow suite and compare with rules. See research-results.md for the measured results and reproduction command.
 - [x] Compare path rules, diff evidence, GLiNER and selective inference on a second suite. Confirm a deterministic request works with the model absent.
 - [x] Pin delegated architect and reviewer invocations to Astra and engineering to Sol. Observe unique live thread IDs for both engineering phases and a separate self-development task.
@@ -31,4 +31,4 @@ The live artifacts are in `.harness/live/6fd4c3c3dc134e1da2b7018022b5bc9b/`. Com
 - [x] Exercise the paired benchmark runner end to end on one FAST task. Baseline and Trail-context treatments both passed, and the runner recorded per-task seconds, client, model, session ID, input tokens, output tokens, cached tokens, changed files, and focused test result.
 - [x] Extend the paired sample to one STANDARD and one FULL seeded repair. Baseline and Trail context each passed all three sampled tasks.
 - [x] Run the complete ten-task Codex suite. Baseline and Trail context each repaired 10/10 seeded defects.
-- [ ] Compare OpenCode on the same ten tasks before drawing a cross-client cost or quality conclusion.
+- [x] Compare OpenCode on the same ten tasks before drawing a cross-client cost or quality conclusion. OpenCode passed 8/10 baseline, 9/10 with Trail context and 9/10 with the live decision-assisted `routed` arm, against Codex's recorded 10/10, in roughly half the wall-clock. Measured rows and the cross-client token caveat are in the research results.

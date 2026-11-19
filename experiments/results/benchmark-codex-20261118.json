@@ -1,0 +1,497 @@
+{
+  "client": "codex",
+  "results": [
+    {
+      "task": "docs-codex",
+      "profile": "FAST",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f011-ae1d-78b2-92b2-1ab321beed3d",
+      "passed": true,
+      "seconds": 68.87,
+      "tokens": {
+        "input": 79703,
+        "output": 2688,
+        "cached": 59008
+      },
+      "changed_files": [
+        "tests/benchmark/test_docs_codex.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.05s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\23b86eab7abc4b78b602740a4840b6a1\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\docs-codex-baseline-4e6ec7cd"
+    },
+    {
+      "task": "docs-codex",
+      "profile": "FAST",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f012-cb00-7622-bdce-00018968d485",
+      "passed": true,
+      "seconds": 80.82,
+      "tokens": {
+        "input": 119927,
+        "output": 2952,
+        "cached": 98176
+      },
+      "changed_files": [
+        "tests/benchmark/test_docs_codex.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.04s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\20accca942f4482c99cd37da8d76c753\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\docs-codex-context-c897108f"
+    },
+    {
+      "task": "combat-stack",
+      "profile": "STANDARD",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f016-2f3e-78a1-afd9-fb3550f0a874",
+      "passed": true,
+      "seconds": 38.45,
+      "tokens": {
+        "input": 119853,
+        "output": 1042,
+        "cached": 97152
+      },
+      "changed_files": [
+        "fixture/combat.py",
+        "tests/benchmark/test_combat_stack.py"
+      ],
+      "test_exit": 0,
+      "test_output": ".                                                                        [100%]\n1 passed in 0.03s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\ca33cf57a2d7413d874b15c566469f97\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\combat-stack-baseline-decba5de"
+    },
+    {
+      "task": "combat-stack",
+      "profile": "STANDARD",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f016-d501-7680-84b2-ffa2f2818672",
+      "passed": true,
+      "seconds": 33.71,
+      "tokens": {
+        "input": 118798,
+        "output": 933,
+        "cached": 96640
+      },
+      "changed_files": [
+        "fixture/combat.py",
+        "tests/benchmark/test_combat_stack.py"
+      ],
+      "test_exit": 0,
+      "test_output": ".                                                                        [100%]\n1 passed in 0.02s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\ea50e13c7484451fbf552afac15cf95a\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\combat-stack-context-c8800b91"
+    },
+    {
+      "task": "profile-docs",
+      "profile": "FULL",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f017-5dab-7333-884f-7849544799c5",
+      "passed": true,
+      "seconds": 161.09,
+      "tokens": {
+        "input": 193557,
+        "output": 6318,
+        "cached": 182272
+      },
+      "changed_files": [
+        "tests/benchmark/test_profile_docs.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.13s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\d135066a6e7c43bf836457772f8d853c\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\profile-docs-baseline-99d7d5ab"
+    },
+    {
+      "task": "profile-docs",
+      "profile": "FULL",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f019-e2be-7380-b6a5-f21bbcc526aa",
+      "passed": true,
+      "seconds": 174.71,
+      "tokens": {
+        "input": 242746,
+        "output": 6364,
+        "cached": 210944
+      },
+      "changed_files": [
+        "tests/benchmark/test_profile_docs.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.14s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\98d14b09ebbe48f2b9a772c18b314108\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\profile-docs-context-2839084e"
+    },
+    {
+      "task": "edit-guard",
+      "profile": "STANDARD",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f02b-cc5e-76d1-a8bb-fbc591d11a03",
+      "passed": true,
+      "seconds": 105.6,
+      "tokens": {
+        "input": 225699,
+        "output": 3838,
+        "cached": 203392
+      },
+      "changed_files": [
+        "tests/benchmark/test_edit_guard.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.16s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\6fe4ba4753c248cd80aa7802562b5658\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\edit-guard-baseline-8aa1fa15"
+    },
+    {
+      "task": "edit-guard",
+      "profile": "STANDARD",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f02d-7aa2-79b2-ab83-9f97de9ad353",
+      "passed": true,
+      "seconds": 112.13,
+      "tokens": {
+        "input": 229716,
+        "output": 4129,
+        "cached": 199424
+      },
+      "changed_files": [
+        "scripts/codex_role.py",
+        "tests/benchmark/test_edit_guard.py"
+      ],
+      "test_exit": 0,
+      "test_output": ".                                                                        [100%]\n1 passed in 0.14s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\eef0e162e03e4b1e801559c62a45b213\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\edit-guard-context-336bbe66"
+    },
+    {
+      "task": "rank-fusion",
+      "profile": "STANDARD",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f02f-35e3-74e2-9e88-544f1e494914",
+      "passed": true,
+      "seconds": 278.52,
+      "tokens": {
+        "input": 187481,
+        "output": 11946,
+        "cached": 152704
+      },
+      "changed_files": [
+        "tests/benchmark/test_rank_fusion.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.16s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\1c4c91fa5d9b48f6b19038710ad64642\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\rank-fusion-baseline-721dc8d1"
+    },
+    {
+      "task": "rank-fusion",
+      "profile": "STANDARD",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f033-874a-7d30-8918-f0a86875db57",
+      "passed": true,
+      "seconds": 296.63,
+      "tokens": {
+        "input": 293874,
+        "output": 12434,
+        "cached": 262784
+      },
+      "changed_files": [
+        "tests/benchmark/test_rank_fusion.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.17s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\fe8696ca63ff4fdc9d848f801f90276c\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\rank-fusion-context-0b1d6937"
+    },
+    {
+      "task": "native-session",
+      "profile": "FULL",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f038-135b-7e23-9b5d-5f6e068d684e",
+      "passed": true,
+      "seconds": 95.69,
+      "tokens": {
+        "input": 167034,
+        "output": 3486,
+        "cached": 141696
+      },
+      "changed_files": [
+        "scripts/opencode_project.py",
+        "tests/benchmark/test_native_session.py"
+      ],
+      "test_exit": 0,
+      "test_output": ".                                                                        [100%]\n1 passed in 0.03s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\80d4cfa3cb3a4f77a558c322b594126f\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\native-session-baseline-e66296ec"
+    },
+    {
+      "task": "native-session",
+      "profile": "FULL",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f039-98cc-73a3-9f22-28caae6843f0",
+      "passed": true,
+      "seconds": 81.82,
+      "tokens": {
+        "input": 157590,
+        "output": 2615,
+        "cached": 129536
+      },
+      "changed_files": [
+        "scripts/opencode_project.py",
+        "tests/benchmark/test_native_session.py"
+      ],
+      "test_exit": 0,
+      "test_output": ".                                                                        [100%]\n1 passed in 0.03s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\793dc103f3a3433f936426f856599dab\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\native-session-context-076db2d4"
+    },
+    {
+      "task": "mcp-route",
+      "profile": "FULL",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f03a-dd97-7061-a699-ce0c4942c432",
+      "passed": true,
+      "seconds": 53.3,
+      "tokens": {
+        "input": 165762,
+        "output": 1511,
+        "cached": 120832
+      },
+      "changed_files": [
+        "tests/benchmark/test_mcp_route.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.74s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\03eb0a3d93224f4f95ef42e3599e4df2\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\mcp-route-baseline-53fd13ef"
+    },
+    {
+      "task": "mcp-route",
+      "profile": "FULL",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f03b-c137-7e43-adf0-e485f8987fec",
+      "passed": true,
+      "seconds": 66.43,
+      "tokens": {
+        "input": 183238,
+        "output": 2020,
+        "cached": 155776
+      },
+      "changed_files": [
+        "tests/benchmark/test_mcp_route.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.69s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\69b540b7ce5e4a93b9f1080e7749024f\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\mcp-route-context-4bec9602"
+    },
+    {
+      "task": "public-bindings",
+      "profile": "FULL",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f03c-ccf2-7532-a4c8-33c9cf719c00",
+      "passed": true,
+      "seconds": 142.64,
+      "tokens": {
+        "input": 142564,
+        "output": 5788,
+        "cached": 132352
+      },
+      "changed_files": [
+        "tests/benchmark/test_public_bindings.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.14s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\ec0d50690a2c4d3fa7df9c0c4a68ffae\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\public-bindings-baseline-b61402f3"
+    },
+    {
+      "task": "public-bindings",
+      "profile": "FULL",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f03f-0a77-7a40-bd32-9b49bedc2119",
+      "passed": true,
+      "seconds": 143.74,
+      "tokens": {
+        "input": 155307,
+        "output": 5801,
+        "cached": 142080
+      },
+      "changed_files": [
+        "tests/benchmark/test_public_bindings.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.14s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\e398e5b0948f4d09ab9e00f9d61bf8d1\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\public-bindings-context-a406ddde"
+    },
+    {
+      "task": "cache-reuse",
+      "profile": "STANDARD",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f041-41d3-79e1-b878-6dc1fb3e2c53",
+      "passed": true,
+      "seconds": 281.7,
+      "tokens": {
+        "input": 188794,
+        "output": 11958,
+        "cached": 169984
+      },
+      "changed_files": [
+        "scripts/shadow_decisions.py",
+        "tests/benchmark/test_cache_reuse.py"
+      ],
+      "test_exit": 0,
+      "test_output": ".                                                                        [100%]\n1 passed in 0.17s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\bbe5c6989bd64b6e8481ef9b872efdc4\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\cache-reuse-baseline-673468f6"
+    },
+    {
+      "task": "cache-reuse",
+      "profile": "STANDARD",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f045-9ff5-70e0-ad0f-a07e6190940f",
+      "passed": true,
+      "seconds": 280.54,
+      "tokens": {
+        "input": 266216,
+        "output": 11827,
+        "cached": 229760
+      },
+      "changed_files": [
+        "tests/benchmark/test_cache_reuse.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.15s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\f68be8d726704928aa6a4c79c43843b0\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\cache-reuse-context-c431cadd"
+    },
+    {
+      "task": "review-binding",
+      "profile": "FULL",
+      "treatment": "baseline",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f04b-529d-78f1-b31e-b7353d53d9f7",
+      "passed": true,
+      "seconds": 147.63,
+      "tokens": {
+        "input": 164449,
+        "output": 5859,
+        "cached": 154496
+      },
+      "changed_files": [
+        "tests/benchmark/test_review_binding.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.14s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\aadd3f10ca874ffea17fcefa298c9d59\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\review-binding-baseline-397a5582"
+    },
+    {
+      "task": "review-binding",
+      "profile": "FULL",
+      "treatment": "context",
+      "client": "codex",
+      "model": "gpt-6.2-sol",
+      "thread_id": "01a1f04d-a450-7b30-a069-f3db839ff896",
+      "passed": true,
+      "seconds": 138.92,
+      "tokens": {
+        "input": 127650,
+        "output": 5677,
+        "cached": 99584
+      },
+      "changed_files": [
+        "tests/benchmark/test_review_binding.py"
+      ],
+      "test_exit": 0,
+      "test_output": "[Tach] 1 test in 9 files unaffected by changes. Skip with: pytest --tach\n[Tach] To disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\n.                                                                        [100%]\n1 passed in 0.13s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\fc5ca9fa0b80403f873b2cc28a9bb774\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\review-binding-context-96fe540d"
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "tasks": 10,
+      "passed": 10,
+      "seconds": 1373.49,
+      "input_tokens": 1634896,
+      "output_tokens": 54434,
+      "cached_tokens": 1413888,
+      "profiles": {
+        "FAST": {
+          "total": 1,
+          "passed": 1
+        },
+        "STANDARD": {
+          "total": 4,
+          "passed": 4
+        },
+        "FULL": {
+          "total": 5,
+          "passed": 5
+        }
+      }
+    },
+    "context": {
+      "tasks": 10,
+      "passed": 10,
+      "seconds": 1409.45,
+      "input_tokens": 1895062,
+      "output_tokens": 54752,
+      "cached_tokens": 1624704,
+      "profiles": {
+        "FAST": {
+          "total": 1,
+          "passed": 1
+        },
+        "STANDARD": {
+          "total": 4,
+          "passed": 4
+        },
+        "FULL": {
+          "total": 5,
+          "passed": 5
+        }
+      }
+    }
+  }
+}

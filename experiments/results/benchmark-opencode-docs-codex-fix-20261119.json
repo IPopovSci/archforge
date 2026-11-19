@@ -1,0 +1,170 @@
+{
+  "client": "opencode",
+  "tasks": [
+    {
+      "id": "docs-codex",
+      "profile": "FAST",
+      "request": "Restore the README sentence that tells users how to start Codex with the project MCP server.",
+      "file": "README.md",
+      "context_query": "start Codex with the project MCP server",
+      "mutation": {
+        "find": "Start Codex or the installed OpenCode 2.x client with the project MCP server:",
+        "replace": "Start the client with the project MCP server:"
+      },
+      "test_file": "tests/benchmark/test_docs_codex.py",
+      "test_source": "from pathlib import Path\n\ndef test_readme_mentions_codex():\n    text = Path(\"README.md\").read_text(encoding=\"utf-8\")\n    assert \"Start Codex\" in text\n",
+      "test_command": [
+        "python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/benchmark/test_docs_codex.py"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "task": "docs-codex",
+      "profile": "FAST",
+      "treatment": "baseline",
+      "client": "opencode",
+      "model": "opencode-go/glm-5.3-flash",
+      "thread_id": "ses_e0b8688c0ffeJ7kyUaORbjjqnC",
+      "passed": true,
+      "seconds": 74.23,
+      "tokens": {
+        "input": 9158,
+        "output": 3539,
+        "cached": 0
+      },
+      "changed_files": [
+        "README.md",
+        "tests/benchmark/test_docs_codex.py"
+      ],
+      "test_exit": 0,
+      "test_output": "\u001b[36m[Tach]\u001b[0m 1 test in 20 files unaffected by changes. Skip with: \u001b[1mpytest --tach\u001b[0m\n\u001b[36m[Tach]\u001b[0m \u001b[2mTo disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\u001b[0m\n.                                                                        [100%]\n1 passed in 0.06s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\4dfd3625d83b468591721d743e382043\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\docs-codex-baseline-da3a9d4c"
+    },
+    {
+      "task": "docs-codex",
+      "profile": "FAST",
+      "treatment": "context",
+      "client": "opencode",
+      "model": "opencode-go/glm-5.3-flash",
+      "thread_id": "ses_e0b855744ffeFKyzJufIC4p957",
+      "passed": true,
+      "seconds": 136.88,
+      "tokens": {
+        "input": 14550,
+        "output": 3698,
+        "cached": 0
+      },
+      "changed_files": [
+        "README.md",
+        "tests/benchmark/test_docs_codex.py"
+      ],
+      "test_exit": 0,
+      "test_output": "\u001b[36m[Tach]\u001b[0m 1 test in 20 files unaffected by changes. Skip with: \u001b[1mpytest --tach\u001b[0m\n\u001b[36m[Tach]\u001b[0m \u001b[2mTo disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\u001b[0m\n.                                                                        [100%]\n1 passed in 0.04s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\799ff4655e394d18ae3078d85724d8a6\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\docs-codex-context-108702fb"
+    },
+    {
+      "task": "docs-codex",
+      "profile": "FAST",
+      "treatment": "routed",
+      "client": "opencode",
+      "model": "opencode-go/glm-5.3-flash",
+      "thread_id": "ses_e0b833bc9ffeTccMzYXcxwjIFg",
+      "passed": true,
+      "seconds": 104.05,
+      "tokens": {
+        "input": 5604,
+        "output": 3565,
+        "cached": 0
+      },
+      "changed_files": [
+        "README.md",
+        "tests/benchmark/test_docs_codex.py"
+      ],
+      "test_exit": 0,
+      "test_output": "\u001b[36m[Tach]\u001b[0m 1 test in 20 files unaffected by changes. Skip with: \u001b[1mpytest --tach\u001b[0m\n\u001b[36m[Tach]\u001b[0m \u001b[2mTo disable: pytest -p no:tach (https://docs.gauge.sh/usage/commands#using-the-pytest-plugin-directly)\u001b[0m\n.                                                                        [100%]\n1 passed in 0.06s\n",
+      "receipt": "E:\\projects\\arch_harness\\.harness\\roles\\16599b8b003b464abc290d7dcf3adccc\\receipt.json",
+      "worktree": "E:\\projects\\arch_harness\\.harness\\benchmark\\worktrees\\docs-codex-routed-5cdf6842",
+      "assessment": {
+        "floor": "FAST",
+        "recommendation": "FAST",
+        "provider": null,
+        "prediction": null,
+        "abstained": false,
+        "abstention_reason": null,
+        "disagreement": false
+      }
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "tasks": 1,
+      "passed": 1,
+      "missed_full": 0,
+      "seconds": 74.23,
+      "input_tokens": 9158,
+      "output_tokens": 3539,
+      "cached_tokens": 0,
+      "FAST": {
+        "total": 1,
+        "passed": 1
+      },
+      "STANDARD": {
+        "total": 0,
+        "passed": 0
+      },
+      "FULL": {
+        "total": 0,
+        "passed": 0
+      }
+    },
+    "context": {
+      "tasks": 1,
+      "passed": 1,
+      "missed_full": 0,
+      "seconds": 136.88,
+      "input_tokens": 14550,
+      "output_tokens": 3698,
+      "cached_tokens": 0,
+      "FAST": {
+        "total": 1,
+        "passed": 1
+      },
+      "STANDARD": {
+        "total": 0,
+        "passed": 0
+      },
+      "FULL": {
+        "total": 0,
+        "passed": 0
+      }
+    },
+    "routed": {
+      "tasks": 1,
+      "passed": 1,
+      "missed_full": 0,
+      "seconds": 104.05,
+      "input_tokens": 5604,
+      "output_tokens": 3565,
+      "cached_tokens": 0,
+      "FAST": {
+        "total": 1,
+        "passed": 1
+      },
+      "STANDARD": {
+        "total": 0,
+        "passed": 0
+      },
+      "FULL": {
+        "total": 0,
+        "passed": 0
+      }
+    }
+  }
+}

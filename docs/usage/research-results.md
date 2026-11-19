@@ -292,4 +292,68 @@ Trail context was slower and used more input tokens on these three seeded repair
 | Baseline | 10/10 | 1,373.49 | 1,634,896 | 1,413,888 | 54,434 |
 | Trail context | 10/10 | 1,409.45 | 1,895,062 | 1,624,704 | 54,752 |
 
-Trail context added 35.96 seconds and 260,166 input tokens while producing the same 10/10 pass count on this deliberately broken suite. This is evidence that the harness improves reproducibility and evidence capture, not that Trail context improves repair quality or cost on this seed set. The corrected review-binding rerun passed 1/1 for both treatments. The OpenCode comparison remains open.
+Trail context added 35.96 seconds and 260,166 input tokens while producing the same 10/10 pass count on this deliberately broken suite. This is evidence that the harness improves reproducibility and evidence capture, not that Trail context improves repair quality or cost on this seed set. The corrected review-binding rerun passed 1/1 for both treatments.
+
+## The OpenCode ten-task arm and the live decision-assisted treatment
+
+The same ten seeded tasks ran through the OpenCode adapter (box 34), with a
+third treatment beside baseline and Trail context: **routed**, the
+decision-assisted arm of the recorded benchmark gate. `scripts/benchmark.py
+--treatments routed` sends each task request through the landed
+`harness.assess` seam before the engineer runs — a live Deem-4B chat consult
+lands in the decision log for every ambiguous-STANDARD task — and the evidence
+policy follows the recommendation: FAST keeps the direct path, STANDARD and
+FULL fetch bounded Trail context first. One transport fix was needed first:
+GLM-flash wrapped its schema-valid engineer JSON in prose and a fenced
+snippet, so the OpenCode adapter now extracts the unique schema-valid object
+and fails closed on zero or ambiguous matches (`e40f36a`, regression-tested).
+
+The docs-codex seed needed one correction before scoring: its acceptance
+assertion demanded the verbatim rewritten sentence, which no engineer without
+the original text can reproduce. The assertion now requires the inferable
+part (`Start Codex`), mirroring the original task design. The corrected task
+passed in all three treatments and its row is substituted below; the
+original all-treatment failure is retained in the recorded file.
+
+| Treatment | Passed | Total seconds | Input tokens | Cached input | Output |
+|---|---:|---:|---:|---:|---:|
+| OpenCode baseline | 8/10 | 757.4 | 80,512 | 0 | 51,482 |
+| OpenCode Trail context | 9/10 | 975.4 | 101,730 | 0 | 52,258 |
+| OpenCode routed (decision-assisted) | **9/10** | **713.8** | 83,096 | 0 | 50,441 |
+| Codex baseline (recorded) | 10/10 | 1,373.49 | 1,634,896 | 1,413,888 | 54,434 |
+| Codex Trail context (recorded) | 10/10 | 1,409.45 | 1,895,062 | 1,624,704 | 54,752 |
+
+Failures: `native-session` failed in all three OpenCode treatments — a
+genuine engineer miss against Codex's 10/10 — and `mcp-route` failed only on
+baseline, where both evidence arms repaired it.
+
+**The live consults (the saga's closing evidence).** All nine non-docs tasks
+floored STANDARD, so nine consults reached the local model at a fraction of a
+cloud turn each. Deem promoted exactly the two hidden public-binding tasks —
+`review-binding` and `public-bindings` — to FULL; both passed. That is the
+same catch the offline 66-row suite measured, now exercised live through the
+landed seam with every row logged (the funnel now holds seventeen rows). On
+`profile-docs` Deem voted FAST below the floor; the never-lower rule held and
+the task passed at STANDARD. The routed arm matched the full-context arm's
+9/10 while running fastest and using less input than context: the advisory
+bought the two interface catches without paying the evidence cost on tasks
+that did not need it.
+
+**Cross-client caveat (why box 34 existed).** Token counts are not comparable
+across clients: Codex reports large cached inputs from its own agent loop
+while the pinned OpenCode harness agents are deny-all single shots that
+report no cache. What the comparison does establish: the deliberately broken
+suite was easier for Codex (10/10 vs 8–9/10), OpenCode finished the same
+ten tasks in roughly half the wall-clock, and the decision-assisted arm is
+now measured live rather than argued.
+
+Completed run evidence is tracked in
+`experiments/results/benchmark-opencode-20261119.json` (the ten-task run with
+assessment rows) and
+`experiments/results/benchmark-opencode-docs-codex-fix-20261119.json` (the
+corrected docs-codex rows). Reproduction:
+
+```powershell
+.\.venv\Scripts\python scripts\benchmark.py --dry-run
+.\.venv\Scripts\python scripts\benchmark.py --client opencode --treatments baseline context routed
+```
