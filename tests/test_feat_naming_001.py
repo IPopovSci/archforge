@@ -17,4 +17,4 @@ def test_readme_presents_the_project_as_archforge():
     lines = (REPO / "README.md").read_text(encoding="utf-8").splitlines()
     assert lines[0] == "# Archforge"
     text = " ".join(lines[1:6])
-    assert "Archforge is the architecture harness developed in this repository" in text
+    assert "Archforge is a verification and routing harness for AI-assisted" in text
