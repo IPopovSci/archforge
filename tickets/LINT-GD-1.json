@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "id": "LINT-GD-1",
+  "intent": "Register the measured gdlint (gdtoolkit 4.5.0) as a named GDScript style lint row and make it a default gate for any compiled contract whose project carries the root godot.toml convention, following the godot_boundaries pattern and the command shape scripts/godot_check.py reports. Fail-closed when the tool is unavailable; contracts without the convention are unaffected. The recorded posture that gdtoolkit is absent from the locked harness environment is preserved or explicitly revised with review, never silently changed. Evidence: unlinted one-shot code showed 516 findings, mature Pixelorama showed zero.",
+  "components": [
+    "harness",
+    "scripts.godot_check"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "LINT-GD-ROW": "A named gdlint check row exists in check_commands and exits nonzero on violations, mirroring the godot_boundaries row shape.",
+    "LINT-GD-DEFAULT": "Any compiled contract whose project carries the root godot.toml convention runs the gdlint gate by default; contracts without the convention are unaffected and never gain the gate implicitly.",
+    "LINT-GD-CONVENTION": "The row follows the root godot.toml convention so a target project's policy determines the lint scope, like the boundary gate.",
+    "LINT-GD-FAIL-CLOSED": "When gdlint is unavailable in the running environment the check fails rather than silently passing.",
+    "LINT-GD-ENV-POSTURE": "The recorded posture that gdtoolkit is absent from the locked harness environment is preserved or explicitly revised with review, never silently changed."
+  },
+  "unknowns": [],
+  "checks": []
+}

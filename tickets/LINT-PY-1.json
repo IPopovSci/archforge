@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "id": "LINT-PY-1",
+  "intent": "Register ruff as a named Python lint row in check_commands and add it to DEFAULT_CHECKS so every compiled contract for this repository lints by default. Pinned in the locked environment via the reviewed policy-file flow; fails closed when unavailable. This ticket changes the compiler, so this contract is verified under pre-change defaults and the next compiled contract exercises the new default. All policy-owned Python is in scope: baseline lint findings are fixed inside the attempt, never suppressed, and the rule set is not weakened to force a pass. Evidence: mature production code shows zero findings, unlinted one-shot code shows hundreds.",
+  "components": [
+    "harness",
+    "server",
+    "scripts.demo",
+    "scripts.live_fixture",
+    "scripts.codex_project",
+    "scripts.shadow_decisions",
+    "scripts.benchmark",
+    "fixture.entities",
+    "fixture.combat",
+    "fixture.turn_lifecycle",
+    "scripts.codex_role",
+    "scripts.opencode_project",
+    "scripts.roles",
+    "scripts.godot_boundaries",
+    "scripts.godot_check",
+    "scripts.doc_catalog"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "LINT-PY-ROW": "A named ruff check row exists in check_commands and exits nonzero on violations, mirroring the tach and pytest row shape.",
+    "LINT-PY-DEFAULT": "The row is added to DEFAULT_CHECKS so every compiled contract for this repository runs it; per the compiler-change rule this contract itself is verified under the pre-change defaults and the next compiled contract exercises the new default.",
+    "LINT-PY-FAIL-CLOSED": "When the pinned tool is unavailable the check fails rather than silently passing.",
+    "LINT-PY-PINNED": "The ruff version and lint configuration are pinned in the locked environment via the reviewed policy-file flow, with file digests recorded in the contract review.",
+    "LINT-PY-SELF-PASS": "Every policy-owned Python module passes the registered row at the ticket baseline under the adopted configuration, without weakening the rule set to force a pass; mechanical fixes land inside this attempt."
+  },
+  "unknowns": [],
+  "checks": []
+}
