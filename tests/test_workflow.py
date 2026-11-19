@@ -8,7 +8,7 @@ from harness import RuleProvider, Ticket, profile
     (["README.md"], "FAST"),
     (["fixture/combat.py", "tests/test_regression.py"], "STANDARD"),
     (["fixture/entities.py", "fixture/combat.py"], "FULL"),
-    (["project_example/lines-master-design-bible.md"], "FULL"),
+    (["project_example/first_person_dungeon_arpg_design.md"], "FULL"),
     (["AGENTS.md"], "FULL"),
     (["README.md", "tach.toml"], "FULL"),
 ])

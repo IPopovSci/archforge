@@ -42,7 +42,7 @@ import harness as h
 from scripts import shadow_decisions as shadow
 import deem_routing as deem
 
-PIN = "c6acd0e355e2713e1f6f0c7139b1529dbb6687a0"  # frozen at this main revision
+PIN = "54b0cfab8d468ac94b18e9419f6752b3d2dbfae0"  # frozen at this main revision
 GLINER_CHECKPOINT = ROOT / ".harness/models/gliner-9d1bfb848cd16d93ee56ccbc59cd92bf0f284d90"
 PROFILES = ("FAST", "STANDARD", "FULL")
 CONFORMAL_90 = deem.CONFORMAL_90

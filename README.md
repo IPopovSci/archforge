@@ -64,7 +64,7 @@ Language tooling follows the same rule: it enters as pluggable adapters, never a
 | `tickets/` | Versioned intent tickets; `python harness.py schema` prints the ticket format |
 | `tach.toml` | The single source of module dependency policy |
 | `fixture/` | Headless turn-based combat simulation; the seeded poison defect is the repeatable acceptance case |
-| `project_example/lines-master-design-bible.md` | Example binding document that deserves FULL review |
+| `project_example/first_person_dungeon_arpg_design.md` | Example binding document that deserves FULL review |
 | `scripts/` | Client launchers, role delegation, benchmarks, documentation gates, offline model experiments |
 | `benchmarks/tasks.json` | Ten seeded engineering tasks for paired model comparisons |
 | `docs/` | Documentation charter and usage pages |
@@ -97,7 +97,7 @@ Both launchers select the native client for child tasks. Ask either client to ca
 ```powershell
 python harness.py route README.md
 python harness.py route fixture/combat.py
-python harness.py route project_example/lines-master-design-bible.md
+python harness.py route project_example/first_person_dungeon_arpg_design.md
 python harness.py catalog
 python harness.py context "poison damage"
 python harness.py assess "poison damage" fixture/turn_lifecycle.py --base HEAD

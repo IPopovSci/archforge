@@ -44,7 +44,7 @@ CASES = [
     ("Add a new subsystem and define its dependency rules.", ["tach.toml"], "FULL"),
     ("Change the public schema used by the compiler and its MCP adapter.", ["harness.py","server.py"], "FULL"),
     ("Change what agents are authorized to edit.", ["AGENTS.md"], "FULL"),
-    ("Revise the locked replay contract in the game design bible.", ["project_example/lines-master-design-bible.md"], "FULL"),
+    ("Revise the locked replay contract in the game design bible.", ["project_example/first_person_dungeon_arpg_design.md"], "FULL"),
     ("Change the required arguments of the public combat API.", ["fixture/combat.py"], "FULL"),
 ]
 

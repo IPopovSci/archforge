@@ -5,7 +5,7 @@ fact has exactly one home; every other mention is a pointer. The layers:
 
 | Layer | Answers | Writer | Home | Gate |
 |---|---|---|---|---|
-| L0 — binding | Why it exists, what must stay true | humans, via reviewed tickets | `AGENTS.md`, `OPENCODE_HARNESS_HANDOFF.md`, `docs/documentation-charter.md`, `project_example/lines-master-design-bible.md` | Router sends changes to FULL review |
+| L0 — binding | Why it exists, what must stay true | humans, via reviewed tickets | `AGENTS.md`, `OPENCODE_HARNESS_HANDOFF.md`, `docs/documentation-charter.md`, `project_example/first_person_dungeon_arpg_design.md` | Router sends changes to FULL review |
 | L1 — contracts | What is obligated, what is allowed | tickets, compiled contracts, policy files | `tickets/`, `.harness/compiled/`, `tach.toml`, `fixture/godot/godot.toml` | Compiler + verifier |
 | L2 — observed | What actually is there | **generated only** | `docs/usage/catalog.md` | `scripts/doc_catalog.py check` fails on staleness |
 | L3 — point truth | What this exact function does | code and docstrings | source files | Review; narration is deleted |

@@ -2,7 +2,7 @@ Start every task by identifying the intended paths and running route_task or the
 
 FAST uses a direct edit and a reviewed Git diff. STANDARD uses focused Trail evidence, Tach and pytest. FULL needs reviewed intent, a compiled contract, an isolated attempt, explicit approval for material architecture changes, passing requirement-linked evidence, and final intent review. Stop for a revised contract when scope expands. Allow at most two repair attempts per contract. Decision models advise rather than enforce: the assess command floors on the routing rules and observed interface impact, consults a provider only inside the ambiguous STANDARD band, never lowers the floor, and records every decision under .harness.
 
-Run the harness from the project root. Both clients can use its CLI when MCP is unavailable. The Lines design bible is a reference for harness cases. Keep gameplay development separate.
+Run the harness from the project root. Both clients can use its CLI when MCP is unavailable. The example design bible in project_example/ is a reference for harness cases. Keep gameplay development separate.
 
 Use the shared CLI or MCP from any client. Use scripts/roles.py for automated delegation when a native adapter is installed. Keep the client selected by its project launcher. When launching directly, pass --client with the native adapter name. Codex assigns architect and reviewer to Astra and engineering to Sol. OpenCode uses the corresponding harness agents and provider-qualified models in opencode.json. Start a fresh invocation per task with its request and relevant evidence. A process already launched in its assigned role should do that task directly. Keep routine FAST edits on the direct path.
 

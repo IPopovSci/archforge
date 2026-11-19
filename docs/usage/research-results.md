@@ -157,7 +157,7 @@ computed, never hand-imagined:
                    public-API impact of the actual diff)
 
 so the label rule is the harness's own floor logic applied to the real
-outcome. The suite pins main at `c6acd0e` (56 non-merge commit requests after
+outcome. The suite pins main at `54b0cfa` (56 non-merge commit requests after
 deduplicating the branch twins, plus the ten executed benchmark tasks), 66
 rows, 12 FAST / 13 STANDARD / 41 FULL by outcome, 15 rows in the ambiguous
 STANDARD band. The known blind spot stays blind by construction:
@@ -217,8 +217,10 @@ as the funnel for any future re-evaluation.
 Caveats: commit subjects are terse and name their own outcome, which favors
 models that read the request carefully; the FULL-heavy composition mirrors
 this repository's actual ticket-driven history; and the ten benchmark
-requests are authored but executed with verified scope. Reproduction (both
-servers as recorded above, then):
+requests are authored but executed with verified scope. The recorded rows
+carry the pre-rewrite revision hashes from the run itself; after the
+example-design purge rewrote history, the pin above names the same tree.
+Reproduction (both servers as recorded above, then):
 
 ```powershell
 .\.harness\decision-env\Scripts\python experiments\adapt_suite.py
