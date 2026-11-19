@@ -85,6 +85,27 @@ Caveats: both suites are small, synthetic and hand-labeled, and their category w
 
 Next steps (parked): FEAT-DECIDE-ADAPT-001 registers the wiring and its gate. The larger suite must come from real engineering requests, and the calibrated abstention path is still unexercised: no call reached a conformal threshold, so a suite that triggers abstention is a prerequisite for trusting it. The typed protocol is CPU-only through jevalt's llama.cpp backend; the Vulkan chat protocol is the GPU option at equal accuracy on these suites. The evidence-triage probe needs a larger frozen suite before the compact-evidence review gains a local first-pass gate. Both servers were left running for continuation: jevalt on 127.0.0.1:8020 and llama-server on 8010.
 
+## Capability classification: Deem vs GLiNER on the committed tickets
+
+The second head-to-head uses real labeled data instead of synthetic cases: every ticket in `tickets/` binds its intent to the catalog components it actually changed, and the menu is the sixteen live `tach.toml` modules. Both models saw the same surface — intent text and module paths only. Fourteen tickets, ground truth committed. Full rows in `.harness/capability-results.json`.
+
+| Treatment | Top-1 in true set | Set exact | Set precision | Set recall | Median latency |
+|---|---:|---:|---:|---:|---:|
+| Deem choice (16-option menu) | **10/14** | — | — | — | 5.3 s CPU |
+| GLiNER classify (16-option menu) | 7/14 | — | — | — | 354 ms CPU |
+| Deem noul-set (16 questions, one request) | — | 3/14 | 0.79 | 0.46 | 12.5 s CPU |
+| GLiNER binary-set (per module) | — | 1/14 | 0.16 | 0.96 | 260 ms CPU |
+
+Deem's four top-1 misses are adjacent-module near-misses at honest low confidence (0.29-0.51): the benchmark ticket picked the launcher module, the seam ticket picked the decision experiments module. GLiNER's seven misses are scattershot (0.13-0.48). The set treatments fail in opposite directions: Deem is conservative — precise when it predicts but often empty or partial — while GLiNER's binary judgments mark nearly the whole menu relevant (eleven to sixteen components per ticket, recall 0.96 at precision 0.16), which is unusable as an advisor. On the same six evidence-triage cases Deem scored 6/6, GLiNER also scored 6/6 — at roughly 280 ms and small RAM against Deem's ~2 s and 3 GB, with ~0.9998 confidence.
+
+**Verdict on GLiNER's necessity.** The data does not support GLiNER in routing (Deem dominates) or in capability ranking (Deem's precision and honest low confidences suit an advisory ranker; GLiNER's set saturation does not). A plausible remaining home is the cheap frequent binary gates — evidence triage is a tie at a seventh of the latency and a fraction of the RAM, so a small classifier fits the frequent-gate cost profile better than a 4B reasoner. The architecture itself argues the same way: the harness is closed-menu by construction (generated catalog, allowlisted actions, versioned schemas), which is the native habitat of typed decision models; GLiNER's distinctive strength — open-vocabulary span extraction over unseen labels — has no assigned job in the current design. GLiNER stays installed as the cheap-gate candidate; neither model takes a capability role in the compiler, where Trail symbol retrieval remains the deterministic resolver and model output stays advisory. Latency note: Deem's typed CPU latency scales with menu size (5.3 s for a sixteen-option choice, 12.5 s per sixteen-question request), so large menus need the GPU chat protocol or smaller criteria slices.
+
+Caveats: fourteen one-line intents are harder than real prose briefs (both models confused the tool a task uses with the component it changes), component lists are single- or two-component tickets, and the in-set metric does not assume a primary component. Reproduction:
+
+```powershell
+.\.harness\decision-env\Scripts\python .harness\experiments\capability_comparison.py
+```
+
 ## Trail and embedding retrieval
 
 The study froze 35 observed function candidates at Git revision `228066d5fa95ef33ae677338365a53c1adc62579`, four exact-name targets and eight behavioral questions before running inference. Dense and TF-IDF methods saw the same symbol text. The operational Trail CLI baseline retains rank positions occupied by files or test symbols. Each question has one designated target, so another useful function can still count as a miss.

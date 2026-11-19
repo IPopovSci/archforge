@@ -1,7 +1,7 @@
 {
   "version": 1,
   "id": "FEAT-DECIDE-ADAPT-001",
-  "intent": "Wire the evaluated Deem-4B provider behind the landed AdvisoryProvider seam for routing abstentions, gated on a larger frozen suite, and re-place GLiNER on capability classification.",
+  "intent": "Wire the evaluated Deem-4B provider behind the landed AdvisoryProvider seam for routing abstentions, gated on a larger frozen suite, and record GLiNER's measured placement.",
   "components": [
     "scripts.shadow_decisions"
   ],
@@ -11,10 +11,10 @@
   "requirements": {
     "REQ-ADAPT-A": "A Deem-4B adapter satisfies the AdvisoryProvider contract through the System One protocol with calibrated abstention, and the decision log records its consults.",
     "REQ-ADAPT-B": "A larger frozen routing suite of at least thirty real engineering requests compares the wired adapter with the deterministic floor and the recorded GLiNER baselines before any default activation.",
-    "REQ-ADAPT-C": "GLiNER's placement is recorded: demoted from the routing slot, retained for multi-label capability and action classification."
+    "REQ-ADAPT-C": "GLiNER's placement is recorded from measured evidence: no routing or capability-ranking role after Deem dominated both frozen comparisons; GLiNER stays installed as the candidate for cheap frequent binary gates such as evidence triage, pending the same larger suite."
   },
   "unknowns": [
     "Adapter module and transport: System One server or llama-server chat protocol",
-    "Whether GLiNER keeps any routing role after the larger suite runs"
+    "Whether GLiNER stays competitive on cheap binary gates once the larger suite runs"
   ]
 }
