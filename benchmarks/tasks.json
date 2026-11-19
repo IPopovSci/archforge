@@ -7,11 +7,11 @@
       "file": "README.md",
       "context_query": "start Codex with the project MCP server",
       "mutation": {
-        "find": "From the repository root, start Codex with the project MCP server:",
-        "replace": "From the repository root, start the client with the project MCP server:"
+        "find": "Start Codex or the installed OpenCode 2.x client with the project MCP server:",
+        "replace": "Start the client with the project MCP server:"
       },
       "test_file": "tests/benchmark/test_docs_codex.py",
-      "test_source": "from pathlib import Path\n\ndef test_readme_mentions_codex():\n    text = Path(\"README.md\").read_text(encoding=\"utf-8\")\n    assert \"start Codex with the project MCP server\" in text\n",
+      "test_source": "from pathlib import Path\n\ndef test_readme_mentions_codex():\n    text = Path(\"README.md\").read_text(encoding=\"utf-8\")\n    assert \"Start Codex or the installed OpenCode 2.x client with the project MCP server\" in text\n",
       "test_command": ["python", "-m", "pytest", "-q", "tests/benchmark/test_docs_codex.py"]
     },
     {
