@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "id": "FEAT-NAMING-001",
+  "intent": "Establish the project name Archforge in agent instructions so communication differentiates this repository's harness from agent harnesses like OpenCode, Codex and Claude Code.",
+  "components": [
+    "harness"
+  ],
+  "actions": [
+    "fix_behavior"
+  ],
+  "requirements": {
+    "REQ-NM-A": "Agent instructions name this repository's harness Archforge and reserve the bare word harness for agent harnesses, so tickets, documents and reports use the name consistently.",
+    "REQ-NM-B": "The repository's front-door document presents the project as Archforge rather than the generic term."
+  },
+  "unknowns": []
+}
