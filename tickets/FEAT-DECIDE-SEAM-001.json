@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "id": "FEAT-DECIDE-SEAM-001",
+  "intent": "Land the measured floor-first decision seam in the harness core: advisory assessment before implementation, a decision provider consulted only inside the ambiguity band, and every decision recorded.",
+  "components": [
+    "harness"
+  ],
+  "actions": [
+    "extend_behavior"
+  ],
+  "requirements": {
+    "REQ-SEAM-A": "An advisory assessment takes a request, its intended paths and optional observed interface impact; the deterministic floor comes from the routing rules promoted by observed impact; a decision provider is consulted only when the floor is an ambiguous STANDARD on non-test source paths; an unavailable or failing provider produces an explicit abstention; and the recommendation never lowers the enforced floor.",
+    "REQ-SEAM-B": "Every assessment appends one JSON line with the request, paths, observed impact, floor, provider identity and prediction, abstention reason, disagreement flag and recommendation to the harness decision log under .harness.",
+    "REQ-SEAM-C": "A CLI command runs the assessment from the repository root with a request, its intended paths and an optional base revision for observed interface impact, returning the recorded row."
+  },
+  "unknowns": []
+}
