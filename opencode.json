@@ -14,7 +14,7 @@
     "servers": {"architecture_harness": {
       "type": "local",
       "command": [
-        "python",
+        "E:\\projects\\arch_harness\\.venv\\Scripts\\python.exe",
         "scripts/opencode_project.py",
         "--serve-mcp"
       ]

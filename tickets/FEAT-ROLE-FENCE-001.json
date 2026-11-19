@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "id": "FEAT-ROLE-FENCE-001",
+  "intent": "Tolerate a markdown code fence around an otherwise valid JSON role answer before schema validation, so one wrapped fence costs no second model session.",
+  "components": [
+    "scripts.codex_role"
+  ],
+  "actions": [
+    "fix_behavior"
+  ],
+  "requirements": {
+    "REQ-FENCE-A": "A role answer whose JSON payload is wrapped in a single markdown code fence is normalized and validated like a raw JSON answer without starting another model session.",
+    "REQ-FENCE-B": "The retained receipt records that the answer was fence-normalized."
+  },
+  "unknowns": []
+}
